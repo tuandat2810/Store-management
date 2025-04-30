@@ -6,20 +6,23 @@ const Router = express.Router();
 const userController = require('../controllers/user.c');
 
 Router.get('/', (req, res) => {
-    res.redirect('/page/login');
+    res.redirect('/login');
 })
 
-Router.get('/page/login', (req, res) => {
+Router.get('/login', (req, res) => {
     res.render('login');
 })
 
-Router.get('/page/register', (req, res) => {
+Router.get('/register', (req, res) => {
     res.render('register');
 })
 
-Router.get('/page/logout', (req, res) => {
+Router.get('/logout', (req, res) => {
     res.render('register');
 })
+
+Router.post('/login', userController.login);
+Router.post('/register', userController.register);
 
 // Route gọi API Mongo
 Router.get('/testmongo', userController.getAllUsers);

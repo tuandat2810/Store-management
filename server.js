@@ -14,7 +14,10 @@ database.connect();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/', require('./routes/page.r.js'));
+app.get('/', (req, res) => {
+    res.redirect('/page/login');
+})
+app.use('/page', require('./routes/page.r.js'));
 
 app.listen(port, () => {
     console.log(`Server chạy tại http://localhost:${port}`);
