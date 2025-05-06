@@ -8,6 +8,7 @@ module.exports.connect = async () => {
             serverSelectionTimeoutMS: 300000,
             connectTimeoutMS: 100000,
         });
+        const collections = await mongoose.connection.db.listCollections().toArray();
         console.log("Connected to MongoDB successfully");
     } catch (error) {
         console.error("Error connecting:", error);
