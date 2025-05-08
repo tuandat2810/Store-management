@@ -10,7 +10,7 @@ module.exports.requireAuth = async (req,res,next) => {
             res.redirect(`/page/login`);
         }
         else{
-            res.locals.user = user;
+            res.locals.user = user.toObject();
             next();
         }
     }

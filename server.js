@@ -15,14 +15,7 @@ const database = require('./configs/database.js');
 database.connect();
 
 // Cấu hình view engine Handlebars
-app.engine("hbs", exphbs.engine({
-    extname: ".hbs",
-    defaultLayout: "main",
-    layoutsDir: path.join(__dirname, "views/layouts"),
-    partialsDir: path.join(__dirname, "views/partials"),
-}));
-app.set("view engine", "hbs");
-app.set("views", path.join(__dirname, "views"));
+require('./configs/hbs_config')(app);
 
 // Middleware
 app.use(express.json());
@@ -46,6 +39,8 @@ app.get('/', (req, res) => {
 
 // Sử dụng router người dùng
 app.use('/page', require('./routes/user.route.js'));
+// Sử dụng router chính của Người dùng
+app.use('/page', require('./routes/main.route.js'));
 
 // Start server
 app.listen(port, () => {
