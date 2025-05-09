@@ -34,9 +34,8 @@ app.use(flash());
 
 // Route chính
 app.get('/', (req, res) => {
-    res.redirect('/page/login');
+    res.render('landing_page');
 });
-
 // Sử dụng router người dùng
 app.use('/page', require('./routes/user.route.js'));
 // Sử dụng router chính của Người dùng
