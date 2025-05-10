@@ -1,0 +1,63 @@
+<style>
+    .custom-select-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    .custom-arrow {
+        position: absolute;
+        top: 50%;
+        right: 26px;
+        transform: translateY(-50%);
+        font-size: 16px;
+        transition: transform 0.3s ease;
+        pointer-events: none;
+        z-index: 10;
+        background-color: #ffffff;
+    }
+
+    /* Khi select đang được focus (được mở), xoay mũi tên */
+    .custom-select:focus + .custom-arrow {
+        transform: translateY(-50%) rotate(180deg);
+    }
+
+</style>
+<div class="container-fluid d-flex flex-column mt-5 justify-content-center align-items-center px-5" style="width: 100%;">
+    <h3 class="mb-5 text-start" style="width: 100%;">
+        Đăng ký đại lý
+    </h3>
+    <form action="/dang-ki-dai-ly" method="POST" class="w-100">
+        <div class="row d-flex flex-nowrap align-items-center mb-4" style="width: 550px; margin: auto;">
+            <label for="quan" class="text-start" style="width: 100px;">Quận</label>
+            <div class="" style="flex: 1">
+                <input type="text" class="form-control" id="quan" name="quan" placeholder="Nhập quận" required>
+            </div>
+        </div>
+        <div class="row d-flex flex-nowrap align-items-center mb-4" style="width: 550px; margin: auto;">
+            <label for="ma_dai_ly" class="text-start" style="width: 100px;">Mã đại lý</label>
+            <div class="" style="flex: 1">
+                <input type="text" class="form-control" id="ma_dai_ly" name="ma_dai_ly" placeholder="Nhập mã đại lý" required>
+            </div>
+        </div>
+        <div class="row d-flex flex-nowrap align-items-center mb-4" style="width: 550px; margin: auto;">
+            <label for="loai_dai_ly" class="text-start" style="width: 100px;">Loại đại lý</label>
+            <div class="custom-select-wrapper" style="flex: 1">
+                <select class="form-select custom-select" id="loai_dai_ly" name="loai_dai_ly" required>
+                    <option value="">-- Chọn loại đại lý --</option>
+                    <option value="1">Loại 1</option>
+                    <option value="2">Loại 2</option>
+                </select>
+                <span class="custom-arrow">
+                    <i class="bi bi-chevron-down"></i>
+                </span>
+            </div>
+        </div>
+        <div class="row d-flex align-items-center justify-content-center" style="width: 400px; margin: auto; margin-top: 50px; ">
+            <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold" 
+                style="width: 50%; background-color: #C6BDBD; color: #000000;"
+                >
+                Đăng ký
+            </button>
+        </div>
+    </form>
+</div>

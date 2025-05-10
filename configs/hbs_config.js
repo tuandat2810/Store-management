@@ -6,6 +6,11 @@ module.exports = (app) => {
     defaultLayout: 'main',
     layoutsDir: 'views/layouts/',
     partialsDir: 'views/partials/',
+    helpers: {
+      eq: (a, b, options) => {
+        return a == b ? options.fn(this) : options.inverse(this);
+      }
+    }
   }));
 
   app.set('view engine', 'hbs');

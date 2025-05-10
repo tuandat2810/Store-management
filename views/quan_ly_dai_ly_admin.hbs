@@ -1,0 +1,107 @@
+<style>
+  .agent-management-container {
+    padding: 40px;
+  }
+
+  .agent-management-title {
+    font-size: 1.8rem;
+  }
+
+  .agent-management-table {
+    width: 95%;
+    margin: 40px auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 1rem;
+    border: 1px solid #bdbdbd;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .agent-management-table th {
+    background: #23262b;
+    color: #fff;
+    padding: 8px 0;
+    font-weight: 500;
+    border-right: 1px solid #bdbdbd;
+  }
+
+  .agent-management-table th:first-child {
+    border-top-left-radius: 12px;
+  }
+
+  .agent-management-table th:last-child {
+    border-top-right-radius: 12px;
+    border-right: none;
+  }
+
+  .agent-management-table td {
+    background: #f7f8fa;
+    color: #23262b;
+    text-align: center;
+    padding: 8px 0;
+    border-top: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0;
+  }
+
+  .agent-management-table td:last-child {
+    border-right: none;
+  }
+
+  .agent-management-btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin-top: 40px;
+  }
+
+  .agent-management-btn {
+    background: #d2c7c7;
+    border: none;
+    border-radius: 30px;
+    padding: 5px 30px;
+    font-size: 1rem;
+    color: #000;
+    cursor: pointer;
+  }
+
+  .agent-management-btn:first-child {
+    padding: 5px 20px;
+  }
+</style>
+
+<div class="agent-management-container">
+  <h1 class="agent-management-title">Quản lý đại lý</h1>
+  <table class="agent-management-table">
+    <thead>
+      <tr>
+        <th>Tên đại lý</th>
+        <th>Mã đại lý</th>
+        <th>Loại đại lý</th>
+        <th>Quận</th>
+        <th>Trạng thái</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>No-Data</td>
+        <td>No-Data</td>
+        <td>No-Data</td>
+        <td>No-Data</td>
+        <td>No-Data</td>
+      </tr>
+      <tr>
+        <td>No-Data</td>
+        <td>No-Data</td>
+        <td>No-Data</td>
+        <td>No-Data</td>
+        <td>No-Data</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="agent-management-btn-group">
+    <button class="agent-management-btn">Thêm</button>
+    <button class="agent-management-btn">Xóa</button>
+    <button class="agent-management-btn">Sửa</button>
+  </div>
+</div>

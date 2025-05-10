@@ -1,0 +1,39 @@
+<div class="container-fluid d-flex flex-column mt-5 justify-content-center align-items-center px-5 w-100">
+    <h3 class="mb-5 text-start w-100">
+        Lập phiếu xuất hàng
+    </h3>
+    <form action="/lap-phieu-xuat-hang" method="POST" class="w-100">
+        <div class="row d-flex flex-nowrap align-items-center mb-4" style="width: 550px; margin: auto;">
+            <label for="ma_dai_ly" class="text-start" style="width: 100px;">Mã đại lý</label>
+            <div class="text-start form-control" style="flex: 1; margin-left: 12px; margin-right: 12px;">
+                Mã đại lý
+            </div>
+        </div>
+        <div class="row d-flex flex-nowrap align-items-center mb-4" style="width: 550px; margin: auto;">
+            <label for="ma_phieu" class="text-start" style="width: 100px;">Mã phiếu</label>
+            <div class="text-start form-control" style="flex: 1; margin-left: 12px; margin-right: 12px;">
+                Mã phiếu
+            </div>
+        </div>
+        <div class="row d-flex flex-nowrap align-items-center mb-4" style="width: 550px; margin: auto;">
+            <label for="mat_hang" class="text-start" style="width: 100px;">Mặt hàng</label>
+            <div class="" style="flex: 1">
+                <input type="text" class="form-control" id="mat_hang" name="mat_hang" placeholder="Nhập mặt hàng" required>
+            </div>
+        </div>
+         <div class="row d-flex flex-nowrap align-items-center mb-4" style="width: 550px; margin: auto;">
+            <label for="so_luong" class="text-start" style="width: 100px;">Số lượng</label>
+            <div class="" style="flex: 1">
+                <input type="text" class="form-control" id="so_luong" name="so_luong" placeholder="Nhập số lượng" required>
+            </div>
+        </div>
+        <div class="row d-flex align-items-center justify-content-center" style="width: 400px; margin: auto; margin-top: 50px; ">
+            <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold" 
+                style="width: 50%; background-color: #C6BDBD; color: #000000;"
+                >
+                Lập
+            </button>
+        </div>
+    </form>
+
+</div>

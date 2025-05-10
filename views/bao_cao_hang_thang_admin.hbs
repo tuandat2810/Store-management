@@ -1,0 +1,79 @@
+<style>
+  .monthly-report-container {
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .monthly-report-title {
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-top: 40px;
+    margin-left: 60px;
+    text-align: left;
+  }
+
+  .monthly-report-select-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+  }
+
+  .monthly-report-label {
+    font-size: 1rem;
+    margin-right: 24px;
+    align-self: center;
+  }
+
+  .monthly-report-select {
+    width: 150px;
+    font-size: 1rem;
+    padding: 14px 18px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    outline: none;
+    background: #fff;
+  }
+
+  .monthly-report-btn-row {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    margin-top: 60px;
+  }
+
+  .monthly-report-btn {
+    background: #cbbaba;
+    border: none;
+    border-radius: 30px;
+    padding: 18px 48px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #23262b;
+    cursor: pointer;
+  }
+</style>
+
+<div class="monthly-report-container">
+  <!-- Tiêu đề -->
+  <h1 class="monthly-report-title">
+    Báo cáo tháng
+  </h1>
+
+  <!-- Chọn tháng-->
+  <div class="monthly-report-select-row">
+    <label for="thang" class="monthly-report-label">Tháng</label>
+    <select id="thang" name="thang" class="monthly-report-select">
+      <option>Value</option>
+    </select>
+  </div>
+
+  <!-- Hai nút chức năng -->
+  <div class="monthly-report-btn-row">
+    <button class="monthly-report-btn">
+      Báo cáo công nợ
+    </button>
+    <button class="monthly-report-btn">
+      Báo cáo doanh thu
+    </button>
+  </div>
+</div>

@@ -1,0 +1,109 @@
+<style>
+  .grid-table .row {
+    --bs-gutter-x: 0;
+  }
+
+  .agency-pagination-row {
+    margin-top: 16px;
+  }
+
+  .agency-search-bar-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 16px;
+    gap: 24px;
+  }
+
+  .agency-search-bar-container {
+    position: relative;
+    width: 420px;
+  }
+
+  .agency-search-input {
+    width: 100%;
+    font-size: 1rem;
+    padding: 14px 48px 14px 18px;
+    border: 2px solid #e0e0e0;
+    border-radius: 32px;
+    outline: none;
+    background: #fff;
+  }
+
+  .agency-search-clear {
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    color: #23262b;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .agency-search-icon {
+    font-size: 2.2rem;
+    color: #23262b;
+    cursor: pointer;
+    user-select: none;
+  }
+
+</style>
+
+<div class="container-fluid mt-5 px-5">
+  <h3 class="mb-3 text-start">
+      Danh sách đại lý
+  </h3>
+  <div class="agency-search-bar-row mb-3">
+    <div class="agency-search-bar-container">
+      <input
+        type="text"
+        value="Value"
+        class="agency-search-input"
+      />
+      <!-- Icon clear (x) -->
+      <i
+        class="bi bi-x agency-search-clear"
+        onclick="this.previousElementSibling.value='';"
+      ></i>
+    </div>
+    <!-- Icon search -->
+    <i class="bi bi-search agency-search-icon"></i>
+  </div>
+
+  <div class="rounded-3 border border-secondary overflow-hidden grid-table">
+    <div class="row">
+      <!-- Header -->
+      <div class="col-3 bg-dark text-white p-2 border-end">Tên đại lý</div>
+      <div class="col-3 bg-dark text-white p-2 border-end">Mã đại lý</div>
+      <div class="col-3 bg-dark text-white p-2 border-end">Loại đại lý</div>
+      <div class="col-3 bg-dark text-white p-2">Quận</div>
+      <!-- Dòng dữ liệu 1 -->
+      <div class="col-3 bg-light text-dark p-2 border-top border-end">No-Data</div>
+      <div class="col-3 bg-light text-dark p-2 border-top border-end">No-Data</div>
+      <div class="col-3 bg-light text-dark p-2 border-top border-end">No-Data</div>
+      <div class="col-3 bg-light text-dark p-2 border-top">No-Data</div>
+      <!-- Dòng dữ liệu 2 -->
+      <div class="col-3 bg-light text-dark p-2 border-top border-end">No-Data</div>
+      <div class="col-3 bg-light text-dark p-2 border-top border-end">No-Data</div>
+      <div class="col-3 bg-light text-dark p-2 border-top border-end">No-Data</div>
+      <div class="col-3 bg-light text-dark p-2 border-top">No-Data</div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-center agency-pagination-row">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" href="#">Previous</a>
+        </li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item">
+          <a class="page-link" href="#">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+</div>

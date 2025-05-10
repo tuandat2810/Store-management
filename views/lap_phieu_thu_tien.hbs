@@ -1,0 +1,98 @@
+<style>
+  .receipt-form-container {
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .receipt-form {
+    max-width: 700px;
+    margin: 40px auto 0 auto;
+  }
+
+  .receipt-form-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 40px;
+    text-align: left;
+  }
+
+  .receipt-form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .receipt-form-row {
+    display: flex;
+    align-items: center;
+  }
+
+  .receipt-form-label {
+    flex: 0 0 160px;
+    font-size: 1.2rem;
+    text-align: left;
+  }
+
+  .receipt-form-input {
+    flex: 0 0 50%;
+    font-size: 1.2rem;
+    padding: 12px 18px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    outline: none;
+    margin-left: 16px;
+    background: #fff;
+  }
+
+  .receipt-form-submit {
+    background: #cbbaba;
+    border: none;
+    border-radius: 16px;
+    padding: 10px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #23262b;
+    cursor: pointer;
+    margin-top: 48px;
+    text-align: center;
+    display: inline-block;
+  }
+  .receipt-form-submit-container {
+    text-align: center;
+    margin-top: 48px;
+  }
+</style>
+
+<div class="receipt-form-container">
+  <form class="receipt-form">
+    <h1 class="receipt-form-title">Lập phiếu thu tiền</h1>
+    <div class="receipt-form-fields">
+
+      <div class="receipt-form-row">
+        <label for="madaily" class="receipt-form-label">Mã đại lý</label>
+        <input id="madaily" name="madaily" type="text" value="Value" class="receipt-form-input">
+      </div>
+
+      <div class="receipt-form-row">
+        <label for="maphieu" class="receipt-form-label">Mã phiếu</label>
+        <input id="maphieu" name="maphieu" type="text" value="Value" class="receipt-form-input">
+      </div>
+
+      <div class="receipt-form-row">
+        <label for="sotien" class="receipt-form-label">Số tiền</label>
+        <input id="sotien" name="sotien" type="text" value="Value" class="receipt-form-input">
+      </div>
+
+      <div class="receipt-form-row">
+        <label for="ghichu" class="receipt-form-label">Ghi chú</label>
+        <input id="ghichu" name="ghichu" type="text" value="Value" class="receipt-form-input">
+      </div>
+
+    </div>
+    <div class="receipt-form-submit-container">
+      <button type="submit" class="receipt-form-submit">
+        Lưu
+      </button>
+    </div>
+  </form>
+</div>

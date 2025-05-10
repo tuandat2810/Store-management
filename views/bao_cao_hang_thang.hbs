@@ -1,0 +1,71 @@
+<style>
+    .custom-select-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    .custom-arrow {
+        position: absolute;
+        top: 50%;
+        right: 26px;
+        transform: translateY(-50%);
+        font-size: 16px;
+        transition: transform 0.3s ease;
+        pointer-events: none;
+        z-index: 10;
+        background-color: #ffffff;
+    }
+
+    /* Khi select đang được focus (được mở), xoay mũi tên */
+    .custom-select:focus + .custom-arrow {
+        transform: translateY(-50%) rotate(180deg);
+    }
+
+    .button-left {
+        margin-right: 30px;
+    }
+</style>
+
+<div class="container-fluid d-flex flex-column mt-5 justify-content-center align-items-center px-5" style="width: 100%;">
+    <h3 class="mb-5 text-start" style="width: 100%;">
+        Báo cáo tháng
+    </h3>
+    <form action="/bao-cao-thang" method="POST" class="w-100">
+        <div class="row d-flex flex-column mb-4" style="width: 550px; margin: auto;">
+            <label for="thang" class="text-start mb-2" style="width: 100px; margin-left: 66px">Tháng</label>
+            <div class="custom-select-wrapper w-75 " style="margin: auto;">
+                <select class="form-select custom-select" id="thang" name="thang" required>
+                    <option value="">-- Chọn tháng --</option>
+                    <option value="1">Loại 1</option>
+                    <option value="2">Loại 2</option>
+                    <option value="1">Loại 3</option>
+                    <option value="1">Loại 4</option>
+                    <option value="1">Loại 5</option>
+                    <option value="1">Loại 6</option>
+                    <option value="1">Loại 7</option>
+                    <option value="1">Loại 8</option>
+                    <option value="1">Loại 9</option>
+                    <option value="1">Loại 10</option>
+                    <option value="1">Loại 11</option>
+                    <option value="1">Loại 12</option>
+                </select>
+                <span class="custom-arrow">
+                    <i class="bi bi-chevron-down"></i>
+                </span>
+            </div>
+        </div>
+        <div class="row d-flex align-items-center" style="width: 75%; margin: auto; margin-top: 50px; justify-content: center;">
+            <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold button-left" 
+                style="width: 200px; background-color: #C6BDBD; color: #000000;"
+                >
+                Báo cáo công nợ
+            </button>
+            <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold" 
+                style="width: 200px; background-color: #C6BDBD; color: #000000;"
+                >
+                Báo cáo doanh thu
+            </button>
+
+        </div>
+    </form>
+</div>

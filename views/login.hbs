@@ -1,4 +1,4 @@
-<div class="container mt-5">
+{{!-- <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow">
@@ -29,4 +29,49 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
+
+<!DOCTYPE html>
+<!-- Main Content -->
+<main class="d-flex justify-content-center align-items-center min-vh-100 bg-secondary">
+    <div class="card p-4 shadow" style="max-width: 400px; width: 100%;">
+        <!-- Title -->
+        <h2 class="card-title text-center mb-4">Đăng nhập</h2>
+
+        <!-- Login Form -->
+        <form action="/page/login" method="POST">
+            <div class="mb-3">
+                <label for="username" class="form-label">Tên tài khoản</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Mật khẩu</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+        </form>
+
+        <!-- Forgot Password Link -->
+        <div class="text-center mt-3">
+            <a href="/forgot-password" class="text-muted text-decoration-none" style="font-size: 14px;">Quên mật khẩu?</a>
+            <a href="/page/register" class="text-muted text-decoration-none" style="font-size: 14px;">Đăng ký</a>
+        </div>
+        
+    </div>
+</main>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Có thể thêm các xử lý JavaScript ở đây
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function(event) {
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                if (!username || !password) {
+                    event.preventDefault();
+                    alert('Vui lòng nhập đầy đủ thông tin!');
+                }
+            });
+        });
+</script>
