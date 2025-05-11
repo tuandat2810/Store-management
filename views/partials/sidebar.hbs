@@ -16,7 +16,7 @@
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-            <a href="#" class="sidebar-item nav-link link-body-emphasis active" aria-current="page" data-section="home">
+            <a href="#" class="sidebar-item nav-link link-body-emphasis" data-section="home">
                 <i class="bi bi-house-door me-2"></i>
                 Trang chủ
             </a>
@@ -71,7 +71,7 @@
 <hr>
 <ul class="nav nav-pills flex-column mb-auto">
     <li class="nav-item">
-        <a href="#" class="sidebar-item nav-link link-body-emphasis" aria-current="page" data-section="home">
+        <a href="#" class="sidebar-item nav-link link-body-emphasis" data-section="home">
             <i class="bi bi-house-door me-2"></i>
             Trang chủ
         </a>
@@ -140,6 +140,13 @@
         const match = window.location.pathname.match(/\/page\/section\/([^\/]+)/);
         const initialSection = match ? match[1] : null;
 
+        // Lần đầu load
+        let isInitial = true;
+
+        if (isInitial) 
+            updateActive('home');
+            isInitial = false;
+
         // Ghi state ban đầu để popstate hoạt động ngay
         history.replaceState({ section: initialSection }, '', window.location.pathname);
 
@@ -172,6 +179,7 @@
             // Nếu là "home", chuyển hướng trang (full load)
             if (section === 'home') {
                 window.location.href = '/page/home';
+                isInitial = true;
                 return;
             }
             // Các Sectio khác
