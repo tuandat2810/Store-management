@@ -156,8 +156,6 @@ module.exports.loginPost = async (req, res) => {
             maxAge: 86400000,
             httpOnly: true,
         });
-        console.log("Đăng nhập thành công với tokenUser:", user.tokenUser);
-
         return res.redirect('/page/home');
     } catch (err) {
         console.error("Lỗi đăng nhập:", err);
@@ -182,4 +180,9 @@ module.exports.home = async(req, res) => {
         layout: 'main',
         pageTitle: 'Trang chủ'
     });
+};
+
+// controllers/about.controller.js
+module.exports.showAboutPage = (req, res) => {
+    res.render("about");
 };

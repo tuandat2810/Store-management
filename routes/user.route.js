@@ -38,5 +38,7 @@ router.post("/login",userController.loginPost);
 
 router.get("/logout", userController.logout);
 
+router.get("/about", authMiddleware.requireAuth, userController.showAboutPage);
+
 router.get('/home', authMiddleware.requireAuth, userController.home);
 module.exports = router;
