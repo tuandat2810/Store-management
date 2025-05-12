@@ -132,89 +132,13 @@
 </div>
 {{/eq}}
 
-{{!-- 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const sidebarItems = document.querySelectorAll('.sidebar-item');
-
-        // 1. Xác định section khởi tạo (khi reload / truy cập trực tiếp)
-        //    VD: URL = /page/section/thong_tin_dai_ly → section = "thong_tin_dai_ly"
-        const match = window.location.pathname.match(/\/page\/section\/([^\/]+)/);
-        const initialSection = match ? match[1] : null;
-
-        // Lần đầu load
-        let isInitial = true;
-
-        if (isInitial) 
-            updateActive('home');
-            isInitial = false;
-
-        // Ghi state ban đầu để popstate hoạt động ngay
-        history.replaceState({ section: initialSection }, '', window.location.pathname);
-
-        // Hàm load partial
-        function loadSection(section) {
-            axios.get(`/page/ajax/section/${section}`)
-            .then(res => {
-                document.getElementById('main-content').innerHTML = res.data;
-            })
-            .catch(err => console.error('Lỗi tải nội dung:', err));
-        }
-
-        // Hàm cập nhật active sidebar
-        function updateActive(section) {
-            sidebarItems.forEach(item => {
-            item.classList.remove('active');
-            item.removeAttribute('aria-current');
-            if (item.dataset.section === section) {
-                item.classList.add('active');
-                item.setAttribute('aria-current', 'page');
-            }
-            });
-        }
-
-        // 2. Bắt sự kiện click
-        sidebarItems.forEach(item => {
-            item.addEventListener('click', e => {
-            e.preventDefault();
-            const section = item.dataset.section;
-            // Nếu là "home", chuyển hướng trang (full load)
-            if (section === 'home') {
-                window.location.href = '/page/home';
-                isInitial = true;
-                return;
-            }
-            // Các Sectio khác
-            updateActive(section);
-            loadSection(section);
-
-            // 3. Đẩy URL direct lên history
-            history.pushState({ section }, '', `/page/section/${section}`);
-            });
-        });
-
-        // 4. Xử lý Back / Forward
-        window.addEventListener('popstate', e => {
-            const section = (e.state && e.state.section) || initialSection;
-            if (!section) return;
-            updateActive(section);
-            loadSection(section);
-        });
-
-        // 5. Nếu là lần đầu load và có section trong URL, load nó luôn
-        if (initialSection) {
-            updateActive(initialSection);
-            loadSection(initialSection);
-        }
-    });
-</script> --}}
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const sidebarItems = document.querySelectorAll('.sidebar-item');
 
         // 1. Xác định section khởi tạo (khi reload / truy cập trực tiếp)
-        const match = window.location.pathname.match(/\/page\/section\/([^\/]+)/);
+        const match = window.location.pathname.match(/\/page\/([^\/]+)/);
         const initialSection = match ? match[1] : null;
 
         // Ghi state ban đầu để popstate hoạt động ngay
@@ -228,7 +152,7 @@
                 return;
             }
             mainContent.innerHTML = '<p>Đang tải...</p>'; // Hiển thị trạng thái đang tải
-            axios.get(`/page/ajax/section/${section}`)
+            axios.get(`/page/ajax/${section}`)
                 .then(res => {
                     mainContent.innerHTML = res.data; // Tải nội dung mới
                 })
@@ -270,7 +194,7 @@
                 loadSection(section);
 
                 // 3. Đẩy URL direct lên history
-                history.pushState({ section }, '', `/page/section/${section}`);
+                history.pushState({ section }, '', `/page/${section}`);
             });
         });
 

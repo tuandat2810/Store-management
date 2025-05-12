@@ -1,3 +1,6 @@
+const generateRandom = require('../helpers/generateRandom');
+const Agency = require('../models/agency.m.js');
+
 module.exports.load_main_data_section = async (req, res) => {
     const name = req.params.name;
 
@@ -23,7 +26,9 @@ module.exports.load_main_data_section = async (req, res) => {
         }
 
         // Render từ views chứ không phải views/partials
-        const data = {};
+        const agencyCode = await generateRandom.generateUniqueAgencyCode();
+        // console.log(agencyCode);
+        const data = { agencyCode };
         res.render(name, {
             layout: false,
             ...data
@@ -67,4 +72,31 @@ module.exports.loadMainSection = async (req, res) => {
       console.error(err);
       res.status(500).render('500', { layout: false });
     }
+  };
+
+
+  module.exports.dang_ky_dai_lyPOST = async (req, res) => {
+      const { agencyCode, agencyName, agencyType, email, phoneNumber, district, address } = req.body;
+  
+      console.log('Usename: ', user.fullname);
+      try {
+          const newAgency = new Agency({
+              agencyCode,
+              managerUsername: user.fullname,
+              name: agencyName,
+              type: agencyType,
+              email,
+              phone: phoneNumber,
+              district,
+              address,
+              acceptedDate: new Date().toISOString()
+          });
+  
+          await newAgency.save();
+  
+          req.flash("success", "Đăng ký đại lý thành công.");
+      } catch (error) {
+          console.error("Lỗi đăng ký:", error);
+          req.flash("error", "Lỗi hệ thống khi đăng ký đại lý!");
+      }
   };
