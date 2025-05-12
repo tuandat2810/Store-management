@@ -8,17 +8,15 @@
 </style>
 
 {{#eq user.type "user"}}
-
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width:280px;height: 100vh;position: fixed; top: 0; left: 0; z-index: 1000;">
-    <a href="/page/home" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none" style="margin-left: 15px;padding-top: 70px;">
-
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px; height: 100vh;">
+    <a href="/page/home" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
         <i class="bi bi-person-circle pe-none me-2 fs-4"></i>
         <span class="fs-4">Đại lý</span>
     </a>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-            <a href="/page/home" class="sidebar-item nav-link link-body-emphasis active"data-section="home">
+            <a href="#" class="sidebar-item nav-link link-body-emphasis" data-section="home">
                 <i class="bi bi-house-door me-2"></i>
                 Trang chủ
             </a>
@@ -65,15 +63,15 @@
 
 </style>
 
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px; height: 100vh;position: fixed; top: 0; left: 0; z-index: 1000;">
-<a href="/page/home" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"style="margin-left: 15px;padding-top: 70px;">
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px; height: 100vh;">
+<a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
     <i class="bi bi-person-circle pe-none me-2 fs-4"></i>
-    <span class="fs-4" >Admin</span>
+    <span class="fs-4">Admin</span>
 </a>
 <hr>
 <ul class="nav nav-pills flex-column mb-auto">
     <li class="nav-item">
-        <a href="/page/home" class="sidebar-item nav-link link-body-emphasis" data-section="home">
+        <a href="#" class="sidebar-item nav-link link-body-emphasis" data-section="home">
             <i class="bi bi-house-door me-2"></i>
             Trang chủ
         </a>
@@ -137,79 +135,38 @@
     document.addEventListener('DOMContentLoaded', () => {
         const sidebarItems = document.querySelectorAll('.sidebar-item');
 
-        // 1. Xác định section khởi tạo (khi reload / truy cập trực tiếp)
-        const match = window.location.pathname.match(/\/page\/([^\/]+)/);
-        const initialSection = match ? match[1] : null;
-
-        // Ghi state ban đầu để popstate hoạt động ngay
-        history.replaceState({ section: initialSection }, '', window.location.pathname);
-
-        // Hàm load partial
-        function loadSection(section) {
-            const mainContent = document.getElementById('main-content');
-            if (!mainContent) {
-                console.error('Phần tử #main-content không tồn tại!');
-                return;
-            }
-            mainContent.innerHTML = '<p>Đang tải...</p>'; // Hiển thị trạng thái đang tải
-            axios.get(`/page/ajax/${section}`)
-                .then(res => {
-                    mainContent.innerHTML = res.data; // Tải nội dung mới
-                })
-                .catch(err => {
-                    console.error('Lỗi tải nội dung:', err);
-                    mainContent.innerHTML = '<p>Lỗi tải nội dung. Vui lòng thử lại.</p>';
-                });
-        }
-
-        // Hàm cập nhật trạng thái active của sidebar
         function updateActive(section) {
             sidebarItems.forEach(item => {
-                item.classList.remove('active');
-                item.removeAttribute('aria-current');
-                if (item.dataset.section === section) {
-                    item.classList.add('active');
-                    item.setAttribute('aria-current', 'page');
-                }
+            item.classList.remove('active');
+            if (item.dataset.section === section) {
+                item.classList.add('active');
+                item.setAttribute('aria-current', 'page');
+            }
             });
         }
 
-        // 2. Bắt sự kiện click
+        // Lấy section từ URL, ví dụ /page/section/dang_ki_dai_ly
+        let path = window.location.pathname;
+        let section = 'home';
+        if (path.startsWith('/page/section/')) {
+            section = path.split('/').pop();
+        }
+
+        // Chạy lần đầu để highlight
+        updateActive(section);
+
+        // Cài sự kiện click để highlight luôn khi người dùng click link (nếu có AJAX)
         sidebarItems.forEach(item => {
             item.addEventListener('click', e => {
-                e.preventDefault();
-                
-                if (item.classList.contains('active')) return;
-
-                const section = item.dataset.section;
-
-                // Nếu là "home", chuyển hướng trang (full load)
-                if (section === 'home') {
-                    window.location.href = '/page/home';
-                    return;
-                }
-
-                // Các section khác
-                updateActive(section);
-                loadSection(section);
-
-                // 3. Đẩy URL direct lên history
-                history.pushState({ section }, '', `/page/${section}`);
+            e.preventDefault();
+            const sec = item.dataset.section;
+            if (sec === 'home') {
+                window.location.href = '/page/home';
+            } else {
+                window.location.href = `/page/section/${sec}`;
+            }
+            updateActive(sec);
             });
         });
-
-        // 4. Xử lý Back / Forward
-        window.addEventListener('popstate', e => {
-            const section = (e.state && e.state.section) || initialSection;
-            if (!section) return;
-            updateActive(section);
-            loadSection(section);
-        });
-
-        // 5. Nếu là lần đầu load và có section trong URL, load nó luôn
-        if (initialSection) {
-            updateActive(initialSection);
-            loadSection(initialSection);
-        }
     });
 </script>
