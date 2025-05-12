@@ -8,8 +8,10 @@
 </style>
 
 {{#eq user.type "user"}}
+
 <div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width = 280px;height: 100vh;position: fixed; top: 0; left: 0; z-index: 1000;">
     <a href="/page/home" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none" style="margin-left: 15px;padding-top: 70px;">
+
         <i class="bi bi-person-circle pe-none me-2 fs-4"></i>
         <span class="fs-4">Đại lý</span>
     </a>
@@ -140,6 +142,13 @@
         const match = window.location.pathname.match(/\/page\/section\/([^\/]+)/);
         const initialSection = match ? match[1] : null;
 
+        // Lần đầu load
+        let isInitial = true;
+
+        if (isInitial) 
+            updateActive('home');
+            isInitial = false;
+
         // Ghi state ban đầu để popstate hoạt động ngay
         history.replaceState({ section: initialSection }, '', window.location.pathname);
 
@@ -172,6 +181,7 @@
             // Nếu là "home", chuyển hướng trang (full load)
             if (section === 'home') {
                 window.location.href = '/page/home';
+                isInitial = true;
                 return;
             }
             // Các Sectio khác
