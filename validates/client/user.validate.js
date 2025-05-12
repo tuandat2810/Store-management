@@ -1,5 +1,4 @@
 module.exports.registerPost = (req, res, next) => {
-    console.log("tôi đang ở validate user");
     const { username, fullname, email, password, confirmPassword } = req.body;
 
     if (!username) {
@@ -44,7 +43,6 @@ module.exports.registerPost = (req, res, next) => {
 };
 
 module.exports.loginPost =  (req,res, next) => {
-    console.log("tôi đang ở validate user");
     if(!req.body.username) {
         req.flash('error', `Vui lòng nhập tài khoản`);
         res.redirect("back");
