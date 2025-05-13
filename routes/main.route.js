@@ -23,6 +23,6 @@ router.get("/thong_tin_admin", authMiddleware.requireAuth, mainController.load_t
 router.get("/thong_tin_dai_ly", authMiddleware.requireAuth, mainController.load_thong_tin_dai_ly);
 
 
-router.post("/dang_ki_dai_ly", mainController.dang_ky_dai_lyPOST);
+router.post("/dang_ki_dai_ly", authMiddleware.requireAuth, mainController.dang_ky_dai_lyPOST);
 
 module.exports = router;
