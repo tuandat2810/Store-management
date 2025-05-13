@@ -6,7 +6,7 @@ module.exports.infoUser = async (req, res, next) => {
             tokenUser: req.cookies.tokenUser
         })
         if(user) {
-            res.locals.user = user;
+            res.locals.user = user.toObject();
         }
     }
     next();
