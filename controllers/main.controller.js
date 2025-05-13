@@ -149,7 +149,7 @@ module.exports.load_thong_tin_dai_ly = async (req, res) => {
   try {
     res.render('thong_tin_dai_ly', {
       layout: 'main',
-      title: 'Thông tin đại lý'
+      pageTitle: 'Thông tin đại lý'
     });
   } catch (err) {
     console.error(err);
