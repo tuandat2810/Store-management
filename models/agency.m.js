@@ -47,6 +47,12 @@ const AgencySchema = new mongoose.Schema({
         lowercase: true,
         trim: true,
         match: [/.+@.+\..+/, 'Email không hợp lệ']
+    },
+    status: {
+        type: String,
+        enum: ["Đã duyệt", "Đang chờ", "Từ chối"],
+        trim: true,
+        required: true
     }
 }, {
     timestamps: true // Tự động thêm createdAt và updatedAt

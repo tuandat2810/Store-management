@@ -23,6 +23,8 @@ module.exports.load_dang_ki_dai_ly = async (req, res) => {
 
 module.exports.load_danh_sach_dai_ly = async (req, res) => {
   try {
+    
+
     res.render('danh_sach_dai_ly', {
       layout: 'main',
       title: 'Danh sách đại lý'
@@ -34,10 +36,14 @@ module.exports.load_danh_sach_dai_ly = async (req, res) => {
 };
 
 module.exports.load_danh_sach_dai_ly_admin = async (req, res) => {
+  const agencyList = await Agency.find().lean();
+  console.log(agencyList);
+  const data = { agencyList };
   try {
     res.render('danh_sach_dai_ly_admin', {
       layout: 'main',
-      title: 'Danh sách đại lý Admin'
+      title: 'Danh sách đại lý Admin',
+      ...data
     });
   } catch (err) {
     console.error(err);

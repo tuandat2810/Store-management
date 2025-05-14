@@ -18,149 +18,99 @@
     margin: 0 auto;
   }
 
-  .agency-search-bar-row {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-top: 16px;
-    gap: 24px;
-  }
-
-  .agency-search-bar-container {
-    position: relative;
-    width: 420px;
-  }
-
-  .agency-search-input {
-    width: 100%;
-    font-size: 1rem;
-    padding: 14px 48px 14px 18px;
-    border: 2px solid #e0e0e0;
-    border-radius: 32px;
-    outline: none;
-    background: #fff;
-  }
-
-  .agency-search-clear {
-    position: absolute;
-    right: 40px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 2rem;
-    color: #23262b;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .agency-search-icon {
-    font-size: 2.2rem;
-    color: #23262b;
-    cursor: pointer;
-    user-select: none;
-  }
 
   .agency-table-container {
-    margin-top: 16px;
+    margin: 16px;
   }
 
-  .agency-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    font-size: 1rem;
-    border: 1px solid #bdbdbd;
-    border-radius: 12px;
-    overflow: hidden;
+  .pagination .page-link {
+    color: black;                /* Màu chữ */
+    background-color: #fff;      /* Màu nền (trang hiện tại có thể giữ nguyên) */
+    border-color: black;         /* Màu viền */
   }
 
-  .agency-table th {
-    background: #23262b;
-    color: #fff;
-    padding: 8px 0;
-    font-weight: 500;
-    border-right: 1px solid #bdbdbd;
+  .pagination .page-item.active .page-link {
+    background-color: black;     /* Nền khi active */
+    border-color: black;         /* Viền khi active */
+    color: white;                /* Chữ khi active */
   }
 
-  .agency-table th:first-child {
-    border-top-left-radius: 12px;
-  }
-
-  .agency-table th:last-child {
-    border-top-right-radius: 12px;
-    border-right: none;
-  }
-
-  .agency-table td {
-    background: #f7f8fa;
-    color: #23262b;
-    text-align: center;
-    padding: 8px 0;
-    border-top: 1px solid #e0e0e0;
-    border-right: 1px solid #e0e0e0;
-  }
-
-  .agency-table td:last-child {
-    border-right: none;
-  }
-
-  .agency-pagination-row {
-    margin-top: 16px;
+  .pagination .page-link:hover {
+    background-color: #333;      /* Nền khi hover */
+    color: white;
   }
 </style>
 
 <div class="agency-list-container w-100">
   <!-- Tiêu đề trang -->
-  <h1 class="agency-list-title">
+  <h1 class="agency-list-title text-center">
     Danh sách đại lý
   </h1>
 
   <!-- Container bọc search bar và table -->
   <div class="agency-list-content">
     <!-- Thanh tìm kiếm (search bar) căn phải -->
-    <div class="agency-search-bar-row">
-      <div class="agency-search-bar-container">
+    <div class="d-flex justify-content-end mb-3">
+      <div class="input-group" style="width: 300px;">
         <input
           type="text"
-          value="Value"
-          class="agency-search-input"
+          class="form-control"
+          placeholder="Tìm kiếm đại lý..."
+          id="searchInput"
         />
-        <!-- Icon clear (x) -->
-        <i
-          class="bi bi-x agency-search-clear"
-          onclick="this.previousElementSibling.value='';"
-        ></i>
+        <button class="btn btn-outline-secondary" type="button" onclick="clearSearch()">
+          <i class="bi bi-x"></i>
+        </button>
+        <button class="btn btn-outline-dark" type="button" onclick="performSearch()">
+          <i class="bi bi-search"></i>
+        </button>
       </div>
-      <!-- Icon search -->
-      <i class="bi bi-search agency-search-icon"></i>
     </div>
+  </div>
 
-    <!-- Bảng dữ liệu -->
-    <div class="agency-table-container">
-      <table class="agency-table">
-        <thead>
+
+    <!-- Bảng dữ liệu sử dụng Bootstrap -->
+  <div class="agency-table-container">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col" class="text-center" style="width: 5%;">#</th>
+          <th scope="col" class="text-center" style="width: 16%;">Tên đại lý</th>
+          <th scope="col" class="text-center" style="width: 12%;">Người quản lý</th>
+          <th scope="col" class="text-center" style="width: 6%;">Loại</th>
+          <th scope="col" class="text-center" style="width: 6%;">Quận</th>
+          <th scope="col" class="text-center" style="width: 39%;">Địa chỉ</th>
+          <th scope="col" class="text-center" style="width: 15%;">Trạng thái</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each agencyList}}
           <tr>
-            <th class="text-center">Tên đại lý</th>
-            <th class="text-center">Mã đại lý</th>
-            <th class="text-center">Loại đại lý</th>
-            <th class="text-center">Quận</th>
+            <td class="text-center">{{ agencyCode }}</td>
+            <td class="text-center">{{ name }}</td>
+            <td class="text-center">{{ managerUsername }}</td>
+            <td class="text-center">{{ type }}</td>
+            <td class="text-center">{{ district }}</td>
+            <td class="text-center">{{ address }}</td>
+            <td class="text-center">
+              {{#eq status "Đã duyệt"}}
+                <span class="badge bg-success">Đã được duyệt</span>
+              {{/eq}}
+              {{#eq status "Đang chờ"}}
+                <span class="badge bg-secondary">Đang chờ duyệt</span>
+              {{/eq}}
+              {{#eq status "Từ chối"}}
+                <span class="badge bg-danger">Đã bị từ chối</span>
+              {{/eq}}
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>No-Data</td>
-            <td>No-Data</td>
-            <td>No-Data</td>
-            <td>No-Data</td>
-          </tr>
-          <tr>
-            <td>No-Data</td>
-            <td>No-Data</td>
-            <td>No-Data</td>
-            <td>No-Data</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+
+
 
     <!-- Pagination căn giữa -->
     <div class="d-flex justify-content-center agency-pagination-row">
@@ -180,3 +130,15 @@
     </div>
   </div>
 </div>
+
+<script>
+  function clearSearch() {
+    document.getElementById('searchInput').value = '';
+  }
+
+  function performSearch() {
+    const value = document.getElementById('searchInput').value;
+    console.log("Tìm kiếm:", value);
+    // Thực hiện tìm kiếm tại đây
+  }
+</script>
