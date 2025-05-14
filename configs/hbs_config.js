@@ -9,7 +9,10 @@ module.exports = (app) => {
     helpers: {
       eq: (a, b, options) => {
         return a == b ? options.fn(this) : options.inverse(this);
-      }
+      },
+      eq1: (a, b) => a === b,
+      add: (a, b) => a + b,
+      subtract: (a, b) => a - b
     }
   }));
 

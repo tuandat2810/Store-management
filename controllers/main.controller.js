@@ -36,20 +36,41 @@ module.exports.load_danh_sach_dai_ly = async (req, res) => {
 };
 
 module.exports.load_danh_sach_dai_ly_admin = async (req, res) => {
-  const agencyList = await Agency.find().lean();
-  console.log(agencyList);
-  const data = { agencyList };
   try {
+    const numberAgencyPerPage = 5;
+
+    // Lấy số trang hiện tại từ query, mặc định là 1
+    const page = parseInt(req.query.page) || 1;
+
+    // Đếm tổng số đại lý
+    const cntAgency = await Agency.countDocuments();
+
+    // Tính tổng số trang
+    const cntPage = Math.ceil(cntAgency / numberAgencyPerPage);
+
+    // Lấy danh sách đại lý của trang hiện tại
+    const agencyList = await Agency.find()
+      .skip((page - 1) * numberAgencyPerPage)
+      .limit(numberAgencyPerPage)
+      .lean();
+
+    // Tạo mảng danh sách số trang [1, 2, 3, ..., cntPage]
+    const pages = Array.from({ length: cntPage }, (_, i) => i + 1);
+
     res.render('danh_sach_dai_ly_admin', {
       layout: 'main',
       title: 'Danh sách đại lý Admin',
-      ...data
+      agencyList,
+      currentPage: page,
+      cntPage,
+      pages,
     });
   } catch (err) {
     console.error(err);
     res.status(500).render('500', { layout: false });
   }
 };
+
 
 module.exports.load_bao_cao_hang_thang = async (req, res) => {
   try {
