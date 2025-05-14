@@ -38,21 +38,34 @@ module.exports.load_danh_sach_dai_ly = async (req, res) => {
 module.exports.load_danh_sach_dai_ly_admin = async (req, res) => {
   try {
     const numberAgencyPerPage = 5;
-
-    // Lấy số trang hiện tại từ query, mặc định là 1
     const page = parseInt(req.query.page) || 1;
 
-    // Đếm tổng số đại lý
-    const cntAgency = await Agency.countDocuments();
-
-    // Tính tổng số trang
-    const cntPage = Math.ceil(cntAgency / numberAgencyPerPage);
-
-    // Lấy danh sách đại lý của trang hiện tại
-    const agencyList = await Agency.find()
+    const searchQuery = req.query.search || '';
+    
+    const agencyList = await Agency.find({
+      $or: [
+        { agencyCode: { $regex: searchQuery, $options: 'i' } },
+        { name: { $regex: searchQuery, $options: 'i' } },
+        { managerUsername: { $regex: searchQuery, $options: 'i' } },
+        { district: { $regex: searchQuery, $options: 'i' } },
+        { address: { $regex: searchQuery, $options: 'i' } },
+      ],
+    })
       .skip((page - 1) * numberAgencyPerPage)
       .limit(numberAgencyPerPage)
       .lean();
+
+    const cntAgency = await Agency.countDocuments({
+      $or: [
+        { agencyCode: { $regex: searchQuery, $options: 'i' } },
+        { name: { $regex: searchQuery, $options: 'i' } },
+        { managerUsername: { $regex: searchQuery, $options: 'i' } },
+        { district: { $regex: searchQuery, $options: 'i' } },
+        { address: { $regex: searchQuery, $options: 'i' } },
+      ],
+    });
+
+    const cntPage = Math.ceil(cntAgency / numberAgencyPerPage);
 
     // Tạo mảng danh sách số trang [1, 2, 3, ..., cntPage]
     const pages = Array.from({ length: cntPage }, (_, i) => i + 1);
@@ -64,12 +77,15 @@ module.exports.load_danh_sach_dai_ly_admin = async (req, res) => {
       currentPage: page,
       cntPage,
       pages,
+      searchQuery, // Truyền từ khóa tìm kiếm vào view
     });
   } catch (err) {
     console.error(err);
     res.status(500).render('500', { layout: false });
   }
 };
+
+
 
 
 module.exports.load_bao_cao_hang_thang = async (req, res) => {

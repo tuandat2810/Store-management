@@ -56,6 +56,7 @@
           class="form-control"
           placeholder="Tìm kiếm đại lý..."
           id="searchInput"
+          value="{{searchQuery}}"
         />
         <button class="btn btn-outline-secondary" type="button" onclick="clearSearch()">
           <i class="bi bi-x"></i>
@@ -65,7 +66,6 @@
         </button>
       </div>
     </div>
-  </div>
 
 
     <!-- Bảng dữ liệu sử dụng Bootstrap -->
@@ -140,13 +140,17 @@
 </div>
 
 <script>
-  function clearSearch() {
-    document.getElementById('searchInput').value = '';
+function performSearch() {
+    const searchQuery = document.getElementById('searchInput').value.trim();
+    if (searchQuery) {
+      // Thực hiện tìm kiếm với từ khóa
+      window.location.href = `/main/danh_sach_dai_ly_admin?search=${encodeURIComponent(searchQuery)}&page=1`;
+    }
   }
 
-  function performSearch() {
-    const value = document.getElementById('searchInput').value;
-    console.log("Tìm kiếm:", value);
-    // Thực hiện tìm kiếm tại đây
+  // Khi người dùng nhấn nút xóa
+  function clearSearch() {
+    document.getElementById('searchInput').value = ''; // Xóa từ khóa tìm kiếm
+    window.location.href = '/main/danh_sach_dai_ly_admin?page=1'; // Reset lại trang và tìm kiếm
   }
 </script>
