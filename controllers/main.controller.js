@@ -1,11 +1,16 @@
 const generateRandom = require('../helpers/generateRandom');
 const Agency = require('../models/agency.m.js');
+const getDate = require('../helpers/getDate');
 
 module.exports.load_dang_ki_dai_ly = async (req, res) => {
+  const agencyCode = await generateRandom.generateUniqueAgencyCode()
+  const data = { agencyCode };
+
   try {
     res.render('dang_ki_dai_ly', {
       layout: 'main',
-      title: 'Đăng ký đại lý'
+      title: 'Đăng ký đại lý',
+      ...data
     });
   } catch (err) {
     console.error(err);
@@ -160,25 +165,30 @@ module.exports.load_thong_tin_dai_ly = async (req, res) => {
 module.exports.dang_ky_dai_lyPOST = async (req, res) => {
     const { agencyCode, agencyName, agencyType, email, phoneNumber, district, address } = req.body;
 
-    console.log('Usename: ', user.fullname);
     try {
-        const newAgency = new Agency({
-            agencyCode,
-            managerUsername: user.fullname,
-            name: agencyName,
-            type: agencyType,
-            email,
-            phone: phoneNumber,
-            district,
-            address,
-            acceptedDate: new Date().toISOString()
-        });
+      const user = res.locals.user;
+      const fullname = user.fullname;
+      const newAgency = new Agency({
+          agencyCode,
+          managerUsername: fullname,
+          name: agencyName,
+          type: agencyType,
+          email,
+          phone: phoneNumber,
+          district,
+          address,
+          acceptedDate: new Date().toISOString(),
+          status: "Đang chờ",
+      });
 
-        await newAgency.save();
+      await newAgency.save();
 
-        req.flash("success", "Đăng ký đại lý thành công.");
+      req.flash("success", "Đăng ký đại lý thành công.");
+      return res.redirect("/main/dang_ki_dai_ly");
+
     } catch (error) {
-        console.error("Lỗi đăng ký:", error);
-        req.flash("error", "Lỗi hệ thống khi đăng ký đại lý!");
+      console.error("Lỗi đăng ký:", error);
+      req.flash("error", "Lỗi hệ thống khi đăng ký đại lý!");
+      return res.redirect("/main/dang_ki_dai_ly");
     }
 };
