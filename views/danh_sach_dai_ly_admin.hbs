@@ -42,9 +42,9 @@
 
 <div class="agency-list-container w-100">
   <!-- Tiêu đề trang -->
-  <h1 class="agency-list-title text-center">
+  <h3 class="agency-list-title text-center">
     Danh sách đại lý
-  </h1>
+  </h3>
 
   <!-- Container bọc search bar và table -->
   <div class="agency-list-content">
@@ -66,7 +66,7 @@
         </button>
       </div>
     </div>
-
+  </div>
 
     <!-- Bảng dữ liệu sử dụng Bootstrap -->
   <div class="agency-table-container">
@@ -111,31 +111,30 @@
 
 
 
-    <!-- Pagination căn giữa -->
-    <div class="d-flex justify-content-center agency-pagination-row">
-      <nav aria-label="Page navigation">
-        <ul class="pagination">
+  <!-- Pagination căn giữa -->
+  <div class="d-flex justify-content-center agency-pagination-row">
+    <nav aria-label="Page navigation">
+      <ul class="pagination">
 
-          {{!-- Nút Previous --}}
-          <li class="page-item {{#if (eq1 currentPage 1)}}disabled{{/if}}">
-            <a class="page-link" href="?page={{subtract currentPage 1}}">Previous</a>
+        {{!-- Nút Previous --}}
+        <li class="page-item {{#if (eq1 currentPage 1)}}disabled{{/if}}">
+          <a class="page-link" href="?page={{subtract currentPage 1}}">Previous</a>
+        </li>
+
+        {{!-- Danh sách số trang --}}
+        {{#each pages}}
+          <li class="page-item {{#if (eq1 this ../currentPage)}}active{{/if}}">
+            <a class="page-link" href="?page={{this}}">{{this}}</a>
           </li>
+        {{/each}}
 
-          {{!-- Danh sách số trang --}}
-          {{#each pages}}
-            <li class="page-item {{#if (eq1 this ../currentPage)}}active{{/if}}">
-              <a class="page-link" href="?page={{this}}">{{this}}</a>
-            </li>
-          {{/each}}
+        {{!-- Nút Next --}}
+        <li class="page-item {{#if (eq1 currentPage cntPage)}}disabled{{/if}}">
+          <a class="page-link" href="?page={{add currentPage 1}}">Next</a>
+        </li>
 
-          {{!-- Nút Next --}}
-          <li class="page-item {{#if (eq1 currentPage cntPage)}}disabled{{/if}}">
-            <a class="page-link" href="?page={{add currentPage 1}}">Next</a>
-          </li>
-
-        </ul>
-      </nav>
-    </div>
+      </ul>
+    </nav>
   </div>
 </div>
 
