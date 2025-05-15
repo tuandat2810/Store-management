@@ -1,13 +1,12 @@
 <style>
     .custom-select-wrapper {
         position: relative;
-        width: 100%;
     }
 
     .custom-arrow {
         position: absolute;
         top: 50%;
-        right: 16px;
+        right: 26px;
         transform: translateY(-50%);
         font-size: 16px;
         transition: transform 0.3s ease;
@@ -19,10 +18,11 @@
     .custom-select:focus + .custom-arrow {
         transform: translateY(-50%) rotate(180deg);
     }
+
 </style>
 
 <div class="container-fluid d-flex flex-column mt-5 justify-content-center align-items-center px-5" style="width: 100%; height: 100%">
-    <h3 class="mb-5 text-center" style="width: 100%;">
+    <h3 class="mb-5 text-center w-100">
         Đăng ký đại lý
     </h3>
     <form action="/main/dang_ki_dai_ly" method="POST" class="w-100" style="max-width: 600px;">
@@ -46,12 +46,15 @@
         <!-- Loại đại lý -->
         <div class="mb-3 row">
             <label for="agencyType" class="col-sm-3 col-form-label">Loại đại lý</label>
-            <div class="col-sm-9">
-                <select class="form-select" id="agencyType" name="agencyType" required>
+            <div class="col-sm-9 custom-select-wrapper">
+                <select class="form-select custom-select" id="agencyType" name="agencyType" required>
                     <option value="">-- Chọn loại đại lý --</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                 </select>
+                <span class="custom-arrow">
+                    <i class="bi bi-chevron-down"></i>
+                </span>
             </div>
         </div>
 
@@ -80,7 +83,7 @@
         </div>
 
         <!-- Địa chỉ -->
-        <div class="mb-4 row">
+        <div class="mb-3 row">
             <label for="address" class="col-sm-3 col-form-label">Địa chỉ</label>
             <div class="col-sm-9">
                 <input type="text" class="form-control" id="address" name="address" placeholder="Nhập địa chỉ" required>
@@ -89,7 +92,9 @@
 
         <!-- Nút đăng ký -->
         <div class="text-center mt-5">
-            <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold px-5 py-2" style="background-color: #C6BDBD; color: #000;">
+            <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold px-5 py-2" 
+                style="background-color: #C6BDBD; color: #000; width: 200px;"
+                >
                 Đăng ký
             </button>
         </div>
