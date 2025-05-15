@@ -64,6 +64,7 @@
         <button class="btn btn-outline-dark" type="button" onclick="performSearch()">
           <i class="bi bi-search"></i>
         </button>
+        <ul id="suggestions" class="list-group position-absolute w-100" style="top: 100%; z-index: 1000;"></ul>
       </div>
     </div>
 
@@ -140,7 +141,8 @@
 </div>
 
 <script>
-function performSearch() {
+  // Khi người dùng nhấn nút tìm kiếm
+  function performSearch() {
     const searchQuery = document.getElementById('searchInput').value.trim();
     if (searchQuery) {
       // Thực hiện tìm kiếm với từ khóa
@@ -153,4 +155,67 @@ function performSearch() {
     document.getElementById('searchInput').value = ''; // Xóa từ khóa tìm kiếm
     window.location.href = '/main/danh_sach_dai_ly_admin?page=1'; // Reset lại trang và tìm kiếm
   }
+
+  // Khi người dùng nhấn phím Enter trong ô tìm kiếm
+  document.getElementById('searchInput').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      performSearch();
+    }
+  });
+
+  // Khi người dùng gõ tìm kiếm sẽ đề xuất nội dung liên quan
+  searchInput.addEventListener("input", () => {
+  const query = searchInput.value.trim();
+
+  if (!query) {
+    suggestions.innerHTML = "";
+    return; // return này nằm đúng trong hàm arrow function
+  }
+
+  fetch(`/main/dai-ly-suggestions?query=${encodeURIComponent(query)}`)
+    .then(res => res.json())
+    .then(data => {
+      suggestions.innerHTML = "";
+      data.forEach(name => {
+        const li = document.createElement("li");
+        li.textContent = name;
+        li.className = "list-group-item list-group-item-action";
+        li.onclick = () => {
+          searchInput.value = name;
+          suggestions.innerHTML = "";
+          performSearch();
+        };
+        suggestions.appendChild(li);
+      });
+    });
+  });
+  // Khi click ra ngoài thì xóa gợi ý
+  document.addEventListener("click", (e) => {
+    const isClickInsideInput = searchInput.contains(e.target);
+    const isClickInsideSuggestions = suggestions.contains(e.target);
+    if (!isClickInsideInput && !isClickInsideSuggestions) {
+      suggestions.innerHTML = "";
+    }
+
+    if (isClickInsideInput && searchInput.value.trim() !== "") {
+      fetch(`/main/dai-ly-suggestions?query=${encodeURIComponent(searchInput.value.trim())}`)
+        .then(res => res.json())
+        .then(data => {
+          suggestions.innerHTML = "";
+          data.forEach(name => {
+            const li = document.createElement("li");
+            li.textContent = name;
+            li.className = "list-group-item list-group-item-action";
+            li.onclick = () => {
+              searchInput.value = name;
+              suggestions.innerHTML = "";
+              performSearch();
+            };
+            suggestions.appendChild(li);
+          });
+      });
+    }
+  })
+
 </script>

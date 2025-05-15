@@ -2,8 +2,6 @@ const Agency = require('../models/agency.m.js');
 
 module.exports.dang_ky_dai_lyPOST = async (req, res) => {
     const { agencyCode, agencyName, agencyType, email, phoneNumber, district, address } = req.body;
-
-    console.log('Usename: ', user.fullname);
     try {
         const newAgency = new Agency({
             agencyCode,

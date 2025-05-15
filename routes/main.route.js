@@ -6,6 +6,7 @@ const router = express.Router();
 const authMiddleware = require("../middlewares/auth.middleware")
 const mainController = require('../controllers/main.controller');
 const { requireAuth } = require("../middlewares/auth.middleware");
+const Agency = require("../models/agency.m");
 
 // Route load section
 router.get("/dang_ki_dai_ly", authMiddleware.requireAuth, mainController.load_dang_ki_dai_ly);
@@ -22,6 +23,7 @@ router.get("/thay_doi_quy_dinh", authMiddleware.requireAuth, mainController.load
 router.get("/thong_tin_admin", authMiddleware.requireAuth, mainController.load_thong_tin_admin);
 router.get("/thong_tin_dai_ly", authMiddleware.requireAuth, mainController.load_thong_tin_dai_ly);
 
+router.get('/dai-ly-suggestions', mainController.search);
 
 router.post("/dang_ki_dai_ly", authMiddleware.requireAuth, mainController.dang_ky_dai_lyPOST);
 
