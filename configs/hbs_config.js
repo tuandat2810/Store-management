@@ -7,8 +7,12 @@ module.exports = (app) => {
     layoutsDir: 'views/layouts/',
     partialsDir: 'views/partials/',
     helpers: {
-      eq: (a, b, options) => {
-        return a == b ? options.fn(this) : options.inverse(this);
+      eq: function (a, b, options) {
+        if (a == b) {
+          return options.fn(options.data.root); 
+        } else {
+          return options.inverse(options.data.root);
+        }
       },
       eq1: (a, b) => a === b,
       add: (a, b) => a + b,

@@ -20,17 +20,64 @@ module.exports.load_dang_ki_dai_ly = async (req, res) => {
 
 module.exports.load_danh_sach_dai_ly = async (req, res) => {
   try {
+        const numberAgencyPerPage = 5;
+    const page = parseInt(req.query.page) || 1;
+
+    const searchQuery = req.query.search || '';
     
+    const agencyList = await Agency.find({
+      $and: [
+        { managerUsername: res.locals.user.fullname },
+        {
+          $or: [
+            { agencyCode: { $regex: searchQuery, $options: 'i' } },
+            { name: { $regex: searchQuery, $options: 'i' } },
+            { managerUsername: { $regex: searchQuery, $options: 'i' } },
+            { district: { $regex: searchQuery, $options: 'i' } },
+            { address: { $regex: searchQuery, $options: 'i' } },
+          ],
+        },
+      ],
+    })
+      .skip((page - 1) * numberAgencyPerPage)
+      .limit(numberAgencyPerPage)
+      .lean();
+
+    const cntAgency = await Agency.countDocuments({
+      $and: [
+        { managerUsername: res.locals.user.fullname },
+        {
+          $or: [
+            { agencyCode: { $regex: searchQuery, $options: 'i' } },
+            { name: { $regex: searchQuery, $options: 'i' } },
+            { managerUsername: { $regex: searchQuery, $options: 'i' } },
+            { district: { $regex: searchQuery, $options: 'i' } },
+            { address: { $regex: searchQuery, $options: 'i' } },
+          ],
+        },
+      ],
+    })
+
+    const cntPage = Math.ceil(cntAgency / numberAgencyPerPage);
+
+    // Tạo mảng danh sách số trang [1, 2, 3, ..., cntPage]
+    const pages = Array.from({ length: cntPage }, (_, i) => i + 1);
 
     res.render('danh_sach_dai_ly', {
       layout: 'main',
-      title: 'Danh sách đại lý'
+      title: 'Danh sách đại lý',
+      agencyList,
+      currentPage: page,
+      cntPage,
+      pages,
+      searchQuery, // Truyền từ khóa tìm kiếm vào view
     });
   } catch (err) {
     console.error(err);
     res.status(500).render('500', { layout: false });
   }
 };
+
 
 module.exports.load_danh_sach_dai_ly_admin = async (req, res) => {
   try {

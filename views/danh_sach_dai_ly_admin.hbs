@@ -115,7 +115,7 @@
 
         {{!-- Nút Previous --}}
         <li class="page-item {{#if (eq1 currentPage 1)}}disabled{{/if}}">
-          <a class="page-link" href="?page={{subtract currentPage 1}}">Previous</a>
+          <a class="page-link" href="?page={{subtract currentPage 1}}">&laquo;</a>
         </li>
 
         {{!-- Danh sách số trang --}}
@@ -127,7 +127,7 @@
 
         {{!-- Nút Next --}}
         <li class="page-item {{#if (eq1 currentPage cntPage)}}disabled{{/if}}">
-          <a class="page-link" href="?page={{add currentPage 1}}">Next</a>
+          <a class="page-link" href="?page={{add currentPage 1}}">&raquo;</a>
         </li>
 
       </ul>
