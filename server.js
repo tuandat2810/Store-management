@@ -14,6 +14,8 @@ const port = process.env.PORT || 3000;
 const database = require('./configs/database.js');
 database.connect();
 
+const userInfoMiddleware = require('./middlewares/user.middleware.js');
+
 // Cấu hình view engine Handlebars
 require('./configs/hbs_config')(app);
 
@@ -31,6 +33,7 @@ app.use(session({
 }));
 
 app.use(flash());
+app.use(userInfoMiddleware.infoUser);
 
 // Route chính
 app.get('/', (req, res) => {

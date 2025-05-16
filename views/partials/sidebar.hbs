@@ -6,12 +6,16 @@
     }
 
 </style>
-
 {{#eq user.type "user"}}
 <div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px; height: 100vh;">
-    <a href="/page/home" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-        <i class="bi bi-person-circle pe-none me-2 fs-4"></i>
-        <span class="fs-4">Đại lý</span>
+    <a href="/main/thong_tin_dai_ly" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none sidebar-item" data-section="thong_tin_dai_ly">
+        <i class="bi bi-person-circle pe-none me-2 fs-4" style = "padding-left: 15px;"></i>
+        <div>
+            <div class="fw-semibold">{{user.username}}</div>
+            <small class="text-muted">
+                Đại lý
+            </small>
+        </div>
     </a>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
@@ -64,14 +68,19 @@
 </style>
 
 <div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px; height: 100vh;">
-<a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-    <i class="bi bi-person-circle pe-none me-2 fs-4"></i>
-    <span class="fs-4">Admin</span>
+<a href="/main/thong_tin_admin" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none sidebar-item " data-section="thong_tin_admin" >
+    <i class="bi bi-person-circle pe-none me-2 fs-4 "style = "padding-left: 15px" ></i>
+    <div>
+        <div class="fw-semibold">{{user.username}}</div>
+        <small class="text-muted">
+            Admin
+        </small>
+    </div>
 </a>
 <hr>
 <ul class="nav nav-pills flex-column mb-auto">
     <li class="nav-item">
-        <a href="/page/login" class="sidebar-item nav-link link-body-emphasis" data-section="home">
+        <a href="/page/home" class="sidebar-item nav-link link-body-emphasis" data-section="home">
             <i class="bi bi-house-door me-2"></i>
             Trang chủ
         </a>
@@ -130,37 +139,3 @@
 </div>
 {{/eq}}
 
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const sidebarItems = document.querySelectorAll('.sidebar-item');
-
-        function updateActive(section) {
-            sidebarItems.forEach(item => {
-            item.classList.remove('active');
-            if (item.dataset.section === section) {
-                item.classList.add('active');
-                item.setAttribute('aria-current', 'page');
-            }
-            });
-        }
-
-        // Lấy section từ URL, ví dụ /main/dang_ki_dai_ly
-        let path = window.location.pathname;
-        let section = 'home';
-        if (path.startsWith('/main/')) {
-            section = path.split('/').pop();
-        }
-
-        // Chạy lần đầu để highlight
-        updateActive(section);
-
-        // Cài sự kiện click để highlight luôn khi người dùng click link (nếu có AJAX)
-        sidebarItems.forEach(item => {
-            item.addEventListener('click', e => {
-                const sec = item.dataset.section;
-                updateActive(sec);
-            });
-        });
-    });
-</script>

@@ -1,7 +1,6 @@
 const User = require('../models/user.m.js');
 const Crypto = require('../configs/crypto_config.js');
 const generateHelper = require("../helpers/generateRandom.js");
-
 module.exports.register = async (req, res) => {
     res.render('register', {
         layout: 'main',
@@ -101,11 +100,14 @@ module.exports.logout = async (req, res) => {
 module.exports.home = async(req, res) => {
     res.render('home', {
         layout: 'main',
-        pageTitle: 'Trang chủ'
+        pageTitle: 'Trang chủ',
     });
 };
 
 // controllers/about.controller.js
-module.exports.showAboutPage = (req, res) => {
-    res.render("about");
+exports.showAboutPage = (req, res) => {
+    res.render('about', {
+        layout: 'main',
+        hideSidebar:true 
+    });
 };
