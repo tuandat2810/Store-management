@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const flash = require('express-flash');
 const exphbs = require('express-handlebars');
+
 // Cấu hình cổng
 const port = process.env.PORT || 3000;
 
@@ -21,7 +22,7 @@ require('./configs/hbs_config')(app);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
+app.use(express.static('public'));
 // Cấu hình session & flash
 app.use(session({
     secret: 'LLLLLLLLLLL',

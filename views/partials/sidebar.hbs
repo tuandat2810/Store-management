@@ -9,10 +9,9 @@
 
 {{#eq user.type "user"}}
 <div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px; height: 100vh;">
-    <a href="/page/home" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+    <a href="/page/home" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none" style = "padding-left: 15px;">
         <i class="bi bi-person-circle pe-none me-2 fs-4"></i>
-        <div class="fs-4">{{user.fullname}}</div>
-            <small class="text-muted">Đại lý</small>
+        <div class="fs-8">{{user.fullname}}-{{user.type}}</div>
     </a>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
@@ -65,9 +64,9 @@
 </style>
 
 <div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px; height: 100vh;">
-<a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+<a href="/main/thong_tin_admin" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none " data-section="thong_tin_admin" style = "padding-left: 15px;">
     <i class="bi bi-person-circle pe-none me-2 fs-4"></i>
-    <div class="fs-4">Admin</div>
+    <div class="fs-8">{{user.fullname}}-{{user.type}}</div>
 </a>
 <hr>
 <ul class="nav nav-pills flex-column mb-auto">
