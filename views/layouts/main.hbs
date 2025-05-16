@@ -17,8 +17,10 @@
     {{> nav}}
     <div class="container-fluid d-flex main-content px-0">
         {{#if user.type}}
-        {{> sidebar}}
-        {{/if}}
+            {{#unless hideSidebar}}
+                {{> sidebar}}
+            {{/unless}}
+        {{/if}}        
         {{{body}}}
     </div>
 
