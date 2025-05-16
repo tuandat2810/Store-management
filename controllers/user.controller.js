@@ -107,5 +107,8 @@ module.exports.home = async(req, res) => {
 
 // controllers/about.controller.js
 module.exports.showAboutPage = (req, res) => {
-    res.render("about");
+    res.render('about', {
+        layout: 'main',
+        hideSidebar:true 
+    });
 };

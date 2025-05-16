@@ -8,47 +8,46 @@
 </style>
 
 {{#eq user.type "user"}}
-
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width:280px;height: 100vh;position: fixed; top: 0; left: 0; z-index: 1000;">
-    <a href="/page/home" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none" style="margin-left: 15px;padding-top: 70px;">
-
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px; height: 100vh;">
+    <a href="/page/home" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
         <i class="bi bi-person-circle pe-none me-2 fs-4"></i>
-        <span class="fs-4">Đại lý</span>
+        <div class="fs-4">{{user.fullname}}</div>
+            <small class="text-muted">Đại lý</small>
     </a>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-            <a href="/page/home" class="sidebar-item nav-link link-body-emphasis active"data-section="home">
+            <a href="/page/home" class="sidebar-item nav-link link-body-emphasis" data-section="home">
                 <i class="bi bi-house-door me-2"></i>
                 Trang chủ
             </a>
         </li>
         <li class="nav-item">
-            <a href="#" class="sidebar-item nav-link link-body-emphasis" data-section="thong_tin_dai_ly">
+            <a href="/main/thong_tin_dai_ly" class="sidebar-item nav-link link-body-emphasis" data-section="thong_tin_dai_ly">
                 <i class="bi bi-people me-2"></i>
                 Thông tin đại lý
             </a>
         </li>
         <li class="nav-item">
-            <a href="#" class="sidebar-item nav-link link-body-emphasis" data-section="dang_ki_dai_ly">
+            <a href="/main/dang_ki_dai_ly" class="sidebar-item nav-link link-body-emphasis" data-section="dang_ki_dai_ly">
                 <i class="bi bi-pen me-2"></i>
                 Đăng ký đại lý
             </a>
         </li>
         <li class="nav-item">
-            <a href="#" class="sidebar-item nav-link link-body-emphasis" data-section="danh_sach_dai_ly">
+            <a href="/main/danh_sach_dai_ly" class="sidebar-item nav-link link-body-emphasis" data-section="danh_sach_dai_ly">
                 <i class="bi bi-grid me-2"></i>
                 Danh sách đại lý
             </a>
         </li>
         <li class="nav-item">
-            <a href="#" class="sidebar-item nav-link link-body-emphasis" data-section="lap_phieu_xuat_hang">
+            <a href="/main/lap_phieu_xuat_hang" class="sidebar-item nav-link link-body-emphasis" data-section="lap_phieu_xuat_hang">
                 <i class="bi bi-clipboard2-fill me-2"></i>
                 Lập phiếu xuất hàng
             </a>
         </li>
         <li class="nav-item">
-            <a href="#" class="sidebar-item nav-link link-body-emphasis" data-section="bao_cao_hang_thang">
+            <a href="/main/bao_cao_hang_thang" class="sidebar-item nav-link link-body-emphasis" data-section="bao_cao_hang_thang">
                 <i class="bi bi-graph-up me-2"></i>
                 Báo cáo hàng tháng
             </a>
@@ -65,10 +64,10 @@
 
 </style>
 
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px; height: 100vh;position: fixed; top: 0; left: 0; z-index: 1000;">
-<a href="/page/home" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"style="margin-left: 15px;padding-top: 70px;">
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px; height: 100vh;">
+<a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
     <i class="bi bi-person-circle pe-none me-2 fs-4"></i>
-    <span class="fs-4" >Admin</span>
+    <div class="fs-4">Admin</div>
 </a>
 <hr>
 <ul class="nav nav-pills flex-column mb-auto">
@@ -80,50 +79,50 @@
     </li>
     
     <li>
-        <a href="#" class="sidebar-item nav-link link-body-emphasis" data-section="thong_tin_admin">
+        <a href="/main/thong_tin_admin" class="sidebar-item nav-link link-body-emphasis" data-section="thong_tin_admin">
             <i class="bi bi-people me-2"></i>
             Thông tin admin
         </a>
     </li>
     
     <li>
-        <a href="#" class="sidebar-item nav-link link-body-emphasis" data-section="quan_ly_dai_ly_admin">
+        <a href="/main/quan_ly_dai_ly_admin" class="sidebar-item nav-link link-body-emphasis" data-section="quan_ly_dai_ly_admin">
             <i class="bi bi-table me-2"></i>
             Quản lý đại lý
         </a>
     </li>
     <li>
-        <a href="#" class="sidebar-item nav-link link-body-emphasis" data-section="quan_ly_loai_dai_ly">
+        <a href="/main/quan_ly_loai_dai_ly" class="sidebar-item nav-link link-body-emphasis" data-section="quan_ly_loai_dai_ly">
             <i class="bi bi-table me-2"></i>
             Quản lý loại đại lý
         </a>
     </li>
     <li>
-        <a href="#" class="sidebar-item nav-link link-body-emphasis" data-section="danh_sach_dai_ly_admin">
+        <a href="/main/danh_sach_dai_ly_admin" class="sidebar-item nav-link link-body-emphasis" data-section="danh_sach_dai_ly_admin">
             <i class="bi bi-grid me-2"></i>
             Danh sách đại lý
         </a>
     </li>
     <li>
-        <a href="#" class="sidebar-item nav-link link-body-emphasis" data-section="lap_phieu_thu_tien">
+        <a href="/main/lap_phieu_thu_tien" class="sidebar-item nav-link link-body-emphasis" data-section="lap_phieu_thu_tien">
             <i class="bi bi-clipboard2-fill me-2"></i>
             Lập phiếu thu tiền
         </a>
     </li>
     <li>
-        <a href="#" class="sidebar-item nav-link link-body-emphasis" data-section="bao_cao_hang_thang_admin">
+        <a href="/main/bao_cao_hang_thang_admin" class="sidebar-item nav-link link-body-emphasis" data-section="bao_cao_hang_thang_admin">
             <i class="bi bi-graph-up me-2"></i>
             Báo cáo hàng tháng
         </a>
     </li>
     <li>
-        <a href="#" class="sidebar-item nav-link link-body-emphasis" data-section="duyet_phieu_xuat_hang">
+        <a href="/main/duyet_phieu_xuat_hang" class="sidebar-item nav-link link-body-emphasis" data-section="duyet_phieu_xuat_hang">
             <i class="bi bi-building-fill-check me-2"></i>
             Duyệt phiếu xuất hàng
         </a>
     </li>
     <li>
-        <a href="#" class="sidebar-item nav-link link-body-emphasis" data-section="thay_doi_quy_dinh">
+        <a href="/main/thay_doi_quy_dinh" class="sidebar-item nav-link link-body-emphasis" data-section="thay_doi_quy_dinh">
             <i class="bi bi-pen me-2"></i>
             Thay đổi quy định
         </a>
@@ -132,40 +131,14 @@
 </div>
 {{/eq}}
 
-{{!-- 
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const sidebarItems = document.querySelectorAll('.sidebar-item');
 
-        // 1. Xác định section khởi tạo (khi reload / truy cập trực tiếp)
-        //    VD: URL = /page/section/thong_tin_dai_ly → section = "thong_tin_dai_ly"
-        const match = window.location.pathname.match(/\/page\/section\/([^\/]+)/);
-        const initialSection = match ? match[1] : null;
-
-        // Lần đầu load
-        let isInitial = true;
-
-        if (isInitial) 
-            updateActive('home');
-            isInitial = false;
-
-        // Ghi state ban đầu để popstate hoạt động ngay
-        history.replaceState({ section: initialSection }, '', window.location.pathname);
-
-        // Hàm load partial
-        function loadSection(section) {
-            axios.get(`/page/ajax/section/${section}`)
-            .then(res => {
-                document.getElementById('main-content').innerHTML = res.data;
-            })
-            .catch(err => console.error('Lỗi tải nội dung:', err));
-        }
-
-        // Hàm cập nhật active sidebar
         function updateActive(section) {
             sidebarItems.forEach(item => {
             item.classList.remove('active');
-            item.removeAttribute('aria-current');
             if (item.dataset.section === section) {
                 item.classList.add('active');
                 item.setAttribute('aria-current', 'page');
@@ -173,119 +146,22 @@
             });
         }
 
-        // 2. Bắt sự kiện click
+        // Lấy section từ URL, ví dụ /main/dang_ki_dai_ly
+        let path = window.location.pathname;
+        let section = 'home';
+        if (path.startsWith('/main/')) {
+            section = path.split('/').pop();
+        }
+
+        // Chạy lần đầu để highlight
+        updateActive(section);
+
+        // Cài sự kiện click để highlight luôn khi người dùng click link (nếu có AJAX)
         sidebarItems.forEach(item => {
             item.addEventListener('click', e => {
-            e.preventDefault();
-            const section = item.dataset.section;
-            // Nếu là "home", chuyển hướng trang (full load)
-            if (section === 'home') {
-                window.location.href = '/page/home';
-                isInitial = true;
-                return;
-            }
-            // Các Sectio khác
-            updateActive(section);
-            loadSection(section);
-
-            // 3. Đẩy URL direct lên history
-            history.pushState({ section }, '', `/page/section/${section}`);
+                const sec = item.dataset.section;
+                updateActive(sec);
             });
         });
-
-        // 4. Xử lý Back / Forward
-        window.addEventListener('popstate', e => {
-            const section = (e.state && e.state.section) || initialSection;
-            if (!section) return;
-            updateActive(section);
-            loadSection(section);
-        });
-
-        // 5. Nếu là lần đầu load và có section trong URL, load nó luôn
-        if (initialSection) {
-            updateActive(initialSection);
-            loadSection(initialSection);
-        }
-    });
-</script> --}}
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const sidebarItems = document.querySelectorAll('.sidebar-item');
-
-        // 1. Xác định section khởi tạo (khi reload / truy cập trực tiếp)
-        const match = window.location.pathname.match(/\/page\/section\/([^\/]+)/);
-        const initialSection = match ? match[1] : null;
-
-        // Ghi state ban đầu để popstate hoạt động ngay
-        history.replaceState({ section: initialSection }, '', window.location.pathname);
-
-        // Hàm load partial
-        function loadSection(section) {
-            const mainContent = document.getElementById('main-content');
-            if (!mainContent) {
-                console.error('Phần tử #main-content không tồn tại!');
-                return;
-            }
-            mainContent.innerHTML = '<p>Đang tải...</p>'; // Hiển thị trạng thái đang tải
-            axios.get(`/page/ajax/section/${section}`)
-                .then(res => {
-                    mainContent.innerHTML = res.data; // Tải nội dung mới
-                })
-                .catch(err => {
-                    console.error('Lỗi tải nội dung:', err);
-                    mainContent.innerHTML = '<p>Lỗi tải nội dung. Vui lòng thử lại.</p>';
-                });
-        }
-
-        // Hàm cập nhật trạng thái active của sidebar
-        function updateActive(section) {
-            sidebarItems.forEach(item => {
-                item.classList.remove('active');
-                item.removeAttribute('aria-current');
-                if (item.dataset.section === section) {
-                    item.classList.add('active');
-                    item.setAttribute('aria-current', 'page');
-                }
-            });
-        }
-
-        // 2. Bắt sự kiện click
-        sidebarItems.forEach(item => {
-            item.addEventListener('click', e => {
-                e.preventDefault();
-                
-                if (item.classList.contains('active')) return;
-
-                const section = item.dataset.section;
-
-                // Nếu là "home", chuyển hướng trang (full load)
-                if (section === 'home') {
-                    window.location.href = '/page/home';
-                    return;
-                }
-
-                // Các section khác
-                updateActive(section);
-                loadSection(section);
-
-                // 3. Đẩy URL direct lên history
-                history.pushState({ section }, '', `/page/section/${section}`);
-            });
-        });
-
-        // 4. Xử lý Back / Forward
-        window.addEventListener('popstate', e => {
-            const section = (e.state && e.state.section) || initialSection;
-            if (!section) return;
-            updateActive(section);
-            loadSection(section);
-        });
-
-        // 5. Nếu là lần đầu load và có section trong URL, load nó luôn
-        if (initialSection) {
-            updateActive(initialSection);
-            loadSection(initialSection);
-        }
     });
 </script>
