@@ -1,98 +1,89 @@
 <style>
-  .regulation-container {
-    padding: 40px;
+  .agency-list-container {
+    min-height: 100vh;
+    padding: 0;
   }
 
-  .regulation-title {
-    font-size: 1.8rem;
+  .agency-list-title {
+    margin-top: 32px;
+    margin-bottom: 0;
   }
 
-  .regulation-table {
+  .agency-list-content {
     width: 95%;
-    margin: 40px auto;
-    border-collapse: separate;
-    border-spacing: 0;
-    font-size: 1rem;
-    border: 1px solid #bdbdbd;
-    border-radius: 12px;
-    overflow: hidden;
+    margin: 0 auto;
   }
 
-  .regulation-table th {
-    background: #23262b;
-    color: #fff;
-    padding: 8px 0;
-    font-weight: 500;
-    border-right: 1px solid #bdbdbd;
+  .agency-table-container {
+    margin: 16px;
   }
 
-  .regulation-table th:first-child {
-    border-top-left-radius: 12px;
+  /* .pagination .page-link {
+    color: black;                
+    background-color: #fff;      
+    border-color: black;         
   }
 
-  .regulation-table th:last-child {
-    border-top-right-radius: 12px;
-    border-right: none;
+  .pagination .page-item.active .page-link {
+    background-color: black;     
+    border-color: black;         
+    color: white;                
   }
 
-  .regulation-table td {
-    background: #f7f8fa;
-    color: #23262b;
-    text-align: center;
-    padding: 8px 0;
-    border-top: 1px solid #e0e0e0;
-    border-right: 1px solid #e0e0e0;
-  }
+  .pagination .page-link:hover {
+    background-color: #333;     
+    color: white;
+  } */
 
-  .regulation-table td:last-child {
-    border-right: none;
-  }
-
-  .regulation-btn-group {
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-    margin-top: 40px;
-  }
-
-  .regulation-btn {
-    background: #d2c7c7;
-    border: none;
-    border-radius: 30px;
-    padding: 5px 30px;
-    font-size: 1rem;
-    color: #000;
-    cursor: pointer;
-  }
-
-  .regulation-btn:first-child {
-    padding: 5px 20px;
-  }
 </style>
 
-<div class="regulation-container w-100">
-  <h1 class="regulation-title">Danh sách quy định</h1>
-  <table class="regulation-table">
-    <thead>
-      <tr>
-        <th>Tên quy định</th>
-        <th>Nội dung</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>No-Data</td>
-        <td>No-Data</td>
-      </tr>
-      <tr>
-        <td>No-Data</td>
-        <td>No-Data</td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="regulation-btn-group">
-    <button class="regulation-btn">Thêm</button>
-    <button class="regulation-btn">Xóa</button>
-    <button class="regulation-btn">Sửa</button>
+<div class="agency-list-container w-100">
+  <h3 class="agency-list-title text-center mb-5">
+    Danh sách quy định
+  </h3>
+
+  <div class="agency-table-container mb-5">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col" class="text-center" style="width: 50%;">Tên quy định</th>
+          <th scope="col" class="text-center" style="width: 50%;">Nội dung</th>
+        </tr>
+      </thead>
+      <tbody>
+          {{#each agencyList}}
+            <tr>
+              <td class="text-center">{{ unknown }}</td>
+              <td class="text-center">{{ unknown }}</td>
+            </tr>
+          {{/each}}
+            <tr>
+              <td class="text-center">Data demo</td>
+              <td class="text-center">Data demo</td>
+            </tr>
+            <tr>
+              <td class="text-center">Data demo</td>
+              <td class="text-center">Data demo</td>
+            </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="d-flex w-100" style="justify-content: center;">
+    <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold py-2" 
+            style="background-color: #C6BDBD; color: #000; width: 200px;"
+            >
+        Thêm
+    </button>
+    <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold mx-5 py-2" 
+            style="background-color: #C6BDBD; color: #000; width: 200px;"
+            >
+        Xóa
+    </button>
+    <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold py-2" 
+            style="background-color: #C6BDBD; color: #000; width: 200px;"
+            >
+        Sửa
+    </button>
   </div>
 </div>

@@ -1,107 +1,112 @@
 <style>
-  .agent-management-container {
-    padding: 40px;
+  .agency-list-container {
+    min-height: 100vh;
+    padding: 0;
   }
 
-  .agent-management-title {
-    font-size: 1.8rem;
+  .agency-list-title {
+    margin-top: 32px;
+    margin-bottom: 0;
   }
 
-  .agent-management-table {
+  .agency-list-content {
     width: 95%;
-    margin: 40px auto;
-    border-collapse: separate;
-    border-spacing: 0;
-    font-size: 1rem;
-    border: 1px solid #bdbdbd;
-    border-radius: 12px;
-    overflow: hidden;
+    margin: 0 auto;
   }
 
-  .agent-management-table th {
-    background: #23262b;
-    color: #fff;
-    padding: 8px 0;
-    font-weight: 500;
-    border-right: 1px solid #bdbdbd;
+  .agency-table-container {
+    margin: 16px;
   }
 
-  .agent-management-table th:first-child {
-    border-top-left-radius: 12px;
+  /* .pagination .page-link {
+    color: black;                
+    background-color: #fff;      
+    border-color: black;         
   }
 
-  .agent-management-table th:last-child {
-    border-top-right-radius: 12px;
-    border-right: none;
+  .pagination .page-item.active .page-link {
+    background-color: black;     
+    border-color: black;         
+    color: white;                
   }
 
-  .agent-management-table td {
-    background: #f7f8fa;
-    color: #23262b;
-    text-align: center;
-    padding: 8px 0;
-    border-top: 1px solid #e0e0e0;
-    border-right: 1px solid #e0e0e0;
-  }
+  .pagination .page-link:hover {
+    background-color: #333;     
+    color: white;
+  } */
+  
 
-  .agent-management-table td:last-child {
-    border-right: none;
-  }
-
-  .agent-management-btn-group {
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-    margin-top: 40px;
-  }
-
-  .agent-management-btn {
-    background: #d2c7c7;
-    border: none;
-    border-radius: 30px;
-    padding: 5px 30px;
-    font-size: 1rem;
-    color: #000;
-    cursor: pointer;
-  }
-
-  .agent-management-btn:first-child {
-    padding: 5px 20px;
-  }
 </style>
 
-<div class="agent-management-container w-100">
-  <h1 class="agent-management-title">Quản lý đại lý</h1>
-  <table class="agent-management-table">
-    <thead>
-      <tr>
-        <th class="text-center">Tên đại lý</th>
-        <th class="text-center">Mã đại lý</th>
-        <th class="text-center">Loại đại lý</th>
-        <th class="text-center">Quận</th>
-        <th class="text-center">Trạng thái</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>No-Data</td>
-        <td>No-Data</td>
-        <td>No-Data</td>
-        <td>No-Data</td>
-        <td>No-Data</td>
-      </tr>
-      <tr>
-        <td>No-Data</td>
-        <td>No-Data</td>
-        <td>No-Data</td>
-        <td>No-Data</td>
-        <td>No-Data</td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="agent-management-btn-group">
-    <button class="agent-management-btn">Thêm</button>
-    <button class="agent-management-btn">Xóa</button>
-    <button class="agent-management-btn">Sửa</button>
+<div class="agency-list-container w-100">
+  <h3 class="agency-list-title text-center mb-5">
+    Danh sách đại lý
+  </h3>
+
+  <div class="agency-table-container">
+    <table class="table table-striped mb-5">
+      <thead>
+        <tr>
+          <th scope="col" class="text-center" style="width: 20%;">Mã đại lý</th>
+          <th scope="col" class="text-center" style="width: 20%;">Tên đại lý</th>
+          <th scope="col" class="text-center" style="width: 20%;">Loại</th>
+          <th scope="col" class="text-center" style="width: 20%;">Quận</th>
+          <th scope="col" class="text-center" style="width: 20%;">Trạng thái</th>
+        </tr>
+      </thead>
+      <tbody>
+          {{#each agencyList}}
+            <tr>
+              <td class="text-center">{{ agencyCode }}</td>
+              <td class="text-center">{{ name }}</td>
+              <td class="text-center">{{ type }}</td>
+              <td class="text-center">{{ district }}</td>
+              <td class="text-center">
+                {{#eq status "Đã duyệt"}}
+                  <span class="badge bg-success">Đã được duyệt</span>
+                {{/eq}}
+                {{#eq status "Đang chờ"}}
+                  <span class="badge bg-secondary">Đang chờ duyệt</span>
+                {{/eq}}
+                {{#eq status "Từ chối"}}
+                  <span class="badge bg-danger">Đã bị từ chối</span>
+                {{/eq}}
+              </td>
+            </tr>
+          {{/each}}
+            <tr>
+              <td class="text-center">Data demo</td>
+              <td class="text-center">Data demo</td>
+              <td class="text-center">Data demo</td>
+              <td class="text-center">Data demo</td>
+              <td class="text-center">Data demo</td>
+            </tr>
+            <tr>
+              <td class="text-center">Data demo</td>
+              <td class="text-center">Data demo</td>
+              <td class="text-center">Data demo</td>
+              <td class="text-center">Data demo</td>
+              <td class="text-center">Data demo</td>
+            </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-flex w-100" style="justify-content: center;">
+    <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold py-2" 
+            style="background-color: #C6BDBD; color: #000; width: 200px;"
+            >
+        Thêm
+    </button>
+    <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold mx-5 py-2" 
+            style="background-color: #C6BDBD; color: #000; width: 200px;"
+            >
+        Xóa
+    </button>
+    <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold py-2" 
+            style="background-color: #C6BDBD; color: #000; width: 200px;"
+            >
+        Sửa
+    </button>
   </div>
 </div>
