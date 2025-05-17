@@ -8,12 +8,14 @@
 </style>
 
 {{#eq user.type "user"}}
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px; height: 100vh;">
-    <a href="/page/home" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-        <i class="bi bi-person-circle pe-none me-2 fs-4"></i>
-        <div class="fs-4">{{user.fullname}}</div>
-            <small class="text-muted">Đại lý</small>
-    </a>
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="position: fixed; top: 0; left: 0; width: 280px; height: 100vh; overflow-y: auto;">
+<a href="/main/thong_tin_dai_ly" class="d-flex align-items-center me-md-auto link-body-emphasis text-decoration-none sidebar-item" style="gap: 8px; padding-left: 15px; margin-bottom: 4px;"data-section="thong_tin_dai_ly">
+  <i class="bi bi-person-circle" style="width: 32px; height: 36px; line-height: 36px; font-size: 24px;"></i>
+  <div class="d-flex flex-column justify-content-center" style="line-height: 1; margin: 0;">
+    <span class="fs-7 fw-semibold mb-0" style="margin: 0; line-height: 1;">{{user.fullname}}</span>
+    <small class="text-muted" style="font-size: 12px; margin: 0; line-height: 1;">{{user.type}}</small>
+  </div>
+</a>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
@@ -64,10 +66,13 @@
 
 </style>
 
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px; height: 100vh;">
-<a href="/page/home" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-    <i class="bi bi-person-circle pe-none me-2 fs-4"></i>
-    <div class="fs-4">Admin</div>
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="position: fixed; top: 70px; left: 0; width: 280px; height: 100vh; overflow-y: auto;">
+<a href="/main/thong_tin_admin" class="d-flex align-items-center me-md-auto link-body-emphasis text-decoration-none sidebar-item" style="gap: 8px; padding-left: 15px; margin-bottom: 4px;"data-section="thong_tin_admin">
+  <i class="bi bi-person-circle" style="width: 32px; height: 36px; line-height: 36px; font-size: 24px;"></i>
+  <div class="d-flex flex-column justify-content-center" style="line-height: 1; margin: 0;">
+    <span class="fs-7 fw-semibold mb-0" style="margin: 0; line-height: 1;">{{user.fullname}}</span>
+    <small class="text-muted" style="font-size: 12px; margin: 0; line-height: 1;">{{user.type}}</small>
+  </div>
 </a>
 <hr>
 <ul class="nav nav-pills flex-column mb-auto">
@@ -131,7 +136,7 @@
 </div>
 {{/eq}}
 
-
+{{!-- 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const sidebarItems = document.querySelectorAll('.sidebar-item');
@@ -162,6 +167,62 @@
                 const sec = item.dataset.section;
                 updateActive(sec);
             });
+        });
+    });
+</script> --}}
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const sidebarItems = document.querySelectorAll('.sidebar-item');
+
+        function updateActive(section) {
+            sidebarItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.section === section) {
+                    item.classList.add('active');
+                    item.setAttribute('aria-current', 'page');
+                }
+            });
+        }
+
+        async function loadSection(url, section) {
+            try {
+                const res = await fetch(url);
+                const text = await res.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(text, 'text/html');
+                const newContent = doc.querySelector('#main-content');
+                if (newContent) {
+                    document.querySelector('#main-content').innerHTML = newContent.innerHTML;
+                    updateActive(section);
+                    window.history.pushState({}, '', url);
+                } else {
+                    console.warn('Không tìm thấy #main-content trong response');
+                }
+            } catch (err) {
+                console.error('Lỗi khi tải nội dung:', err);
+            }
+        }
+
+        // Highlight ban đầu
+        const currentPath = window.location.pathname;
+        const section = currentPath.split('/').pop() || 'home';
+        updateActive(section);
+
+        sidebarItems.forEach(item => {
+            item.addEventListener('click', e => {
+                e.preventDefault(); // ✅ Ngăn reload
+                const section = item.dataset.section;
+                const url = item.getAttribute('href');
+                loadSection(url, section);
+            });
+        });
+
+        // Quay lại trang cũ khi dùng nút Back/Forward
+        window.addEventListener('popstate', async () => {
+            const url = window.location.pathname;
+            const section = url.split('/').pop() || 'home';
+            await loadSection(url, section);
         });
     });
 </script>
