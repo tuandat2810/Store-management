@@ -159,6 +159,9 @@
     }
   });
 
+  const searchInput = document.getElementById('searchInput')
+  const suggestions = document.getElementById('suggestions')
+
   // Khi người dùng gõ tìm kiếm sẽ đề xuất nội dung liên quan
   searchInput.addEventListener("input", () => {
   const query = searchInput.value.trim();
