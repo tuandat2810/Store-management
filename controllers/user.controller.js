@@ -61,7 +61,7 @@ module.exports.login = async (req, res) => {
         if (user) return res.redirect("/page/home");
     }
     res.render('login', {
-        layout: 'auth',
+        layout: 'main',
         pageTitle: 'Đăng nhập',
         error: req.flash('error')[0],
         success: req.flash('success')[0]
