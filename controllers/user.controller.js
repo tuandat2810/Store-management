@@ -56,8 +56,12 @@ module.exports.registerPost = async (req, res) => {
 };
 
 module.exports.login = async (req, res) => {
+    if (req.cookies.tokenUser) {
+        const user = await User.findOne({ tokenUser: req.cookies.tokenUser });
+        if (user) return res.redirect("/page/home");
+    }
     res.render('login', {
-        layout: 'main',
+        layout: 'auth',
         pageTitle: 'Đăng nhập',
         error: req.flash('error')[0],
         success: req.flash('success')[0]
