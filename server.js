@@ -35,9 +35,9 @@ app.use(flash());
 
 // Route chính
 app.get('/', (req, res) => {
-    if (res.locals.user) {
-        return res.redirect('/page/home');
-        }   
+    // if (res.locals.user) {
+    //     return res.redirect('/page/home');
+    // }   
     res.render('landing_page');
 });
 app.use(infoUser)
