@@ -21,8 +21,7 @@
                 {{> sidebar}}
             {{/unless}}
         {{/if}}       
-        <div id="main-content" class="flex-grow-1 d-flex flex-column"
-style="{{#if user.type}}{{#unless hideSidebar}}padding-left: 280px;{{/unless}}{{/if}}">
+        <div id="main-content" class="flex-grow-1 d-flex flex-column" style="{{#if user.type}}{{#unless hideSidebar}}padding-left: 280px;{{/unless}}{{/if}}">
             {{{body}}}
         </div>
     </div>
