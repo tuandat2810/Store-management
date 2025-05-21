@@ -12,6 +12,7 @@ const port = process.env.PORT || 3000;
 
 // Kết nối MongoDB
 const database = require('./configs/database.js');
+const { infoUser } = require('./middlewares/user.middleware.js');
 database.connect();
 
 // Cấu hình view engine Handlebars
@@ -34,12 +35,18 @@ app.use(flash());
 
 // Route chính
 app.get('/', (req, res) => {
+    // if (res.locals.user) {
+    //     return res.redirect('/page/home');
+    // }   
     res.render('landing_page');
 });
+app.use(infoUser)
 // Sử dụng router người dùng
 app.use('/page', require('./routes/user.route.js'));
 // Sử dụng router chính của Người dùng
-app.use('/page', require('./routes/main.route.js'));
+app.use('/main', require('./routes/main.route.js'));
+
+// app.use('/page', require('./routes/agency.route.js'));
 
 // Start server
 app.listen(port, () => {

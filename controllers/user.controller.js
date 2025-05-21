@@ -56,6 +56,10 @@ module.exports.registerPost = async (req, res) => {
 };
 
 module.exports.login = async (req, res) => {
+    if (req.cookies.tokenUser) {
+        const user = await User.findOne({ tokenUser: req.cookies.tokenUser });
+        if (user) return res.redirect("/page/home");
+    }
     res.render('login', {
         layout: 'main',
         pageTitle: 'Đăng nhập',
@@ -84,7 +88,6 @@ module.exports.loginPost = async (req, res) => {
             maxAge: 86400000,
             httpOnly: true,
         });
-
         return res.redirect('/page/home');
     } catch (err) {
         console.error("Lỗi đăng nhập:", err);
@@ -103,5 +106,13 @@ module.exports.home = async(req, res) => {
     res.render('home', {
         layout: 'main',
         pageTitle: 'Trang chủ'
+    });
+};
+
+// controllers/about.controller.js
+module.exports.showAboutPage = (req, res) => {
+    res.render('about', {
+        layout: 'main',
+        hideSidebar:true 
     });
 };

@@ -7,13 +7,27 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet">
-
+    <style>
+        .main-content {
+            padding-top: 70px; /* Điều chỉnh giá trị này theo chiều cao của navbar */
+        }
+    </style>
 </head>
 <body>
-    {{>nav}}
-    {{{body}}}
+    {{> nav}}
+    <div class="container-fluid d-flex main-content px-0">
+        {{#if user.type}}
+            {{#unless hideSidebar}}
+                {{> sidebar}}
+            {{/unless}}
+        {{/if}}       
+        <div id="main-content" class="flex-grow-1 d-flex flex-column" style="{{#if user.type}}{{#unless hideSidebar}}padding-left: 280px;{{/unless}}{{/if}}">
+            {{{body}}}
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
+    
 </body>
 </html>

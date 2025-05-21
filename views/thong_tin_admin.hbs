@@ -1,71 +1,35 @@
 <style>
-  .admin-form-container {
-    min-height: 100vh;
-    padding: 0;
-  }
-
-  .admin-form {
-    max-width: 700px;
-    margin: 40px auto 0 auto;
-  }
-
-  .admin-form-title {
-    font-size: 1.8rem;
-    font-weight: 600;
-    margin-bottom: 40px;
-    text-align: left;
-  }
-
-  .admin-form-fields {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-  }
-
-  .admin-form-row {
-    display: flex;
-    align-items: center;
-  }
-
-  .admin-form-label {
-    flex: 0 0 160px;
-    font-size: 1.2rem;
-    text-align: left;
-  }
-
-  .admin-form-input {
-    flex: 0 0 50%;
-    font-size: 1.2rem;
-    padding: 12px 18px;
-    border: 2px solid #e0e0e0;
-    border-radius: 12px;
-    outline: none;
-    margin-left: 16px;
-    background: #fff;
-  }
-
 </style>
 
-<div class="admin-form-container">
-  <form class="admin-form">
-    <h1 class="admin-form-title">Thông tin tài khoản Admin</h1>
-    <div class="admin-form-fields">
-      <div class="admin-form-row">
-        <label for="madaily" class="admin-form-label">Họ và tên</label>
-        <input id="madaily" name="madaily" type="text" value="Value" readonly class="admin-form-input">
-      </div>
-      <div class="admin-form-row">
-        <label for="maphieu" class="admin-form-label">Điện thoại</label>
-        <input id="maphieu" name="maphieu" type="text" value="Value" readonly class="admin-form-input">
-      </div>
-      <div class="admin-form-row">
-        <label for="sotien" class="admin-form-label">Email</label>
-        <input id="sotien" name="sotien" type="text" value="Value" readonly class="admin-form-input">
-      </div>
-      <div class="admin-form-row">
-        <label for="ghichu" class="admin-form-label">Địa chỉ</label>
-        <input id="ghichu" name="ghichu" type="text" value="Value" readonly class="admin-form-input">
-      </div>
+<div class="container-user container-fluid d-flex flex-column align-items-center" style="width: 100%; height: 100%;margin-top: 32px;">
+  <h3 class="mb-5 text-center w-100">
+    Thông tin tài khoản
+  </h3>    
+  
+  <form id="admin-form" action="/submit-data-user" method="POST" class="w-100" style="max-width: 600px;">
+    <div class="mb-3 row">
+        <label for="hoten" class="col-sm-3 col-form-label">Họ và tên</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="hoten" name="hoten" placeholder="Data họ tên" readonly>
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="phone" class="col-sm-3 col-form-label">Điện thoại</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="phone" name="phone" placeholder="Data số điện thoại" readonly>
+        </div>        
+    </div>
+    <div class="mb-3 row">
+        <label for="email" class="col-sm-3 col-form-label">Email</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="email" name="email" placeholder="Data email" readonly>
+        </div>        
+    </div>
+    <div class="mb-3 row">
+        <label for="address" class="col-sm-3 col-form-label">Địa chỉ</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="address" name="address" placeholder="Data địa chỉ" readonly>
+        </div>        
     </div>
   </form>
 </div>
