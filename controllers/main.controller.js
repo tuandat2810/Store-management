@@ -210,9 +210,20 @@ module.exports.load_lap_phieu_xuat_hang = async (req, res) => {
 
 module.exports.load_quan_ly_dai_ly_admin = async (req, res) => {
   try {
+    const searchQuery = req.query.search || '';
+    const agencyList = await Agency.find({
+      $or: [
+        { agencyCode: { $regex: searchQuery, $options: 'i' } },
+        { name: { $regex: searchQuery, $options: 'i' } },
+      ],
+    }).lean();
+
+
+    const data = { agencyList };
     res.render('quan_ly_dai_ly_admin', {
       layout: 'main',
-      title: 'Quản lý đại lý Admin'
+      title: 'Quản lý đại lý Admin',
+      ...data
     });
   } catch (err) {
     console.error(err);

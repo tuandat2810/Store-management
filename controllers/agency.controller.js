@@ -1,25 +1,24 @@
 const Agency = require('../models/agency.m.js');
 
-module.exports.dang_ky_dai_lyPOST = async (req, res) => {
-    const { agencyCode, agencyName, agencyType, email, phoneNumber, district, address } = req.body;
+module.exports.update_status = async (req, res) => {
     try {
-        const newAgency = new Agency({
-            agencyCode,
-            managerUsername: user.fullname,
-            name: agencyName,
-            type: agencyType,
-            email,
-            phone: phoneNumber,
-            district,
-            address,
-            acceptedDate: new Date().toISOString()
-        });
+        const { agencyCode, status } = req.body;
+        // console.log("Received agencyCode:", agencyCode);
+        // console.log("Received status:", status);
+        if (!agencyCode || !status) {
+            return res.status(400).json({ message: 'Thiếu agencyCode hoặc status' });
+        }
 
-        await newAgency.save();
+        
+        const agency = await Agency.findOneAndUpdate({ agencyCode }, { status }, { new: true });
 
-        req.flash("success", "Đăng ký đại lý thành công.");
-    } catch (error) {
-        console.error("Lỗi đăng ký:", error);
-        req.flash("error", "Lỗi hệ thống khi đăng ký đại lý!");
+        if (!agency) {
+            return res.status(404).json({ message: 'Không tìm thấy đại lý' });
+        }
+
+        res.json({ message: 'Cập nhật thành công', agency });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Lỗi server' });
     }
 };

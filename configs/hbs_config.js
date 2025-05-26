@@ -9,9 +9,9 @@ module.exports = (app) => {
     helpers: {
       eq: function (a, b, options) {
         if (a == b) {
-          return options.fn(options.data.root); 
+          return options.fn(this); // Dùng `this` để giữ nguyên context hiện tại
         } else {
-          return options.inverse(options.data.root);
+          return options.inverse(this);
         }
       },
       eq1: (a, b) => a === b,

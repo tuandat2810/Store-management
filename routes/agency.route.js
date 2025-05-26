@@ -3,8 +3,10 @@ require('dotenv').config();
 const express = require("express");
 const router = express.Router();
 
+const authMiddleware = require("../middlewares/auth.middleware")
 const agencyController = require('../controllers/agency.controller');
+const { requireAuth } = require("../middlewares/auth.middleware");
 
-router.post('/section/dang_ki_dai_ly', agencyController.dang_ky_dai_lyPOST);
+router.post('/api/agency/update-status', authMiddleware.requireAuth, agencyController.update_status);
 
 module.exports = router;

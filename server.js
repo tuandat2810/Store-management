@@ -52,7 +52,8 @@ app.use('/page', require('./routes/user.route.js'));
 // Sử dụng router chính của Người dùng
 app.use('/main', require('./routes/main.route.js'));
 
-// app.use('/page', require('./routes/agency.route.js'));
+// Api route ho tro
+app.use('/', require('./routes/agency.route.js'));
 
 // Start server
 app.listen(port, () => {
