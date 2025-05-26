@@ -19,7 +19,57 @@
         transform: translateY(-50%) rotate(180deg);
     }
 
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1050;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        max-width: 500px;
+        width: 90%;
+        background: white; /* Nền trắng */
+    }
+
+    .modal-content.success {
+        border: 2px solid #28a745; /* Viền xanh cho success */
+    }
+
+    .modal-content.error {
+        border: 2px solid #dc3545; /* Viền đỏ cho error */
+    }
+
+    .btn-close-custom {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
 </style>
+
+{{#if success_msg}}
+<div class="modal-overlay" id="success-popup">
+    <div class="modal-content success p-4 rounded-3 shadow">
+        <button type="button" class="btn-close btn-close-custom" aria-label="Close" onclick="closePopup('success-popup')"></button>
+        <div class="text-center">{{success_msg}}</div>
+    </div>
+</div>
+{{/if}}
+
+{{#if error_msg}}
+<div class="modal-overlay" id="error-popup">
+    <div class="modal-content error p-4 rounded-3 shadow">
+        <button type="button" class="btn-close btn-close-custom" aria-label="Close" onclick="closePopup('error-popup')"></button>
+        <div class="text-center">{{error_msg}}</div>
+    </div>
+</div>
+{{/if}}
 
 <div class="container-fluid d-flex flex-column align-items-center" style="width: 100%; height: 100%;margin-top: 32px;">
     <h3 class="mb-5 text-center w-100">
@@ -100,3 +150,24 @@
         </div>
     </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const successPopup = document.getElementById('success-popup');
+        const errorPopup = document.getElementById('error-popup');
+
+        if (successPopup) {
+            successPopup.style.display = 'flex';
+        }
+        if (errorPopup) {
+            errorPopup.style.display = 'flex';
+        }
+    });
+
+    function closePopup(popupId) {
+        const popup = document.getElementById(popupId);
+        if (popup) {
+            popup.style.display = 'none';
+        }
+    }
+</script>

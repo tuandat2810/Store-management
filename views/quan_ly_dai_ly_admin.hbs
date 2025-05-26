@@ -18,33 +18,53 @@
     margin: 16px;
   }
 
-  /* .pagination .page-link {
-    color: black;                
-    background-color: #fff;      
-    border-color: black;         
+  .pagination .page-link {
+    color: black;                /* Màu chữ */
+    background-color: #fff;      /* Màu nền (trang hiện tại có thể giữ nguyên) */
+    border-color: black;         /* Màu viền */
   }
 
   .pagination .page-item.active .page-link {
-    background-color: black;     
-    border-color: black;         
-    color: white;                
+    background-color: black;     /* Nền khi active */
+    border-color: black;         /* Viền khi active */
+    color: white;                /* Chữ khi active */
   }
 
   .pagination .page-link:hover {
-    background-color: #333;     
+    background-color: #333;      /* Nền khi hover */
     color: white;
-  } */
-  
+  }
 
 </style>
 
 <div class="agency-list-container w-100">
-  <h3 class="agency-list-title text-center mb-5">
-    Danh sách đại lý
+  <h3 class="agency-list-title text-center">
+    Quản lý đại lý
   </h3>
+  
+  <!-- Thanh tìm kiếm (search bar) căn phải -->
+    <div class="d-flex justify-content-end mb-3">
+      <div class="input-group" style="width: 300px;">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Tìm kiếm đại lý..."
+          id="searchInput"
+          value="{{searchQuery}}"
+        />
+        <button class="btn btn-outline-secondary" type="button" onclick="clearSearch()">
+          <i class="bi bi-x"></i>
+        </button>
+        <button class="btn btn-outline-dark" type="button" onclick="performSearch()">
+          <i class="bi bi-search"></i>
+        </button>
+        <ul id="suggestions" class="list-group position-absolute w-100" style="top: 100%; z-index: 1000;"></ul>
+      </div>
+    </div>
+  </div>
 
   <div class="agency-table-container">
-    <table class="table table-striped mb-5">
+    <table class="table table-striped">
       <thead>
         <tr>
           <th scope="col" class="text-center" style="width: 20%;">Mã đại lý</th>
@@ -110,3 +130,88 @@
     </button>
   </div>
 </div>
+
+
+
+<script>
+  // Khi người dùng nhấn nút tìm kiếm
+  function performSearch() {
+    const searchQuery = document.getElementById('searchInput').value.trim();
+    if (searchQuery) {
+      // Thực hiện tìm kiếm với từ khóa
+      window.location.href = `/main/danh_sach_dai_ly_admin?search=${encodeURIComponent(searchQuery)}&page=1`;
+    }
+  }
+
+  // Khi người dùng nhấn nút xóa
+  function clearSearch() {
+    document.getElementById('searchInput').value = ''; // Xóa từ khóa tìm kiếm
+    window.location.href = '/main/danh_sach_dai_ly_admin?page=1'; // Reset lại trang và tìm kiếm
+  }
+
+  // Khi người dùng nhấn phím Enter trong ô tìm kiếm
+  document.getElementById('searchInput').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      performSearch();
+    }
+  });
+
+  const searchInput = document.getElementById('searchInput')
+  const suggestions = document.getElementById('suggestions')
+
+  // Khi người dùng gõ tìm kiếm sẽ đề xuất nội dung liên quan
+  searchInput.addEventListener("input", () => {
+  const query = searchInput.value.trim();
+
+  if (!query) {
+    suggestions.innerHTML = "";
+    return; // return này nằm đúng trong hàm arrow function
+  }
+
+  fetch(`/main/dai-ly-suggestions?query=${encodeURIComponent(query)}`)
+    .then(res => res.json())
+    .then(data => {
+      suggestions.innerHTML = "";
+      data.forEach(name => {
+        const li = document.createElement("li");
+        li.textContent = name;
+        li.className = "list-group-item list-group-item-action";
+        li.onclick = () => {
+          searchInput.value = name;
+          suggestions.innerHTML = "";
+          performSearch();
+        };
+        suggestions.appendChild(li);
+      });
+    });
+  });
+  // Khi click ra ngoài thì xóa gợi ý
+  document.addEventListener("click", (e) => {
+    const isClickInsideInput = searchInput.contains(e.target);
+    const isClickInsideSuggestions = suggestions.contains(e.target);
+    if (!isClickInsideInput && !isClickInsideSuggestions) {
+      suggestions.innerHTML = "";
+    }
+
+    if (isClickInsideInput && searchInput.value.trim() !== "") {
+      fetch(`/main/dai-ly-suggestions?query=${encodeURIComponent(searchInput.value.trim())}`)
+        .then(res => res.json())
+        .then(data => {
+          suggestions.innerHTML = "";
+          data.forEach(name => {
+            const li = document.createElement("li");
+            li.textContent = name;
+            li.className = "list-group-item list-group-item-action";
+            li.onclick = () => {
+              searchInput.value = name;
+              suggestions.innerHTML = "";
+              performSearch();
+            };
+            suggestions.appendChild(li);
+          });
+      });
+    }
+  })
+
+</script>

@@ -31,7 +31,13 @@ app.use(session({
     cookie: { maxAge: 60000 }
 }));
 
+// Flash
 app.use(flash());
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash('success');
+    res.locals.error_msg = req.flash('error');
+    next();
+});
 
 // Route chính
 app.get('/', (req, res) => {
