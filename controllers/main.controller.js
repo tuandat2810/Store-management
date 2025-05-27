@@ -145,9 +145,6 @@ module.exports.search = async (req, res) => {
   }
 }
 
-
-
-
 module.exports.load_bao_cao_hang_thang = async (req, res) => {
   try {
     res.render('bao_cao_hang_thang', {
@@ -300,7 +297,7 @@ module.exports.dang_ky_dai_lyPOST = async (req, res) => {
 
       await newAgency.save();
 
-      req.flash("success", "Đăng ký đại lý thành công.");
+      req.flash("success", "Đăng ký đại lý thành công. Vui lòng chờ duyệt!");
       return res.redirect("/main/dang_ki_dai_ly");
 
     } catch (error) {

@@ -3,8 +3,6 @@ const Agency = require('../models/agency.m.js');
 module.exports.update_status = async (req, res) => {
     try {
         const { agencyCode, status } = req.body;
-        // console.log("Received agencyCode:", agencyCode);
-        // console.log("Received status:", status);
         if (!agencyCode || !status) {
             return res.status(400).json({ message: 'Thiếu agencyCode hoặc status' });
         }

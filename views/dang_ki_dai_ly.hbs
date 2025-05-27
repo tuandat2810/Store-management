@@ -152,7 +152,7 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    {{!-- document.addEventListener('DOMContentLoaded', function() {
         const successPopup = document.getElementById('success-popup');
         const errorPopup = document.getElementById('error-popup');
 
@@ -169,5 +169,31 @@
         if (popup) {
             popup.style.display = 'none';
         }
+    } --}}
+    document.addEventListener("DOMContentLoaded", function () {
+        const successPopup = document.getElementById('success-popup');
+        const errorPopup = document.getElementById('error-popup');
+
+    if (successPopup) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Thành công',
+        text: successPopup.textContent,
+        showConfirmButton: false,
+        timer: 2000
+      }).then(() => {
+        window.location.reload(); 
+      });
     }
+
+    if (errorPopup) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Lỗi',
+        text: errorPopup.textContent,
+        showConfirmButton: false,
+        timer: 2500
+      });
+    }
+  });
 </script>
