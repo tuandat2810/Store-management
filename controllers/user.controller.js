@@ -80,7 +80,7 @@ module.exports.loginPost = async (req, res) => {
 
         const isMatch = await Crypto.verifyPassword(password, user.password);
         if (!isMatch) {
-            req.flash("error", "Sai mật khẩu!");
+            req.flash("error", "Sai tài khoản hoặc mật khẩu!");
             return res.redirect('/page/login');
         }
 
@@ -88,6 +88,8 @@ module.exports.loginPost = async (req, res) => {
             maxAge: 86400000,
             httpOnly: true,
         });
+        req.flash("success", "Đăng nhập thành công!");
+        
         return res.redirect('/page/home');
     } catch (err) {
         console.error("Lỗi đăng nhập:", err);
