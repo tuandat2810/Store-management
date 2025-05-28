@@ -96,24 +96,24 @@
             </td>
             <td class="text-center">
               {{#eq status "Đã duyệt"}}
-                <button type="button" class="btn btn-outline-danger btn-sm" data-id="{{agencyCode}}">
+                <button type="button" class="btn btn-outline-danger btn-sm" data-id="{{agencyCode}}" data-district="{{district}}">
                   Hủy tiếp nhận
                 </button>
               {{/eq}}
 
               {{#eq status "Đang chờ"}}
                 <div class="d-flex justify-content-center gap-2">
-                  <button type="button" class="btn btn-outline-success btn-sm" data-id="{{agencyCode}}">
+                  <button type="button" class="btn btn-outline-success btn-sm" data-id="{{agencyCode}}" data-district="{{district}}">
                     Tiếp nhận
                   </button>
-                  <button type="button" class="btn btn-outline-secondary btn-sm" data-id="{{agencyCode}}">
+                  <button type="button" class="btn btn-outline-secondary btn-sm" data-id="{{agencyCode}}" data-district="{{district}}">
                     Từ chối
                   </button>
                 </div>
               {{/eq}}
 
               {{#eq status "Từ chối"}}
-                <button type="button" class="btn btn-outline-warning btn-sm" data-id="{{agencyCode}}">
+                <button type="button" class="btn btn-outline-warning btn-sm" data-id="{{agencyCode}}" data-district="{{district}}">
                   Hủy từ chối
                 </button>
               {{/eq}}
@@ -211,8 +211,11 @@
   document.querySelectorAll('button[data-id]').forEach(btn => {
     btn.addEventListener('click', async e => {
       const button = e.target.closest('button'); 
-      const id = button.getAttribute('data-id');
+
+      const id = button.getAttribute('data-id'); // agencyCode: mã đại lý
+      const district = button.getAttribute('data-district'); // district: quận
       
+
       const action = button.textContent.trim();
 
       let newStatus;
@@ -222,43 +225,6 @@
       else if (action.includes("Hủy từ chối")) newStatus = "Đang chờ";
       else return;
 
-      {{!-- try {
-        const response = await fetch('/api/agency/update-status', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ agencyCode: id, status: newStatus }),
-        });
-
-        if (response.ok) {
-          Swal.fire({
-            icon: 'success',
-            title: 'Thành công',
-            text: `Cập nhật trạng thái thành công: ${newStatus}`,
-            timer: 2000,
-            showConfirmButton: false
-          });
-
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
-
-        } else {
-          const err = await response.json();
-          Swal.fire({
-            icon: 'error',
-            title: 'Thất bại',
-            text: `Cập nhật trạng thái thất bại: ${err.message || 'Cập nhật thất bại'}`,
-            timer: 2000,
-            showConfirmButton: false
-          });
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
-        }
-      } catch (error) {
-        alert('Có lỗi xảy ra khi kết nối server');
-        console.error(error);
-      } --}}
       Swal.fire({
         title: 'Bạn có chắc?',
         text: `Thay đổi trạng thái thành: "${newStatus}"?`,
@@ -272,7 +238,7 @@
             const response = await fetch('/api/agency/update-status', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ agencyCode: id, status: newStatus }),
+              body: JSON.stringify({ agencyCode: id, status: newStatus, district }),
             });
 
             if (response.ok) {
