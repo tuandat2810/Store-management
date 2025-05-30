@@ -1,72 +1,89 @@
+<style>
+    .badge-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem; /* Replaces me-1 and mb-1 for better control */
+    }
+
+    .badge-container .badge {
+        display: inline-block;
+    }
+</style>
+
+
 <div class="container-fluid mt-5">
-  <h3 class="text-center mb-5">Lập phiếu xuất hàng</h3>
-  <div class="row justify-content-center">
-    <!-- Form nhập -->
-    <div class="col-md-6" style="">
-      <form action="/lap-phieu-xuat-hang" method="POST">
-        <!-- Mã đại lý -->
-        <div class="mb-3 row">
-          <label for="agencyCode" class="col-sm-4 col-form-label text-end">Mã đại lý:</label>
-          <div class="col-sm-8">
-            <input type="text" class="form-control" id="agencyCode" name="agencyCode" value="{{agencyCode}}" readonly>
-          </div>
-        </div>
-        <!-- Mã phiếu -->
-        <div class="mb-3 row">
-          <label for="agencyTicket" class="col-sm-4 col-form-label text-end">Mã phiếu:</label>
-          <div class="col-sm-8">
-            <input type="text" class="form-control" id="agencyTicket" name="agencyTicket" value="{{agencyTicket}}" readonly>
-          </div>
-        </div>
-        <!-- Mặt hàng -->
-        <div class="mb-3 row">
-          <label for="mat_hang" class="col-sm-4 col-form-label text-end">Mặt hàng:</label>
-          <div class="col-sm-8">
-            <select class="form-select" id="mat_hang" name="mat_hang" required>
-              <option value="" selected disabled>Chọn mặt hàng</option>
-              <!-- Thêm options sản phẩm ở đây -->
-              <option value="SP1">Sản phẩm 1</option>
-              <option value="SP2">Sản phẩm 2</option>
-            </select>
-          </div>
-        </div>
-        <!-- Số lượng -->
-        <div class="mb-3 row">
-          <label for="so_luong" class="col-sm-4 col-form-label text-end">Số lượng:</label>
-          <div class="col-sm-8">
-            <input type="number" class="form-control" id="so_luong" name="so_luong" placeholder="Nhập số lượng" required>
-          </div>
+    <h3 class="text-center mb-5">Lập phiếu xuất hàng</h3>
+    <div class="row justify-content-center">
+        <!-- Form nhập -->
+        <div class="col-md-6" style="">
+            <form form action="/lap-phieu-xuat-hang" method="POST">
+            <!-- Mã đại lý -->
+            
+            <div class="mb-3 row">
+            <label for="agencyCode" class="col-sm-4 col-form-label text-end">Mã đại lý:</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="agencyCode" name="agencyCode" value="{{agencyCode}}" readonly>
+            </div>
+            </div>
+            <!-- Mã phiếu -->
+            <div class="mb-3 row">
+            <label for="agencyTicket" class="col-sm-4 col-form-label text-end">Mã phiếu:</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="agencyTicket" name="agencyTicket" value="{{agencyTicket}}" readonly>
+            </div>
+            </div>
+
+            <!-- Mặt hàng -->
+            <div class="mb-3 row">
+                <label for="mat_hang" class="col-sm-4 col-form-label text-end">Chọn mặt hàng:</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <!-- Chọn mặt hàng -->
+                        <select class="form-select" id="mat_hang" name="mat_hang" required>
+                            <option value="" selected disabled>Mặt hàng</option>
+                            <option value="SP1">Sản phẩm 1</option>
+                            <option value="SP2">Sản phẩm 2</option>
+                        </select>
+
+                        <!-- Nhập số lượng -->
+                        <input type="number" class="form-control" id="so_luong" name="so_luong" placeholder="Số lượng" required />
+
+                        <!-- Nút thêm vào giỏ -->
+                        <button class="btn btn-outline-dark" type="button" onclick="themVaoGio()">
+                            <i class="bi bi-cart-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nút lập phiếu -->
+            <div class="mb-3 row">
+                <div class="col-sm-8 offset-sm-4 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-dark fw-semibold rounded px-5">
+                        <i class="bi bi-clipboard-check me-2"></i> Lập phiếu
+                    </button>
+                </div>
+            </div>
+
+
+            </form>
         </div>
 
-        <!-- Nút thêm vào giỏ -->
-        <div class="text-end mb-4">
-          <button class="btn btn-outline-dark" type="button" onclick="themVaoGio()">
-            <i class="bi bi-cart-plus"></i> Thêm vào giỏ
-          </button>
+        <!-- Giỏ hàng -->
+        <div class="col-md-6" style="padding-right: 113px !important;">
+            <div class="card shadow">
+                <div class="card-header d-flex justify-content-between align-items-center bg-dark text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-cart me-2"></i>Giỏ hàng
+                    </h5>    
+                    <span class="badge bg-light text-dark" id="gioCount">0 sản phẩm</span>
+                </div>
+                <div class="p-2 badge-container" id="gioHang">
+                    <!-- Các sản phẩm sẽ được thêm vào đây -->
+                </div>
+            </div>
         </div>
-
-        <!-- Nút lập phiếu -->
-        <div class="text-center mt-4">
-          <button type="submit" class="btn btn-primary px-5 rounded-pill fw-semibold">
-            Lập phiếu
-          </button>
-        </div>
-      </form>
     </div>
-
-    <!-- Giỏ hàng -->
-    <div class="col-md-6" style="padding-right: 113px !important;">
-      <div class="card shadow">
-        <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white">
-          <h5 class="mb-0">Giỏ hàng</h5>
-          <span class="badge bg-light text-dark" id="gioCount">0 sản phẩm</span>
-        </div>
-        <ul class="list-group list-group-flush" id="gioHang">
-          <!-- Các sản phẩm sẽ được thêm vào đây -->
-        </ul>
-      </div>
-    </div>
-  </div>
 </div>
 
 
@@ -92,13 +109,14 @@
     const gio = document.getElementById("gioHang");
     gio.innerHTML = "";
     cart.forEach(item => {
-      const li = document.createElement("li");
-      li.className = "list-group-item d-flex justify-content-between";
-      li.innerHTML = `<span>${item.name}</span><span>${item.qty} cái</span>`;
-      gio.appendChild(li);
+      const badge = document.createElement("span");
+      badge.className = "badge bg-secondary text-wrap";
+      badge.style.fontSize = "0.8rem"; // Smaller font size
+      badge.style.padding = "0.25rem 0.5rem"; // Reduced padding
+      badge.innerHTML = `${item.name}: ${item.qty} cái`;
+      gio.appendChild(badge);
     });
 
     document.getElementById("gioCount").innerText = `${cart.length} sản phẩm`;
   }
 </script>
-    
