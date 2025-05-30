@@ -1,45 +1,104 @@
-<div class="container-fluid d-flex flex-column align-items-center w-100" style="width: 100%; height: 100%;margin-top: 32px;">
-    <h3 class="mb-5 text-center w-100">
-        Lập phiếu xuất hàng
-    </h3>
-    <form action="/lap-phieu-xuat-hang" method="POST" class="w-100" style="max-width: 600px;">
-
+<div class="container-fluid mt-5">
+  <h3 class="text-center mb-5">Lập phiếu xuất hàng</h3>
+  <div class="row justify-content-center">
+    <!-- Form nhập -->
+    <div class="col-md-7">
+      <form action="/lap-phieu-xuat-hang" method="POST">
         <!-- Mã đại lý -->
-        <div class="row mb-3">
-            <label for="ma_dai_ly" class="col-sm-3 col-form-label">Mã đại lý</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="agencyCode" name="agencyCode" value="{{agencyCode}}" readonly>
-            </div>
+        <div class="mb-3 row">
+          <label for="agencyCode" class="col-sm-4 col-form-label text-end">Mã đại lý:</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" id="agencyCode" name="agencyCode" value="{{agencyCode}}" readonly>
+          </div>
         </div>
         <!-- Mã phiếu -->
-        <div class="row mb-3">
-            <label for="ma_phieu" class="col-sm-3 col-form-label">Mã phiếu</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="agencyTicket" name="agencyTicket" value="{{agencyTicket}}" readonly>
-            </div>
+        <div class="mb-3 row">
+          <label for="agencyTicket" class="col-sm-4 col-form-label text-end">Mã phiếu:</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" id="agencyTicket" name="agencyTicket" value="{{agencyTicket}}" readonly>
+          </div>
         </div>
-        <!--Mặt hàng -->
-        <div class="row mb-3">
-            <label for="mat_hang" class="col-sm-3 col-form-label">Mặt hàng</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="mat_hang" name="mat_hang" placeholder="Nhập mặt hàng" required>
-            </div>
+        <!-- Mặt hàng -->
+        <div class="mb-3 row">
+          <label for="mat_hang" class="col-sm-4 col-form-label text-end">Mặt hàng:</label>
+          <div class="col-sm-8">
+            <select class="form-select" id="mat_hang" name="mat_hang" required>
+              <option value="" selected disabled>Chọn mặt hàng</option>
+              <!-- Thêm options sản phẩm ở đây -->
+              <option value="SP1">Sản phẩm 1</option>
+              <option value="SP2">Sản phẩm 2</option>
+            </select>
+          </div>
         </div>
-        <!--Số lượng -->
-         <div class="row mb-3">
-            <label for="so_luong" class="col-sm-3 col-form-label">Số lượng</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="so_luong" name="so_luong" placeholder="Nhập số lượng" required>
-            </div>
+        <!-- Số lượng -->
+        <div class="mb-3 row">
+          <label for="so_luong" class="col-sm-4 col-form-label text-end">Số lượng:</label>
+          <div class="col-sm-8">
+            <input type="number" class="form-control" id="so_luong" name="so_luong" placeholder="Nhập số lượng" required>
+          </div>
         </div>
-        <!-- Nút -->
-        <div class="text-center mt-5">
-            <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold py-2" 
-                style="background-color: #C6BDBD; color: #000; width: 200px;"
-                >
-                Lập
-            </button>
-        </div>
-    </form>
 
+        <!-- Nút thêm vào giỏ -->
+        <div class="text-end mb-4">
+          <button class="btn btn-outline-dark" type="button" onclick="themVaoGio()">
+            <i class="bi bi-cart-plus"></i> Thêm vào giỏ
+          </button>
+        </div>
+
+        <!-- Nút lập phiếu -->
+        <div class="text-center mt-4">
+          <button type="submit" class="btn btn-primary px-5 rounded-pill fw-semibold">
+            Lập phiếu
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Giỏ hàng -->
+    <div class="col-md-5">
+      <div class="card shadow">
+        <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white">
+          <h5 class="mb-0">Giỏ hàng</h5>
+          <span class="badge bg-light text-dark" id="gioCount">0 sản phẩm</span>
+        </div>
+        <ul class="list-group list-group-flush" id="gioHang">
+          <!-- Các sản phẩm sẽ được thêm vào đây -->
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
+
+
+<script>
+  let cart = [];
+
+  function themVaoGio() {
+    const matHang = document.getElementById("mat_hang").value;
+    const soLuong = parseInt(document.getElementById("so_luong").value);
+    if (!matHang || isNaN(soLuong) || soLuong <= 0) return;
+
+    const existing = cart.find(item => item.name === matHang);
+    if (existing) {
+      existing.qty += soLuong;
+    } else {
+      cart.push({ name: matHang, qty: soLuong });
+    }
+
+    renderGioHang();
+  }
+
+  function renderGioHang() {
+    const gio = document.getElementById("gioHang");
+    gio.innerHTML = "";
+    cart.forEach(item => {
+      const li = document.createElement("li");
+      li.className = "list-group-item d-flex justify-content-between";
+      li.innerHTML = `<span>${item.name}</span><span>${item.qty} cái</span>`;
+      gio.appendChild(li);
+    });
+
+    document.getElementById("gioCount").innerText = `${cart.length} sản phẩm`;
+  }
+</script>
+    
