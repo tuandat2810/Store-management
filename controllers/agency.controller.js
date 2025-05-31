@@ -13,9 +13,9 @@ module.exports.update_status = async (req, res) => {
 
         if (status === 'Đã duyệt') {
             const id = String(district);
-            console.log('id:', id);   
+            // console.log('id:', id);   
             const districtData = await District.findOne({ id });
-            console.log(districtData);
+            // console.log(districtData);
 
             if (!districtData) {                                                    
                 return res.status(404).json({ message: 'Không tìm thấy quận' });
@@ -23,10 +23,10 @@ module.exports.update_status = async (req, res) => {
 
             const maximumAgencies = districtData.maximumAgenciesAvailable || 4; // mặc định 4 nếu không có
 
-            console.log(maximumAgencies);
+            // console.log(maximumAgencies);
 
             const acceptedCount = await Agency.countDocuments({ district, status: 'Đã duyệt' });
-            console.log(acceptedCount);
+            // console.log(acceptedCount);
             if (acceptedCount >= maximumAgencies) {
                 return res.status(400).json({ message: `Không thể tiếp nhận thêm đại lý vì số đại lý trong quận ${district} đã đạt giới hạn ${maximumAgencies}` });
             }

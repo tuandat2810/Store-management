@@ -1,6 +1,9 @@
 const generateRandom = require('../helpers/generateRandom');
 const Agency = require('../models/agency.m.js');
 const getDate = require('../helpers/getDate');
+const Product = require('../models/product.m.js');
+const Order = require('../models/order.m.js');
+
 
 module.exports.load_dang_ki_dai_ly = async (req, res) => {
   const agencyCode = await generateRandom.generateUniqueAgencyCode()
@@ -195,9 +198,25 @@ module.exports.load_lap_phieu_thu_tien = async (req, res) => {
 
 module.exports.load_lap_phieu_xuat_hang = async (req, res) => {
   try {
+    const orderCode = await generateRandom.generateUniqueOrderCode();
+    
+    const products = await Product.find().lean();
+    // console.log(products);
+    const agencies = await Agency.find({
+      $and: [
+        { managerUsername: res.locals.user.fullname },
+        { status: "Đã duyệt" },
+      ],
+    }).lean();
+
+    // console.log('Agencies: ', agencies);
+
+    const data = { orderCode, products, agencies };
+
     res.render('lap_phieu_xuat_hang', {
       layout: 'main',
-      title: 'Lập phiếu xuất hàng'
+      title: 'Lập phiếu xuất hàng',
+      ...data
     });
   } catch (err) {
     console.error(err);
@@ -306,3 +325,81 @@ module.exports.dang_ky_dai_lyPOST = async (req, res) => {
       return res.redirect("/main/dang_ki_dai_ly");
     }
 };
+
+module.exports.lap_phieu_xuat_hangPOST = async (req, res) => {
+  try {
+    console.log('1233 he he he');
+
+    // 1. Lấy dữ liệu từ form
+    const { orderCode, agencyCode, cartData } = req.body;
+
+    // 2. Kiểm tra bắt buộc
+    if (!orderCode || !agencyCode || !cartData) {
+      // Thiếu dữ liệu, trả về lỗi hoặc redirect về form với flash message
+      return res.status(400).send('Thiếu thông tin cần thiết.');
+    }
+
+    // 3. Parse cartData (là JSON-string) thành mảng JS
+    let productsArray;
+    try {
+      productsArray = JSON.parse(cartData);
+    } catch (parseErr) {
+      return res.status(400).send('Dữ liệu giỏ hàng không hợp lệ.');
+    }
+
+    if (!Array.isArray(productsArray) || productsArray.length === 0) {
+      return res.status(400).send('Giỏ hàng rỗng hoặc không đúng định dạng.');
+    }
+
+    // 4. Chuẩn hóa lại mảng products: 
+    //    Mỗi phần tử we expect có các trường { name, qty, unitPrice, unit, imageURL }.
+    //    Nhưng trong DB model của bạn cần: { productCode, unitPrice, unit, quantity, totalPrice }.
+    //    Ở đây, mình giả sử item.name chính là productCode (hoặc nếu tên khác, 
+    //    bạn có thể truyền thêm productCode vào client để dữ liệu chính xác hơn).
+
+    const processedProducts = productsArray.map(item => {
+      const productCode = item.name; 
+      const unitPrice = parseFloat(item.unitPrice);
+      const unit = item.unit;
+      const quantity = parseInt(item.qty, 10);
+      const totalPrice = unitPrice * quantity;
+
+      return { productCode, unitPrice, unit, quantity, totalPrice };
+    });
+
+    // 5. Tính tổng toàn bộ
+    const totalAmount = processedProducts.reduce((sum, p) => sum + p.totalPrice, 0);
+
+    // 6. Tạo một instance mới của Order
+    const newOrder = new Order({
+      orderCode,
+      agencyCode,
+      // orderDate: Mongoose tự default Date.now nếu ko truyền
+      products: processedProducts,
+      totalAmount
+    });
+
+    // 7. Lưu vào DB
+    await newOrder.save();
+
+    // 8. Sau khi lưu thành công, bạn có thể redirect về danh sách hoặc trả trang success
+    //    Ví dụ: redirect về trang danh sách phiếu xuất
+    return res.redirect('/main/lap_phieu_xuat_hang'); 
+    // Hoặc nếu muốn render lại view kèm thông báo thành công:
+    // return res.render('lap_phieu_xuat_hang', {
+    //   layout: 'main',
+    //   title: 'Lập phiếu xuất hàng',
+    //   successMessage: 'Lập phiếu xuất hàng thành công!',
+    //   orderCode: await generateUniqueExportCode(), // nếu bạn sắp tạo phiếu mới
+    //   agencies: /* cấp lại agencies nếu view cần */,
+    //   products: /* cấp lại products nếu view cần */
+    // });
+  } catch (err) {
+    console.error('Lỗi khi lưu Order:', err);
+    // Nếu lỗi duplicate orderCode hoặc lỗi khác
+    if (err.code === 11000 && err.keyPattern && err.keyPattern.orderCode) {
+      return res.status(400).send('Mã phiếu đã tồn tại, vui lòng thử lại.');
+    }
+    return res.status(500).render('500', { layout: false });
+  }
+}

@@ -26,5 +26,5 @@ router.get("/thong_tin_dai_ly", authMiddleware.requireAuth, mainController.load_
 router.get('/dai-ly-suggestions', mainController.search);
 
 router.post("/dang_ki_dai_ly", authMiddleware.requireAuth, mainController.dang_ky_dai_lyPOST);
-
+router.post("/lap_phieu_xuat_hang", authMiddleware.requireAuth, mainController.lap_phieu_xuat_hangPOST);
 module.exports = router;

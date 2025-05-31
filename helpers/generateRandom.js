@@ -42,3 +42,36 @@ module.exports.generateUniqueAgencyCode = async () => {
   }
   return code;
 }
+
+function generateRandomOrderCode(length = 8) {
+  const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+  const digits = '0123456789';
+  const symbols = '@#$%&*';
+
+  const allChars = uppercase + lowercase + digits + symbols;
+  let code = '';
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * allChars.length);
+    code += allChars[randomIndex];
+  }
+
+  return code;
+}
+
+
+const Order = require('../models/order.m.js');
+
+
+module.exports.generateUniqueOrderCode = async () => {
+  let code;
+  let exists = true;
+
+  while (exists) {
+    code = generateRandomOrderCode(); 
+    exists = await Order.exists({ orderCode: code }); 
+  }
+
+  return code;
+};
