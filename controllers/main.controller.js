@@ -224,6 +224,25 @@ module.exports.load_lap_phieu_xuat_hang = async (req, res) => {
   }
 };
 
+module.exports.load_xem_phieu_xuat_hang = async (req, res) => {
+  try {
+    const orders = await Order.find().lean();
+
+    // console.log(orders)
+
+    const data = { orders };
+    
+    res.render('xem_phieu_xuat_hang', {
+      layout: 'main',
+      title: 'Xem phiếu xuất hàng',
+      ...data
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).render('500', { layout: false });
+  }
+};
+
 module.exports.load_quan_ly_dai_ly_admin = async (req, res) => {
   try {
     const searchQuery = req.query.search || '';
@@ -328,8 +347,6 @@ module.exports.dang_ky_dai_lyPOST = async (req, res) => {
 
 module.exports.lap_phieu_xuat_hangPOST = async (req, res) => {
   try {
-    console.log('1233 he he he');
-
     // 1. Lấy dữ liệu từ form
     const { orderCode, agencyCode, cartData } = req.body;
 
@@ -358,22 +375,25 @@ module.exports.lap_phieu_xuat_hangPOST = async (req, res) => {
     //    bạn có thể truyền thêm productCode vào client để dữ liệu chính xác hơn).
 
     const processedProducts = productsArray.map(item => {
-      const productCode = item.name; 
+      const productCode = item.productCode; 
+      const productName = item.productName;
       const unitPrice = parseFloat(item.unitPrice);
       const unit = item.unit;
       const quantity = parseInt(item.qty, 10);
       const totalPrice = unitPrice * quantity;
 
-      return { productCode, unitPrice, unit, quantity, totalPrice };
+      return { productCode, productName, unitPrice, unit, quantity, totalPrice };
     });
 
     // 5. Tính tổng toàn bộ
     const totalAmount = processedProducts.reduce((sum, p) => sum + p.totalPrice, 0);
 
+    console.log('locals:', res.locals.user.fullname);
     // 6. Tạo một instance mới của Order
     const newOrder = new Order({
       orderCode,
       agencyCode,
+      createdBy: res.locals.user.fullname,
       // orderDate: Mongoose tự default Date.now nếu ko truyền
       products: processedProducts,
       totalAmount
@@ -382,24 +402,17 @@ module.exports.lap_phieu_xuat_hangPOST = async (req, res) => {
     // 7. Lưu vào DB
     await newOrder.save();
 
+    req.flash("success", "Lập phiếu xuất hàng thành công!");
+    
     // 8. Sau khi lưu thành công, bạn có thể redirect về danh sách hoặc trả trang success
     //    Ví dụ: redirect về trang danh sách phiếu xuất
     return res.redirect('/main/lap_phieu_xuat_hang'); 
-    // Hoặc nếu muốn render lại view kèm thông báo thành công:
-    // return res.render('lap_phieu_xuat_hang', {
-    //   layout: 'main',
-    //   title: 'Lập phiếu xuất hàng',
-    //   successMessage: 'Lập phiếu xuất hàng thành công!',
-    //   orderCode: await generateUniqueExportCode(), // nếu bạn sắp tạo phiếu mới
-    //   agencies: /* cấp lại agencies nếu view cần */,
-    //   products: /* cấp lại products nếu view cần */
-    // });
+
   } catch (err) {
-    console.error('Lỗi khi lưu Order:', err);
     // Nếu lỗi duplicate orderCode hoặc lỗi khác
     if (err.code === 11000 && err.keyPattern && err.keyPattern.orderCode) {
-      return res.status(400).send('Mã phiếu đã tồn tại, vui lòng thử lại.');
-    }
-    return res.status(500).render('500', { layout: false });
+      req.flash("error", "Lập phiếu xuất hàng thất bại (trùng phiếu xuất hàng)!");
+    } else
+      req.flash("error", "Lập phiếu xuất hàng thất bại!");
   }
 }

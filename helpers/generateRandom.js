@@ -47,7 +47,7 @@ function generateRandomOrderCode(length = 8) {
   const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const lowercase = 'abcdefghijklmnopqrstuvwxyz';
   const digits = '0123456789';
-  const symbols = '@#$%&*';
+  const symbols = '@#&$';
 
   const allChars = uppercase + lowercase + digits + symbols;
   let code = '';

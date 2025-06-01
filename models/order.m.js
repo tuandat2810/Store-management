@@ -5,6 +5,10 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  productName: {
+    type: String,
+    required: true
+  },
   unitPrice: {
     type: Number,
     required: true
@@ -30,6 +34,10 @@ const orderSchema = new mongoose.Schema({
     unique: true
   },
   agencyCode: {
+    type: String,
+    required: true
+  },
+  createdBy: {
     type: String,
     required: true
   },

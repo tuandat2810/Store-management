@@ -14,9 +14,13 @@ router.get("/danh_sach_dai_ly", authMiddleware.requireAuth, mainController.load_
 router.get("/danh_sach_dai_ly_admin", authMiddleware.requireAuth, mainController.load_danh_sach_dai_ly_admin);
 router.get("/bao_cao_hang_thang", authMiddleware.requireAuth, mainController.load_bao_cao_hang_thang);
 router.get("/bao_cao_hang_thang_admin", authMiddleware.requireAuth, mainController.load_bao_cao_hang_thang_admin);
-router.get("/duyet_phieu_xuat_hang", authMiddleware.requireAuth, mainController.load_duyet_phieu_xuat_hang);
+
 router.get("/lap_phieu_thu_tien", authMiddleware.requireAuth, mainController.load_lap_phieu_thu_tien);
+
 router.get("/lap_phieu_xuat_hang", authMiddleware.requireAuth, mainController.load_lap_phieu_xuat_hang);
+router.get("/xem_phieu_xuat_hang", authMiddleware.requireAuth, mainController.load_xem_phieu_xuat_hang);
+
+
 router.get("/quan_ly_dai_ly_admin", authMiddleware.requireAuth, mainController.load_quan_ly_dai_ly_admin);
 router.get("/quan_ly_loai_dai_ly", authMiddleware.requireAuth, mainController.load_quan_ly_loai_dai_ly);
 router.get("/thay_doi_quy_dinh", authMiddleware.requireAuth, mainController.load_thay_doi_quy_dinh);

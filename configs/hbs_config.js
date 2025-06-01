@@ -16,7 +16,21 @@ module.exports = (app) => {
       },
       eq1: (a, b) => a === b,
       add: (a, b) => a + b,
-      subtract: (a, b) => a - b
+      subtract: (a, b) => a - b,
+      formatCurrency: (value) => {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+      },
+      formatDate: (date) => {
+        const d = new Date(date);
+        return d.toLocaleString('vi-VN', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        });
+      }
     }
   }));
 

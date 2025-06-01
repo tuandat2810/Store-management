@@ -29,8 +29,8 @@ const ProductSchema = new mongoose.Schema({
   },
   unit: {
     type: String,
-    enum: ['piece', 'pair', 'set'], // bạn có thể thêm đơn vị khác nếu cần
-    default: 'piece'
+    enum: ['Đơn', 'Đôi', 'Bộ'], // bạn có thể thêm đơn vị khác nếu cần
+    default: 'Đơn'
   },
   category: {
     type: String,

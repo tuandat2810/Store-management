@@ -1,3 +1,5 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <style>
     .badge-container {
         display: flex;
@@ -63,8 +65,8 @@
                         <select class="form-select" id="mat_hang" name="mat_hang" style="width: 60%;" required>
                             <option value="" selected disabled>Mặt hàng</option>
                             {{#each products}}
-                                <option value="{{productName}}" data-unitprice="{{unitPrice}}"
-                                data-unit="{{unit}}"
+                                <option value="{{productCode}}" data-unitprice="{{unitPrice}}"
+                                data-unit="{{unit}}" data-productName="{{productName}}"
                                 data-image="{{image}}">
                                     {{productName}}
                                 </option>
@@ -132,6 +134,7 @@
         if (!matHang || isNaN(soLuong) || soLuong <= 0) return;
 
         // Lấy đơn giá từ option được chọn
+        const productName = select.options[select.selectedIndex].getAttribute('data-productName');
         const unitPrice = parseFloat(select.options[select.selectedIndex].getAttribute('data-unitprice'));
         const unit = select.options[select.selectedIndex].getAttribute('data-unit');
 
@@ -140,14 +143,14 @@
 
         if (isNaN(unitPrice)) return;
 
-        const existing = cart.find(item => item.name === matHang);
+        const existing = cart.find(item => item.productCode  === matHang);
         if (existing) {
             existing.qty += soLuong;
         } else {
-            cart.push({ name: matHang, qty: soLuong, unitPrice: unitPrice, unit, imageURL });
+            cart.push({ productCode: matHang, productName, qty: soLuong, unitPrice: unitPrice, unit, imageURL });
         }
 
-        renderGioHang();    
+        renderGioHang();        
     }
 
 
@@ -169,7 +172,7 @@
             // Hình ảnh sản phẩm
             const img = document.createElement("img");
             img.src = item.imageURL;
-            img.alt = item.name;
+            img.alt = item.productName;
             img.style.width = "40px";
             img.style.height = "40px";
             img.style.objectFit = "cover";
@@ -178,7 +181,7 @@
             // Thông tin mặt hàng
             const info = document.createElement("div");
             info.innerHTML = `
-                <strong>${item.name}</strong><br>
+                <strong>${item.productName}</strong><br>
                 ${item.qty} cái - ${itemTotal.toLocaleString('vi-VN')}₫
             `;
             info.style.fontSize = "0.85rem";
@@ -203,15 +206,48 @@
         document.getElementById("gioCount").innerText = `${cart.length} sản phẩm`;
     }
 
-
-    function prepareAndSubmit(e) {
+    function prepareAndSubmit(event) {
         if (cart.length === 0) {
-        e.preventDefault();
-        alert("Giỏ hàng trống! Vui lòng thêm sản phẩm vào giỏ trước khi lập phiếu.");
-        return;
+            event.preventDefault(); 
+            Swal.fire({
+                icon: 'warning',
+                title: 'Giỏ hàng trống!',
+                text: 'Vui lòng thêm ít nhất một mặt hàng trước khi lập phiếu.'
+            });
+            return;
         }
-        // Gán JSON string của cart vào hidden input
-        document.getElementById('cartData').value = JSON.stringify(cart);
-        // Khi này form sẽ submit bình thường, và trong req.body.cartData sẽ là một JSON-string
+
+        document.getElementById("cartData").value = JSON.stringify(cart);
+    }
+
+    const successMsg = "{{success_msg}}";
+    const errorMsg = "{{error_msg}}";
+    console.log("Success Message:", successMsg);
+    console.log("Error Message:", errorMsg);
+
+    if(successMsg) {
+        Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: 'Thành công!',
+        text: successMsg,
+        timer: 5000,
+        timerProgressBar: true,
+        showConfirmButton: false
+        });
+    }
+
+    if(errorMsg) {
+        Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'error',
+        title: 'Thất bại!',
+        text: errorMsg,
+        timer: 5000,
+        timerProgressBar: true,
+        showConfirmButton: false
+        });
     }
 </script>
