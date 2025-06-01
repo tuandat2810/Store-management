@@ -226,9 +226,16 @@ module.exports.load_lap_phieu_xuat_hang = async (req, res) => {
 
 module.exports.load_xem_phieu_xuat_hang = async (req, res) => {
   try {
-    const orders = await Order.find().lean();
+    const userType = res.locals.user.type;
+    const fullname = res.locals.user.fullname;
 
-    // console.log(orders)
+    let orders;
+
+    if (userType === 'user') {
+      orders = await Order.find({ createdBy: fullname }).lean();
+    } else {
+      orders = await Order.find().lean();
+    }
 
     const data = { orders };
     
@@ -242,6 +249,7 @@ module.exports.load_xem_phieu_xuat_hang = async (req, res) => {
     res.status(500).render('500', { layout: false });
   }
 };
+
 
 module.exports.load_quan_ly_dai_ly_admin = async (req, res) => {
   try {
