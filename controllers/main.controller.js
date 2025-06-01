@@ -232,9 +232,9 @@ module.exports.load_xem_phieu_xuat_hang = async (req, res) => {
     let orders;
 
     if (userType === 'user') {
-      orders = await Order.find({ createdBy: fullname }).lean();
+      orders = await Order.find({ createdBy: fullname }).sort({ orderDate: -1 }).lean();
     } else {
-      orders = await Order.find().lean();
+      orders = await Order.find().sort({ orderDate: -1 }).lean();
     }
 
     const data = { orders };
