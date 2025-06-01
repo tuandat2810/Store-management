@@ -9,11 +9,21 @@
         <form action="/page/login" method="POST">
             <div class="mb-3">
                 <label for="username" class="form-label">Tên tài khoản</label>
-                <input type="text" class="form-control" id="username" name="username" required>
+                <input type="text" class="form-control {{#if username_error}}is-invalid{{/if}}" id="username" name="username" required>
+                {{#if username_error}}
+                <div class="invalid-feedback d-block">
+                    {{username_error}}
+                </div>
+                {{/if}}
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Mật khẩu</label>
-                <input type="password" class="form-control" id="password" name="password" required>
+                <input type="password" class="form-control {{#if password_error}}is-invalid{{/if}}" id="password" name="password" required>
+                {{#if password_error}}
+                <div class="invalid-feedback d-block">
+                    {{password_error}}
+                </div>
+                {{/if}}
             </div>
             <button type="submit" class="btn w-100" style= "background-color: #343a40;color:white">Đăng nhập</button>
         </form>
@@ -29,7 +39,6 @@
 
 <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Có thể thêm các xử lý JavaScript ở đây
             const form = document.querySelector('form');
             form.addEventListener('submit', function(event) {
                 const username = document.getElementById('username').value;
@@ -42,9 +51,7 @@
             });
         });
         const successMsg = "{{success_msg}}";
-        const errorMsg = "{{error_msg}}";
         console.log("Success Message:", successMsg);
-        console.log("Error Message:", errorMsg);
         if(successMsg) {
             Swal.fire({
             toast: true,
@@ -52,19 +59,6 @@
             icon: 'success',
             title: 'Thành công',
             text: successMsg,
-            timer: 2000,
-            timerProgressBar: true,
-            showConfirmButton: false
-            });
-        }
-
-        if(errorMsg) {
-            Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'error',
-            title: 'Lỗi đăng nhập',
-            text: errorMsg,
             timer: 2000,
             timerProgressBar: true,
             showConfirmButton: false
