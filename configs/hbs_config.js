@@ -18,7 +18,7 @@ module.exports = (app) => {
       add: (a, b) => a + b,
       subtract: (a, b) => a - b,
       formatCurrency: (value) => {
-        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
       },
       formatDate: (date) => {
         const d = new Date(date);

@@ -3,7 +3,7 @@ const Agency = require('../models/agency.m.js');
 const getDate = require('../helpers/getDate');
 const Product = require('../models/product.m.js');
 const Order = require('../models/order.m.js');
-
+const AgencyType = require('../models/agencytype.m.js');
 
 module.exports.load_dang_ki_dai_ly = async (req, res) => {
   const agencyCode = await generateRandom.generateUniqueAgencyCode()
@@ -377,10 +377,6 @@ module.exports.lap_phieu_xuat_hangPOST = async (req, res) => {
     }
 
     // 4. Chuẩn hóa lại mảng products: 
-    //    Mỗi phần tử we expect có các trường { name, qty, unitPrice, unit, imageURL }.
-    //    Nhưng trong DB model của bạn cần: { productCode, unitPrice, unit, quantity, totalPrice }.
-    //    Ở đây, mình giả sử item.name chính là productCode (hoặc nếu tên khác, 
-    //    bạn có thể truyền thêm productCode vào client để dữ liệu chính xác hơn).
 
     const processedProducts = productsArray.map(item => {
       const productCode = item.productCode; 
@@ -396,7 +392,30 @@ module.exports.lap_phieu_xuat_hangPOST = async (req, res) => {
     // 5. Tính tổng toàn bộ
     const totalAmount = processedProducts.reduce((sum, p) => sum + p.totalPrice, 0);
 
-    console.log('locals:', res.locals.user.fullname);
+    // Bước kiểm tra: tổng nợ mới có vượt maximumDebt không?
+    const agency = await Agency.findOne({ agencyCode });
+
+    if (!agency) {
+      req.flash("error", "Không tìm thấy đại lý.");
+      return res.redirect('/main/lap_phieu_xuat_hang');
+    }
+
+    // Lấy maximumDebt từ loại đại lý
+    const agencyType = await AgencyType.findOne({ type: agency.type });
+
+    if (!agencyType) {
+      req.flash("error", "Không tìm thấy thông tin loại đại lý.");
+      return res.redirect('/main/lap_phieu_xuat_hang');
+    }
+
+    const newDebt = agency.debt + totalAmount;
+    const maximumDebt = agencyType.maximumDebt;
+
+    if (newDebt > maximumDebt) {
+      req.flash("error", `Không thể lập phiếu. Tổng nợ (${newDebt}) vượt mức cho phép (${maximumDebt}).`);
+      return res.redirect('/main/lap_phieu_xuat_hang');
+    }
+
     // 6. Tạo một instance mới của Order
     const newOrder = new Order({
       orderCode,
@@ -409,11 +428,12 @@ module.exports.lap_phieu_xuat_hangPOST = async (req, res) => {
 
     // 7. Lưu vào DB
     await newOrder.save();
+    
+    // Cập nhật nợ của đại lý
+    agency.debt = newDebt;
+    await agency.save();
 
     req.flash("success", "Lập phiếu xuất hàng thành công!");
-    
-    // 8. Sau khi lưu thành công, bạn có thể redirect về danh sách hoặc trả trang success
-    //    Ví dụ: redirect về trang danh sách phiếu xuất
     return res.redirect('/main/lap_phieu_xuat_hang'); 
 
   } catch (err) {

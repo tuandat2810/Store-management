@@ -185,7 +185,7 @@
             const info = document.createElement("div");
             info.innerHTML = `
                 <strong>${item.productName}</strong><br>
-                ${item.qty} cái - ${itemTotal.toLocaleString('vi-VN')}₫
+                ${item.qty} cái - $${itemTotal.toLocaleString('us-US')}
             `;
             info.style.fontSize = "0.85rem";
 
@@ -204,7 +204,7 @@
             totalDiv.className = "p-3 text-end fw-semibold fs-5 border-top";
             gio.parentNode.appendChild(totalDiv);
         }
-        totalDiv.innerText = `Tổng tiền: ${totalAmount.toLocaleString('vi-VN')}₫`;
+        totalDiv.innerText = `Tổng tiền: $${totalAmount.toLocaleString('us-US')}`;
 
         document.getElementById("gioCount").innerText = `${cart.length} sản phẩm`;
     }
