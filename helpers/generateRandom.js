@@ -75,3 +75,17 @@ module.exports.generateUniqueOrderCode = async () => {
 
   return code;
 };
+
+const Receipt = require('../models/receipt.m.js');
+
+module.exports.generateUniqueReceiptCode = async () => {
+  let code;
+  let exists = true;
+
+  while (exists) {
+    code = generateRandomOrderCode(); 
+    exists = await Receipt.exists({ receiptCode: code }); 
+  }
+
+  return code;
+};

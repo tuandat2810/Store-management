@@ -4,6 +4,7 @@ const getDate = require('../helpers/getDate');
 const Product = require('../models/product.m.js');
 const Order = require('../models/order.m.js');
 const AgencyType = require('../models/agencytype.m.js');
+const Receipt = require('../models/receipt.m.js');
 
 module.exports.load_dang_ki_dai_ly = async (req, res) => {
   const agencyCode = await generateRandom.generateUniqueAgencyCode()
@@ -186,9 +187,31 @@ module.exports.load_duyet_phieu_xuat_hang = async (req, res) => {
 
 module.exports.load_lap_phieu_thu_tien = async (req, res) => {
   try {
+    const receiptCode = await generateRandom.generateUniqueReceiptCode();
+    const agencies = await Agency.find().lean();
+    
+    const formattedAgencies = agencies.map(agency => {
+      const code = agency.agencyCode;
+      const name = agency.name;
+      const debt = '$' + new Intl.NumberFormat('en-US').format(agency.debt);
+
+      const paddedCode = code.padEnd(5, ' ').replace(/ /g, '\u00A0');
+      const paddedName = name.padEnd(20, ' ').replace(/ /g, '\u00A0');
+
+      return {
+        value: agency.agencyCode,
+        display: `${paddedCode} | ${paddedName} | Nợ: ${debt}`
+      };
+    });
+
+
+    const data = { receiptCode, formattedAgencies };
+
+
     res.render('lap_phieu_thu_tien', {
       layout: 'main',
-      title: 'Lập phiếu thu tiền'
+      title: 'Lập phiếu thu tiền',
+      ...data
     });
   } catch (err) {
     console.error(err);
@@ -444,3 +467,59 @@ module.exports.lap_phieu_xuat_hangPOST = async (req, res) => {
       req.flash("error", "Lập phiếu xuất hàng thất bại!");
   }
 }
+
+module.exports.lap_phieu_thu_tienPOST = async (req, res) => {
+  try {
+    const { maphieu, agencyCode, sotien, ghichu } = req.body;
+
+    // 1. Kiểm tra dữ liệu bắt buộc
+    if (!maphieu || !agencyCode || !sotien) {
+      req.flash('error', 'Thiếu thông tin bắt buộc!');
+      return res.redirect('/main/lap_phieu_thu_tien');
+    }
+
+    const amount = parseFloat(sotien);
+    if (isNaN(amount) || amount <= 0) {
+      req.flash('error', 'Số tiền không hợp lệ!');
+      return res.redirect('/main/lap_phieu_thu_tien');
+    }
+
+    // 2. Tìm đại lý
+    const agency = await Agency.findOne({ agencyCode });
+    if (!agency) {
+      req.flash('error', 'Không tìm thấy đại lý!');
+      return res.redirect('/main/lap_phieu_thu_tien');
+    }
+
+    if (amount > agency.debt) {
+      req.flash('error', 'Số tiền thu lớn hơn số tiền đại lý đang nợ!');
+      return res.redirect('/main/lap_phieu_thu_tien');
+    }
+    // 3. Tạo phiếu thu
+    const newReceipt = new Receipt({
+      receiptCode: maphieu,
+      agencyCode: agency.agencyCode,
+      agencyName: agency.name,
+      agencyAddress: agency.address,
+      agencyPhone: agency.phone,
+      agencyEmail: agency.email,
+      collectionDate: new Date(),
+      amountCollected: amount,
+      note: ghichu || ''
+    });
+
+    await newReceipt.save();
+
+    // 4. Trừ nợ
+    agency.debt = Math.max(agency.debt - amount, 0); // Không cho âm nợ
+    await agency.save();
+
+    req.flash('success', 'Lập phiếu thu tiền thành công!');
+    return res.redirect('/main/lap_phieu_thu_tien');
+  } catch (err) {
+    console.error(err);
+    req.flash('error', 'Lập phiếu thu tiền thất bại!');
+    return res.redirect('/main/lap_phieu_thu_tien');
+  }
+};
+
