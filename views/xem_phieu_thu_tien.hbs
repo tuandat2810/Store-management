@@ -1,0 +1,42 @@
+<style>
+  .bg-custom {
+    background-image: linear-gradient(85.2deg, rgba(33,3,40,1) 7.5%, rgba(65,5,72,1) 88.7%);
+  }
+</style>
+
+<div class="container mt-4">
+
+    {{#if receipts.length}}
+        <h3 class="text-center mb-5">Danh sách phiếu thu tiền</h3>
+
+        {{#each receipts}}
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-custom text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                <strong>Mã phiếu:</strong> {{receiptCode}} <br>
+                <strong>Đại lý:</strong> {{agencyCode}} - {{agencyName}}
+                </div>
+                <div class="text-end">
+                <strong>Ngày thu:</strong> {{formatDate collectionDate}} <br>
+                <strong>Email:</strong> {{agencyEmail}}
+                </div>
+            </div>
+            </div>
+            <div class="card-body">
+            <p><strong>Địa chỉ:</strong> {{agencyAddress}}</p>
+            <p><strong>Số điện thoại:</strong> {{agencyPhone}}</p>
+            <p><strong>Số tiền thu:</strong> {{formatCurrency amountCollected}}</p>
+            <p><strong>Ghi chú:</strong> {{note}}</p>
+            </div>
+        </div>
+        {{/each}}
+
+    {{else}}
+        <div class="d-flex flex-column justify-content-center align-items-center" style="height: 60vh;">
+        <img src="https://cdn-icons-png.flaticon.com/512/4076/4076503.png" alt="No Data" width="120" class="mb-4" />
+        <h5 class="text-muted">Không có phiếu thu tiền nào để hiển thị.</h5>
+        </div>
+    {{/if}}
+
+</div>

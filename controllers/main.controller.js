@@ -204,14 +204,43 @@ module.exports.load_lap_phieu_thu_tien = async (req, res) => {
       };
     });
 
-
     const data = { receiptCode, formattedAgencies };
-
-
     res.render('lap_phieu_thu_tien', {
       layout: 'main',
       title: 'Lập phiếu thu tiền',
       ...data
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).render('500', { layout: false });
+  }
+};
+
+module.exports.load_xem_phieu_thu_tien = async (req, res) => {
+  try {
+    const userType = res.locals.user.type;
+    const fullname = res.locals.user.fullname;
+
+    let receipts;
+
+    if (userType === 'user') {
+      // 1. Tìm các agencyCode do user này quản lý
+      const agencies = await Agency.find({ managerUsername: fullname }, 'agencyCode').lean();
+      const agencyCodes = agencies.map(agency => agency.agencyCode);
+
+      // 2. Lọc các phiếu thu thuộc các đại lý đó
+      receipts = await Receipt.find({ agencyCode: { $in: agencyCodes } })
+        .sort({ collectionDate: -1 })
+        .lean();
+    } else {
+      // Admin thì xem tất cả
+      receipts = await Receipt.find().sort({ collectionDate: -1 }).lean();
+    }
+
+    res.render('xem_phieu_thu_tien', {
+      layout: 'main',
+      title: 'Xem phiếu thu tiền',
+      receipts
     });
   } catch (err) {
     console.error(err);
