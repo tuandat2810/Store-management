@@ -7,6 +7,8 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const flash = require('express-flash');
 const exphbs = require('express-handlebars');
+const District = require('./models/district.m.js'); // Import model District
+const Agency = require('./models/agency.m.js'); // Import model Agency
 // Cấu hình cổng
 const port = process.env.PORT || 3000;
 
@@ -40,11 +42,24 @@ app.use((req, res, next) => {
 });
 
 // Route chính
-app.get('/', (req, res) => {
-    // if (res.locals.user) {
-    //     return res.redirect('/page/home');
-    // }   
-    res.render('landing_page');
+app.get('/', async (req, res) => {
+    try {
+        const agencies = await Agency.find({status:"Đã duyệt"},'district');
+        const districtIdsWithAgencies = [...new Set(agencies.map(a => a.district))];
+        const districts = await District.find({ id: { $in: districtIdsWithAgencies } });
+        const totalDistricts = districts.length;
+        const totalAgencies = agencies.length;
+
+        res.render('landing_page', {
+            districts,
+            totalDistricts,
+            totalAgencies
+        });
+
+    } catch (err) {
+        console.error('Lỗi khi lấy quận có đại lý:', err);
+        res.status(500).send('Lỗi server');
+    }
 });
 app.use(infoUser)
 // Sử dụng router người dùng
@@ -59,3 +74,5 @@ app.use('/', require('./routes/agency.route.js'));
 app.listen(port, () => {
     console.log(`Server chạy tại: http://localhost:${port}`);
 });
+
+

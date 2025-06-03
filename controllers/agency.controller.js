@@ -9,8 +9,6 @@ module.exports.update_status = async (req, res) => {
             return res.status(400).json({ message: 'Thiếu agencyCode hoặc status' });
         }
 
-
-
         if (status === 'Đã duyệt') {
             const id = String(district);
             // console.log('id:', id);   
