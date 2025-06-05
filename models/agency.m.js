@@ -48,6 +48,11 @@ const AgencySchema = new mongoose.Schema({
         trim: true,
         match: [/.+@.+\..+/, 'Email không hợp lệ']
     },
+    debt: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
     status: {
         type: String,
         enum: ["Đã duyệt", "Đang chờ", "Từ chối"],

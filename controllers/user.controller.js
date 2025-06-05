@@ -3,6 +3,10 @@ const Crypto = require('../configs/crypto_config.js');
 const generateHelper = require("../helpers/generateRandom.js");
 
 module.exports.register = async (req, res) => {
+    if (req.cookies.tokenUser) {
+        const user = await User.findOne({ tokenUser: req.cookies.tokenUser });
+        if (user) return res.redirect("/page/register");
+    }
     res.render('register', {
         layout: 'main',
         pageTitle: 'Đăng ký',
