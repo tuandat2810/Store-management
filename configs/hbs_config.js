@@ -30,7 +30,10 @@ module.exports = (app) => {
           minute: '2-digit',
           hour12: false
         });
-      }
+      },
+      addOne: (value) => {
+        return parseInt(value) + 1;
+      },
     }
   }));
 

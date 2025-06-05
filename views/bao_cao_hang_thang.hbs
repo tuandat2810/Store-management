@@ -86,7 +86,7 @@
         <tbody>
           {{#each salesReport}}
             <tr>
-              <td>{{@index}}</td>
+              <td>{{addOne @index}}</td>
               <td>{{agencyName}}</td>
               <td>{{numOrders}}</td>
               <td>{{formatCurrency totalSales}}</td>
@@ -117,7 +117,7 @@
         <tbody>
           {{#each debtReport}}
             <tr>
-              <td>{{@index}}</td>
+              <td>{{addOne @index}}</td>
               <td>{{agencyName}}</td>
               <td>{{formatCurrency openingDebt}}</td>
               <td>{{formatCurrency incurred}}</td>

@@ -152,6 +152,8 @@ module.exports.search = async (req, res) => {
 
 module.exports.load_bao_cao_hang_thang = async (req, res) => {
   try {
+    const userType = res.locals.user.type;
+
     // Lấy danh sách quận từ District model
     const districts = await District.find().lean(); 
 
@@ -167,9 +169,14 @@ module.exports.load_bao_cao_hang_thang = async (req, res) => {
     // console.log('toDate: ', toDate);
 
     // Lọc agency theo quận (nếu có)
-    const agencyFilter = selectedDistrict
-      ? { district: selectedDistrict, status: 'Đã duyệt' }
-      : { status: 'Đã duyệt' };
+    let agencyFilter = { status: 'Đã duyệt' };
+    if (userType === 'user') {
+      // Nếu là user (đại lý), chỉ lấy các đại lý do họ quản lý
+      agencyFilter.managerUsername = res.locals.user.fullname;
+    }
+    if (selectedDistrict) {
+      agencyFilter.district = selectedDistrict;
+    }
 
     const agencies = await Agency.find(agencyFilter).lean();
 
@@ -241,18 +248,16 @@ module.exports.load_bao_cao_hang_thang = async (req, res) => {
       };
     });
     
+    const data = { districts,
+      salesReport, debtReport,
+      selectedMonth, selectedYear, selectedDistrict,
+      months: [1,2,3,4,5,6,7,8,9,10,11,12], years: [2024, 2025]
+    };
 
     res.render('bao_cao_hang_thang', {
       layout: 'main',
       title: 'Báo cáo hàng tháng',
-      districts,
-      salesReport,
-      debtReport,
-      selectedMonth,
-      selectedYear,
-      selectedDistrict,
-      months: [1,2,3,4,5,6,7,8,9,10,11,12],
-      years: [2024, 2025]
+      ...data
     });
   } catch (err) {
     console.error(err);
