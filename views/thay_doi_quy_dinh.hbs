@@ -1,89 +1,94 @@
+
+
+
 <style>
-  .agency-list-container {
-    min-height: 100vh;
-    padding: 0;
+  .bg-custom {
+    background-image: linear-gradient(85.2deg, rgba(33,3,40,1) 7.5%, rgba(65,5,72,1) 88.7%);
   }
-
-  .agency-list-title {
-    margin-top: 32px;
-    margin-bottom: 0;
-  }
-
-  .agency-list-content {
-    width: 95%;
-    margin: 0 auto;
-  }
-
-  .agency-table-container {
-    margin: 16px;
-  }
-
-  /* .pagination .page-link {
-    color: black;                
-    background-color: #fff;      
-    border-color: black;         
-  }
-
-  .pagination .page-item.active .page-link {
-    background-color: black;     
-    border-color: black;         
-    color: white;                
-  }
-
-  .pagination .page-link:hover {
-    background-color: #333;     
-    color: white;
-  } */
-
 </style>
 
-<div class="agency-list-container w-100">
-  <h3 class="agency-list-title text-center mb-5">
-    Danh sách quy định
-  </h3>
+<div class="container mt-4">
+  <h3 class="text-center mb-5">Thay đổi quy định</h3>
 
-  <div class="agency-table-container mb-5">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th scope="col" class="text-center" style="width: 50%;">Tên quy định</th>
-          <th scope="col" class="text-center" style="width: 50%;">Nội dung</th>
-        </tr>
-      </thead>
-      <tbody>
-          {{#each agencyList}}
-            <tr>
-              <td class="text-center">{{ unknown }}</td>
-              <td class="text-center">{{ unknown }}</td>
-            </tr>
-          {{/each}}
-            <tr>
-              <td class="text-center">Data demo</td>
-              <td class="text-center">Data demo</td>
-            </tr>
-            <tr>
-              <td class="text-center">Data demo</td>
-              <td class="text-center">Data demo</td>
-            </tr>
-      </tbody>
-    </table>
+  <!-- Tabs -->
+  <ul class="nav nav-tabs mb-4" id="quyDinhTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="qd1-tab" data-bs-toggle="tab" data-bs-target="#qd1" type="button" role="tab">
+        QĐ1: Số lượng đại lý
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="qd2-tab" data-bs-toggle="tab" data-bs-target="#qd2" type="button" role="tab">
+        QĐ2: Mặt hàng và giới hạn nợ
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content" id="quyDinhTabContent">
+    <!-- QĐ1 -->
+    <div class="tab-pane fade show active" id="qd1" role="tabpanel">
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          QĐ1: Số lượng đại lý theo quận
+        </div>
+        <div class="card-body">
+          <p class="text-muted">Nhập số lượng đại lý tối đa cho từng quận:</p>
+          <!-- Ví dụ bảng các quận -->
+          <table class="table table-bordered align-middle text-center">
+            <thead class="table-secondary">
+              <tr>
+                <th>STT</th>
+                <th>Quận</th>
+                <th>Số đại lý tối đa</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Quận 1</td>
+                <td><input type="number" min="1" class="form-control" value="5"></td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Quận 3</td>
+                <td><input type="number" min="1" class="form-control" value="7"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- QĐ2 -->
+    <div class="tab-pane fade" id="qd2" role="tabpanel">
+      <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+          QĐ2: Mặt hàng và giới hạn nợ
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="soLuongMatHang" class="form-label">Số lượng mặt hàng</label>
+            <input type="number" class="form-control" id="soLuongMatHang" min="1">
+          </div>
+          <div class="mb-3">
+            <label for="donViTinh" class="form-label">Đơn vị tính mặc định</label>
+            <input type="text" class="form-control" id="donViTinh" placeholder="ví dụ: hộp, chai, cái...">
+          </div>
+          <div class="mb-3">
+            <label for="donGiaBan" class="form-label">Đơn giá bán mặc định</label>
+            <input type="number" class="form-control" id="donGiaBan" min="0">
+          </div>
+          <div class="mb-3">
+            <label for="tienNoToiDa" class="form-label">Tiền nợ tối đa mỗi loại đại lý</label>
+            <input type="number" class="form-control" id="tienNoToiDa" min="0">
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  
-  <div class="d-flex w-100" style="justify-content: center;">
-    <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold py-2" 
-            style="background-color: #C6BDBD; color: #000; width: 200px;"
-            >
-        Thêm
-    </button>
-    <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold mx-5 py-2" 
-            style="background-color: #C6BDBD; color: #000; width: 200px;"
-            >
-        Xóa
-    </button>
-    <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold py-2" 
-            style="background-color: #C6BDBD; color: #000; width: 200px;"
-            >
-        Sửa
-    </button>
+
+  <!-- Nút lưu -->
+  <div class="text-center mt-4">
+    <button class="btn bg-custom text-white px-4 py-2">Lưu quy định</button>
   </div>
 </div>

@@ -407,7 +407,9 @@ module.exports.load_quan_ly_dai_ly_admin = async (req, res) => {
     }).lean();
 
 
+
     const data = { agencyList };
+    console.log('[+] Rendering trang quản lý đại lý');
     res.render('quan_ly_dai_ly_admin', {
       layout: 'main',
       title: 'Quản lý đại lý Admin',
@@ -415,6 +417,7 @@ module.exports.load_quan_ly_dai_ly_admin = async (req, res) => {
     });
   } catch (err) {
     console.error(err);
+    console.log('[!] Có lỗi, render 500');
     res.status(500).render('500', { layout: false });
   }
 };
