@@ -29,12 +29,12 @@
   <h3 class="mb-4 text-center w-100">Báo cáo tháng</h3>
 
   <!-- Form chọn tháng/năm/quận -->
-  <form action="/bao-cao-thang" method="POST" class="row g-3 w-100 mb-5" style="justify-content: center;">
+  <form action="/main/bao_cao_hang_thang" method="POST" class="row g-3 w-100 mb-5" style="justify-content: center;">
     <div class="col-md-3">
       <label for="thang" class="form-label">Tháng</label>
       <select class="form-select" id="thang" name="thang" required>
-        {{#each [1,2,3,4,5,6,7,8,9,10,11,12]}}
-          <option value="{{this}}">Tháng {{this}}</option>
+        {{#each months}}
+          <option value="{{this}}" {{#eq ../selectedMonth this}}selected{{/eq}}>Tháng {{this}}</option>
         {{/each}}
       </select>
     </div>
@@ -42,20 +42,19 @@
     <div class="col-md-3">
       <label for="nam" class="form-label">Năm</label>
       <select class="form-select" id="nam" name="nam" required>
-        {{#each [2024,2025]}}
-          <option value="{{this}}">{{this}}</option>
+        {{#each years}}
+          <option value="{{this}}" {{#eq ../selectedYear this}}selected{{/eq}}>{{this}}</option>
         {{/each}}
       </select>
     </div>
 
     <div class="col-md-3">
       <label for="district" class="form-label">Quận</label>
-      <select class="form-select" id="district" name="district" required>
+      <select class="form-select" id="district" name="district">
         <option value="">-- Tất cả --</option>
-        <option value="1">Quận 1</option>
-        <option value="3">Quận 3</option>
-        <option value="Tân Bình">Tân Bình</option>
-        <!-- thêm quận khác nếu có -->
+        {{#each districts}}
+          <option value="{{id}}" {{#eq ../selectedDistrict districtName}}selected{{/eq}}>{{districtName}}</option>
+        {{/each}}
       </select>
     </div>
 
@@ -66,12 +65,14 @@
     </div>
   </form>
 
+
+
   <!-- 🔀 2 phần chia ngang: Doanh thu | Công nợ -->
   <div class="report-wrapper w-100">
     <!-- Báo cáo Doanh Số -->
     <div class="report-box">
-      <div class="table-title py-2">BM5.1: Báo Cáo Doanh Số</div>
-      <p><strong>Tháng:</strong> {{fakeMonth}}/{{fakeYear}}</p>
+      <div class="table-title py-2">Báo Cáo Doanh Số</div>
+      <p><strong>Tháng:</strong> {{selectedMonth}}/{{selectedYear}}</p>
       <table class="table table-bordered align-middle text-center">
         <thead class="table-secondary">
           <tr>
@@ -83,28 +84,26 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Q1-BuiThiXuan</td>
-            <td>4</td>
-            <td>8,200,000đ</td>
-            <td>27%</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>TB-NguyenThuongHien</td>
-            <td>5</td>
-            <td>22,000,000đ</td>
-            <td>73%</td>
-          </tr>
+          {{#each salesReport}}
+            <tr>
+              <td>{{@index}}</td>
+              <td>{{agencyName}}</td>
+              <td>{{numOrders}}</td>
+              <td>{{totalSales}}</td>
+              <td>{{percentage}}</td>
+            </tr>
+          {{else}}
+            <tr><td colspan="5">Không có dữ liệu</td></tr>
+          {{/each}}
         </tbody>
       </table>
     </div>
 
+
     <!-- Báo cáo Công Nợ -->
     <div class="report-box">
-      <div class="table-title py-2">BM5.2: Báo Cáo Công Nợ Đại Lý</div>
-      <p><strong>Tháng:</strong> {{fakeMonth}}/{{fakeYear}}</p>
+      <div class="table-title py-2">  Báo Cáo Công Nợ Đại Lý</div>
+      <p><strong>Tháng:</strong> {{selectedMonth}}/{{selectedYear}}</p>
       <table class="table table-bordered align-middle text-center">
         <thead class="table-secondary">
           <tr>
@@ -116,20 +115,17 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Q1-BuiThiXuan</td>
-            <td>2,000,000đ</td>
-            <td>3,000,000đ</td>
-            <td>5,000,000đ</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>TB-NguyenThuongHien</td>
-            <td>0đ</td>
-            <td>5,000,000đ</td>
-            <td>5,000,000đ</td>
-          </tr>
+          {{#each debtReport}}
+            <tr>
+              <td>{{@index}}</td>
+              <td>{{agencyName}}</td>
+              <td>{{openingDebt}}</td>
+              <td>{{incurred}}</td>
+              <td>{{closingDebt}}</td>
+            </tr>
+          {{else}}
+            <tr><td colspan="5">Không có dữ liệu</td></tr>
+          {{/each}}
         </tbody>
       </table>
     </div>

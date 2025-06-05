@@ -5,6 +5,7 @@ const Product = require('../models/product.m.js');
 const Order = require('../models/order.m.js');
 const AgencyType = require('../models/agencytype.m.js');
 const Receipt = require('../models/receipt.m.js');
+const District = require('../models/district.m.js');
 
 module.exports.load_dang_ki_dai_ly = async (req, res) => {
   const agencyCode = await generateRandom.generateUniqueAgencyCode()
@@ -151,9 +152,102 @@ module.exports.search = async (req, res) => {
 
 module.exports.load_bao_cao_hang_thang = async (req, res) => {
   try {
+    // Lấy danh sách quận từ District model
+    const districts = await District.find().lean();
+
+    // Lấy tháng, năm, quận từ body hoặc mặc định
+    const selectedMonth = parseInt(req.body.thang) || new Date().getMonth() + 1;
+    const selectedYear = parseInt(req.body.nam) || new Date().getFullYear();
+    const selectedDistrict = req.body.district || '';
+
+        // Lấy ngày bắt đầu và kết thúc trong tháng
+    const fromDate = new Date(selectedYear, selectedMonth - 1, 1);
+    const toDate = new Date(selectedYear, selectedMonth, 1);
+
+    // Lọc agency theo quận (nếu có)
+    const agencyFilter = selectedDistrict
+      ? { district: selectedDistrict, status: 'Đã duyệt' }
+      : { status: 'Đã duyệt' };
+
+    const agencies = await Agency.find(agencyFilter).lean();
+
+    // Map từ agencyCode => agencyName
+    const agencyMap = {};
+    agencies.forEach(a => agencyMap[a.agencyCode] = a.name);
+
+    const agencyCodes = agencies.map(a => a.agencyCode);
+
+    // Lấy tất cả đơn hàng trong tháng
+    const orders = await Order.find({
+      agencyCode: { $in: agencyCodes },
+      orderDate: { $gte: fromDate, $lt: toDate }
+    }).lean();
+
+    
+    // Tính tổng doanh số và số phiếu xuất theo đại lý
+    const salesSummary = {};
+    for (const order of orders) {
+      const code = order.agencyCode;
+      if (!salesSummary[code]) {
+        salesSummary[code] = { numOrders: 0, totalSales: 0 };
+      }
+      salesSummary[code].numOrders += 1;
+      salesSummary[code].totalSales += order.totalAmount;
+    }
+
+    // Tổng doanh số toàn bộ
+    const totalSalesAll = Object.values(salesSummary).reduce((sum, a) => sum + a.totalSales, 0);
+
+    // Tạo mảng báo cáo doanh thu (BM5.1)
+    const salesReport = Object.entries(salesSummary).map(([code, data]) => ({
+      agencyName: agencyMap[code] || code,
+      numOrders: data.numOrders,
+      totalSales: parseFloat(data.totalSales.toFixed(2)),
+      percentage: totalSalesAll > 0 ? (data.totalSales / totalSalesAll * 100).toFixed(2) : '0.00'
+    }));
+
+    // Lấy tất cả phiếu thu trong tháng
+    const receipts = await Receipt.find({
+      agencyCode: { $in: agencyCodes },
+      collectionDate: { $gte: fromDate, $lt: toDate }
+    }).lean();
+
+    // Tính phát sinh thu tiền theo đại lý
+    const receiptMap = {};
+    for (const r of receipts) {
+      const code = r.agencyCode;
+      if (!receiptMap[code]) receiptMap[code] = 0;
+      receiptMap[code] += r.amountCollected;
+    }
+
+    // Tạo báo cáo công nợ (BM5.2)
+    const debtReport = agencies.map(agency => {
+      const code = agency.agencyCode;
+      const incurred = salesSummary[code]?.totalSales || 0;
+      const collected = receiptMap[code] || 0;
+      const openingDebt = Math.max((agency.debt || 0) - incurred + collected, 0); // gần đúng
+      const closingDebt = agency.debt;
+
+      return {
+        agencyName: agency.name,
+        openingDebt: parseFloat(openingDebt.toFixed(2)),
+        incurred: parseFloat(incurred.toFixed(2)),
+        closingDebt: parseFloat(closingDebt.toFixed(2))
+      };
+    });
+    
+
     res.render('bao_cao_hang_thang', {
       layout: 'main',
-      title: 'Báo cáo hàng tháng'
+      title: 'Báo cáo hàng tháng',
+      districts,
+      salesReport,
+      debtReport,
+      selectedMonth,
+      selectedYear,
+      selectedDistrict,
+      months: [1,2,3,4,5,6,7,8,9,10,11,12],
+      years: [2024, 2025]
     });
   } catch (err) {
     console.error(err);
@@ -161,17 +255,6 @@ module.exports.load_bao_cao_hang_thang = async (req, res) => {
   }
 };
 
-module.exports.load_bao_cao_hang_thang_admin = async (req, res) => {
-  try {
-    res.render('bao_cao_hang_thang_admin', {
-      layout: 'main',
-      title: 'Báo cáo hàng tháng Admin'
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).render('500', { layout: false });
-  }
-};
 
 module.exports.load_duyet_phieu_xuat_hang = async (req, res) => {
   try {

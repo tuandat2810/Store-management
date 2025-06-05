@@ -11,8 +11,9 @@ const { requireAuth } = require("../middlewares/auth.middleware");
 router.get("/dang_ki_dai_ly", authMiddleware.requireAuth, mainController.load_dang_ki_dai_ly);
 router.get("/danh_sach_dai_ly", authMiddleware.requireAuth, mainController.load_danh_sach_dai_ly);
 router.get("/danh_sach_dai_ly_admin", authMiddleware.requireAuth, mainController.load_danh_sach_dai_ly_admin);
+
 router.get("/bao_cao_hang_thang", authMiddleware.requireAuth, mainController.load_bao_cao_hang_thang);
-router.get("/bao_cao_hang_thang_admin", authMiddleware.requireAuth, mainController.load_bao_cao_hang_thang_admin);
+router.post("/bao_cao_hang_thang", authMiddleware.requireAuth, mainController.load_bao_cao_hang_thang);
 
 router.get("/lap_phieu_thu_tien", authMiddleware.requireAuth, mainController.load_lap_phieu_thu_tien);
 router.get("/xem_phieu_thu_tien", authMiddleware.requireAuth, mainController.load_xem_phieu_thu_tien);
