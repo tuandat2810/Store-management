@@ -66,6 +66,14 @@ app.use('/page', require('./routes/user.route.js'));
 // Sử dụng router chính của Người dùng
 app.use('/main', require('./routes/main.route.js'));
 
+// Mọi trang khác sẽ được chuyển hướng đến trang 404
+app.use('*', (req, res) => {
+    res.status(404).render('404', {
+        layout: 'error',
+        title: 'Trang không tìm thấy'
+    });
+});
+
 // Api route ho tro
 app.use('/', require('./routes/agency.route.js'));
 
