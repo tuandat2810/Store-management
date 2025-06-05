@@ -153,16 +153,18 @@ module.exports.search = async (req, res) => {
 module.exports.load_bao_cao_hang_thang = async (req, res) => {
   try {
     // Lấy danh sách quận từ District model
-    const districts = await District.find().lean();
+    const districts = await District.find().lean(); 
 
     // Lấy tháng, năm, quận từ body hoặc mặc định
     const selectedMonth = parseInt(req.body.thang) || new Date().getMonth() + 1;
     const selectedYear = parseInt(req.body.nam) || new Date().getFullYear();
     const selectedDistrict = req.body.district || '';
 
-        // Lấy ngày bắt đầu và kết thúc trong tháng
+    // Lấy ngày bắt đầu và kết thúc trong tháng
     const fromDate = new Date(selectedYear, selectedMonth - 1, 1);
+    // console.log('fromDate: ', fromDate);
     const toDate = new Date(selectedYear, selectedMonth, 1);
+    // console.log('toDate: ', toDate);
 
     // Lọc agency theo quận (nếu có)
     const agencyFilter = selectedDistrict
@@ -174,8 +176,9 @@ module.exports.load_bao_cao_hang_thang = async (req, res) => {
     // Map từ agencyCode => agencyName
     const agencyMap = {};
     agencies.forEach(a => agencyMap[a.agencyCode] = a.name);
-
+    // console.log('agencyMap: ', agencyMap);
     const agencyCodes = agencies.map(a => a.agencyCode);
+    // console.log('agencyCodes: ', agencyCodes);
 
     // Lấy tất cả đơn hàng trong tháng
     const orders = await Order.find({
@@ -183,20 +186,22 @@ module.exports.load_bao_cao_hang_thang = async (req, res) => {
       orderDate: { $gte: fromDate, $lt: toDate }
     }).lean();
 
-    
+    // console.log('orders: ', orders);
+
     // Tính tổng doanh số và số phiếu xuất theo đại lý
     const salesSummary = {};
     for (const order of orders) {
-      const code = order.agencyCode;
-      if (!salesSummary[code]) {
+      const code = order.agencyCode; // Lấy mã đại lý từ đơn hàng
+      if (!salesSummary[code]) { // Nếu chưa có đại lý này trong báo cáo
+        // Khởi tạo đối tượng cho đại lý này
         salesSummary[code] = { numOrders: 0, totalSales: 0 };
       }
-      salesSummary[code].numOrders += 1;
-      salesSummary[code].totalSales += order.totalAmount;
+      salesSummary[code].numOrders += 1; // Tăng số phiếu xuất hàng
+      salesSummary[code].totalSales += order.totalAmount;  // Cộng dồn doanh số
     }
 
-    // Tổng doanh số toàn bộ
-    const totalSalesAll = Object.values(salesSummary).reduce((sum, a) => sum + a.totalSales, 0);
+    // Tổng doanh số toàn bộ (để tính phần trăm tỷ lệ)
+    const totalSalesAll = Object.values(salesSummary).reduce((sum, a) => sum + a.totalSales, 0); 
 
     // Tạo mảng báo cáo doanh thu (BM5.1)
     const salesReport = Object.entries(salesSummary).map(([code, data]) => ({
@@ -215,14 +220,14 @@ module.exports.load_bao_cao_hang_thang = async (req, res) => {
     // Tính phát sinh thu tiền theo đại lý
     const receiptMap = {};
     for (const r of receipts) {
-      const code = r.agencyCode;
-      if (!receiptMap[code]) receiptMap[code] = 0;
-      receiptMap[code] += r.amountCollected;
+      const code = r.agencyCode; // Lấy mã đại lý từ phiếu thu
+      if (!receiptMap[code]) receiptMap[code] = 0; // Nếu chưa có đại lý này trong báo cáo, khởi tạo
+      receiptMap[code] += r.amountCollected; // Cộng dồn số tiền thu
     }
 
     // Tạo báo cáo công nợ (BM5.2)
     const debtReport = agencies.map(agency => {
-      const code = agency.agencyCode;
+      const code = agency.agencyCode; 
       const incurred = salesSummary[code]?.totalSales || 0;
       const collected = receiptMap[code] || 0;
       const openingDebt = Math.max((agency.debt || 0) - incurred + collected, 0); // gần đúng
