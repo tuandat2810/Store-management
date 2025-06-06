@@ -435,7 +435,6 @@
   document.addEventListener("DOMContentLoaded", function () {
     const rows = document.querySelectorAll("#productTable tbody tr");
 
-<<<<<<< HEAD
   document.addEventListener('DOMContentLoaded', () => {
       const table = document.getElementById('agencyTypeTable');
       const updateButton = document.getElementById('updateAgencyType');
@@ -463,7 +462,6 @@
         updateButton.classList.remove('d-none');
       });
     });
-=======
     rows.forEach(row => {
       row.addEventListener("click", () => {
         document.getElementById("productCode").value = row.dataset.code;
@@ -559,6 +557,5 @@
 
     return { productCode, productName, unit, unitPrice, category, description, image };
   }
->>>>>>> 28b99d2066e349ca844c4371642292d5292034ca
 
 </script>
