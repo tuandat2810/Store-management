@@ -1,3 +1,21 @@
-<div class="container-fluid text-center" id="main-content" >
-    <h3 class="" style = "margin-top:32px">Đây là trang chủ</h3>    
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="container-fluid text-center" id="main-content">
+    <h3 style="margin-top:32px">Đây là trang chủ</h3>    
 </div>
+
+<script>
+  const successMsg = "{{success_msg}}";
+  console.log("Success Message:", successMsg);
+  if(successMsg) {
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: 'success',
+      text: successMsg,
+      timer: 2000,
+      timerProgressBar: true,
+      showConfirmButton: false
+    });
+  }
+</script>

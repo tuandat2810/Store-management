@@ -72,11 +72,12 @@
         <tr>
           <th scope="col" class="text-center" style="width: 5%;">#</th>
           <th scope="col" class="text-center" style="width: 16%;">Tên đại lý</th>
-          <th scope="col" class="text-center" style="width: 12%;">Người quản lý</th>
+          <th scope="col" class="text-center" style="width: 15%;">Người quản lý</th>
           <th scope="col" class="text-center" style="width: 6%;">Loại</th>
-          <th scope="col" class="text-center" style="width: 6%;">Quận</th>
-          <th scope="col" class="text-center" style="width: 39%;">Địa chỉ</th>
-          <th scope="col" class="text-center" style="width: 15%;">Trạng thái</th>
+          <th scope="col" class="text-center" style="width: 7%;">Quận</th>
+          <th scope="col" class="text-center" style="width: 30%;">Địa chỉ</th>
+          <th scope="col" class="text-center" style="width: 8%;">Tiền nợ</th>
+          <th scope="col" class="text-center" style="width: 12%;">Trạng thái</th>
         </tr>
       </thead>
       <tbody>
@@ -88,6 +89,7 @@
             <td class="text-center">{{ type }}</td>
             <td class="text-center">{{ district }}</td>
             <td class="text-center">{{ address }}</td>
+            <td class="text-center">{{ formatCurrency debt }}</td>
             <td class="text-center">
               {{#eq status "Đã duyệt"}}
                 <span class="badge bg-success">Đã được duyệt</span>

@@ -18,95 +18,261 @@
     margin: 16px;
   }
 
-  /* .pagination .page-link {
-    color: black;                
-    background-color: #fff;      
-    border-color: black;         
+  .pagination .page-link {
+    color: black;                /* Màu chữ */
+    background-color: #fff;      /* Màu nền (trang hiện tại có thể giữ nguyên) */
+    border-color: black;         /* Màu viền */
   }
 
   .pagination .page-item.active .page-link {
-    background-color: black;     
-    border-color: black;         
-    color: white;                
+    background-color: black;     /* Nền khi active */
+    border-color: black;         /* Viền khi active */
+    color: white;                /* Chữ khi active */
   }
 
   .pagination .page-link:hover {
-    background-color: #333;     
+    background-color: #333;      /* Nền khi hover */
     color: white;
-  } */
-  
+  }
 
 </style>
 
 <div class="agency-list-container w-100">
-  <h3 class="agency-list-title text-center mb-5">
-    Danh sách đại lý
+  <h3 class="agency-list-title text-center">
+    Quản lý đại lý
   </h3>
+  
+  <!-- Thanh tìm kiếm (search bar) căn phải -->
+  <div class="d-flex justify-content-end mb-3">
+    <div class="input-group" style="width: 300px;">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Tìm kiếm đại lý..."
+        id="searchInput"
+        value="{{searchQuery}}"
+      />
+      <button class="btn btn-outline-secondary" type="button" onclick="clearSearch()">
+        <i class="bi bi-x"></i>
+      </button>
+      <button class="btn btn-outline-dark" type="button" onclick="performSearch()">
+        <i class="bi bi-search"></i>
+      </button>
+      <ul id="suggestions" class="list-group position-absolute w-100" style="top: 100%; z-index: 1000;"></ul>
+    </div>
+  </div>
 
   <div class="agency-table-container">
-    <table class="table table-striped mb-5">
+    <table class="table table-striped align-middle">
       <thead>
         <tr>
-          <th scope="col" class="text-center" style="width: 20%;">Mã đại lý</th>
-          <th scope="col" class="text-center" style="width: 20%;">Tên đại lý</th>
-          <th scope="col" class="text-center" style="width: 20%;">Loại</th>
-          <th scope="col" class="text-center" style="width: 20%;">Quận</th>
-          <th scope="col" class="text-center" style="width: 20%;">Trạng thái</th>
+          <th scope="col" class="text-center" style="width: 5%;">#</th>
+          <th scope="col" class="text-center" style="width: 12%;">Tên đại lý</th>
+          <th scope="col" class="text-center" style="width: 12%;">Người quản lý</th>
+          <th scope="col" class="text-center" style="width: 8%;">Loại</th>
+          <th scope="col" class="text-center" style="width: 8%;">Quận</th>
+          <th scope="col" class="text-center" style="width: 10%;">Trạng thái</th>
+          <th scope="col" class="text-center" style="width: 15%;">Thao tác</th>
         </tr>
       </thead>
       <tbody>
-          {{#each agencyList}}
-            <tr>
-              <td class="text-center">{{ agencyCode }}</td>
-              <td class="text-center">{{ name }}</td>
-              <td class="text-center">{{ type }}</td>
-              <td class="text-center">{{ district }}</td>
-              <td class="text-center">
-                {{#eq status "Đã duyệt"}}
-                  <span class="badge bg-success">Đã được duyệt</span>
-                {{/eq}}
-                {{#eq status "Đang chờ"}}
-                  <span class="badge bg-secondary">Đang chờ duyệt</span>
-                {{/eq}}
-                {{#eq status "Từ chối"}}
-                  <span class="badge bg-danger">Đã bị từ chối</span>
-                {{/eq}}
-              </td>
-            </tr>
-          {{/each}}
-            <tr>
-              <td class="text-center">Data demo</td>
-              <td class="text-center">Data demo</td>
-              <td class="text-center">Data demo</td>
-              <td class="text-center">Data demo</td>
-              <td class="text-center">Data demo</td>
-            </tr>
-            <tr>
-              <td class="text-center">Data demo</td>
-              <td class="text-center">Data demo</td>
-              <td class="text-center">Data demo</td>
-              <td class="text-center">Data demo</td>
-              <td class="text-center">Data demo</td>
-            </tr>
+        {{#each agencyList}}
+          <tr>
+            <td class="text-center">{{ agencyCode }}</td>
+            <td class="text-center">{{ name }}</td>
+            <td class="text-center">{{ managerUsername }}</td>
+            <td class="text-center">{{ type }}</td>
+            <td class="text-center">{{ district }}</td>
+            <td class="text-center">
+              {{#eq status "Đã duyệt"}}
+                <span class="badge bg-success">Đã được duyệt</span>
+              {{/eq}}
+              {{#eq status "Đang chờ"}}
+                <span class="badge bg-secondary">Đang chờ duyệt</span>
+              {{/eq}}
+              {{#eq status "Từ chối"}}
+                <span class="badge bg-danger">Đã bị từ chối</span>
+              {{/eq}}
+            </td>
+            <td class="text-center">
+              {{#eq status "Đã duyệt"}}
+                <button type="button" class="btn btn-outline-danger btn-sm" data-id="{{agencyCode}}" data-district="{{district}}">
+                  Hủy tiếp nhận
+                </button>
+              {{/eq}}
+
+              {{#eq status "Đang chờ"}}
+                <div class="d-flex justify-content-center gap-2">
+                  <button type="button" class="btn btn-outline-success btn-sm" data-id="{{agencyCode}}" data-district="{{district}}">
+                    Tiếp nhận
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary btn-sm" data-id="{{agencyCode}}" data-district="{{district}}">
+                    Từ chối
+                  </button>
+                </div>
+              {{/eq}}
+
+              {{#eq status "Từ chối"}}
+                <button type="button" class="btn btn-outline-warning btn-sm" data-id="{{agencyCode}}" data-district="{{district}}">
+                  Hủy từ chối
+                </button>
+              {{/eq}}
+
+            </td>
+          </tr>
+        {{/each}}
       </tbody>
     </table>
   </div>
-
-  <div class="d-flex w-100" style="justify-content: center;">
-    <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold py-2" 
-            style="background-color: #C6BDBD; color: #000; width: 200px;"
-            >
-        Thêm
-    </button>
-    <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold mx-5 py-2" 
-            style="background-color: #C6BDBD; color: #000; width: 200px;"
-            >
-        Xóa
-    </button>
-    <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold py-2" 
-            style="background-color: #C6BDBD; color: #000; width: 200px;"
-            >
-        Sửa
-    </button>
-  </div>
 </div>
+
+
+<script>
+  // Khi người dùng nhấn nút tìm kiếm
+  function performSearch() {
+    const searchQuery = document.getElementById('searchInput').value.trim();
+    if (searchQuery) {
+      // Thực hiện tìm kiếm với từ khóa
+      window.location.href = `/main/quan_ly_dai_ly_admin?search=${encodeURIComponent(searchQuery)}`;
+    }
+  }
+
+  // Khi người dùng nhấn nút xóa
+  function clearSearch() {
+    document.getElementById('searchInput').value = ''; // Xóa từ khóa tìm kiếm
+    window.location.href = '/main/quan_ly_dai_ly_admin?page=1'; // Reset lại trang và tìm kiếm
+  }
+
+  // Khi người dùng nhấn phím Enter trong ô tìm kiếm
+  document.getElementById('searchInput').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      performSearch();
+    }
+  });
+
+  const searchInput = document.getElementById('searchInput')
+  const suggestions = document.getElementById('suggestions')
+
+  // Khi người dùng gõ tìm kiếm sẽ đề xuất nội dung liên quan
+  searchInput.addEventListener("input", () => {
+  const query = searchInput.value.trim();
+
+  if (!query) {
+    suggestions.innerHTML = "";
+    return; // return này nằm đúng trong hàm arrow function
+  }
+
+  fetch(`/main/dai-ly-suggestions?query=${encodeURIComponent(query)}`)
+    .then(res => res.json())
+    .then(data => {
+      suggestions.innerHTML = "";
+      data.forEach(name => {
+        const li = document.createElement("li");
+        li.textContent = name;
+        li.className = "list-group-item list-group-item-action";
+        li.onclick = () => {
+          searchInput.value = name;
+          suggestions.innerHTML = "";
+          performSearch();
+        };
+        suggestions.appendChild(li);
+      });
+    });
+  });
+  // Khi click ra ngoài thì xóa gợi ý
+  document.addEventListener("click", (e) => {
+    const isClickInsideInput = searchInput.contains(e.target);
+    const isClickInsideSuggestions = suggestions.contains(e.target);
+    if (!isClickInsideInput && !isClickInsideSuggestions) {
+      suggestions.innerHTML = "";
+    }
+
+    if (isClickInsideInput && searchInput.value.trim() !== "") {
+      fetch(`/main/dai-ly-suggestions?query=${encodeURIComponent(searchInput.value.trim())}`)
+        .then(res => res.json())
+        .then(data => {
+          suggestions.innerHTML = "";
+          data.forEach(name => {
+            const li = document.createElement("li");
+            li.textContent = name;
+            li.className = "list-group-item list-group-item-action";
+            li.onclick = () => {
+              searchInput.value = name;
+              suggestions.innerHTML = "";
+              performSearch();
+            };
+            suggestions.appendChild(li);
+          });
+      });
+    }
+  })
+
+  document.querySelectorAll('button[data-id]').forEach(btn => {
+    btn.addEventListener('click', async e => {
+      const button = e.target.closest('button'); 
+
+      const id = button.getAttribute('data-id'); // agencyCode: mã đại lý
+      const district = button.getAttribute('data-district'); // district: quận
+      
+
+      const action = button.textContent.trim();
+
+      let newStatus;
+      if (action.includes("Tiếp nhận")) newStatus = "Đã duyệt";
+      else if (action.includes("Từ chối")) newStatus = "Từ chối";
+      else if (action.includes("Hủy tiếp nhận")) newStatus = "Đang chờ";
+      else if (action.includes("Hủy từ chối")) newStatus = "Đang chờ";
+      else return;
+
+      Swal.fire({
+        title: 'Bạn có chắc?',
+        text: `Thay đổi trạng thái thành: "${newStatus}"?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Xác nhận',
+        cancelButtonText: 'Hủy'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const response = await fetch('/api/agency/update-status', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ agencyCode: id, status: newStatus, district }),
+            });
+
+            if (response.ok) {
+              Swal.fire({
+                icon: 'success',
+                title: 'Thành công',
+                text: `Cập nhật trạng thái thành công: ${newStatus}`,
+                timer: 2000,
+                showConfirmButton: false
+              });
+              setTimeout(() => window.location.reload(), 1000);
+            } else {
+              const err = await response.json();
+              Swal.fire({
+                icon: 'error',
+                title: 'Thất bại',
+                text: `Cập nhật trạng thái thất bại: ${err.message || 'Cập nhật thất bại'}`,
+                timer: 2000,
+                showConfirmButton: false
+              });
+              setTimeout(() => window.location.reload(), 2000);
+            }
+          } catch (error) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Lỗi kết nối',
+              text: 'Không thể kết nối tới server.',
+              timer: 2000,
+              showConfirmButton: false
+            });
+          }
+        }
+      });
+
+    });
+  });
+</script>

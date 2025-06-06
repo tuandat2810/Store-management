@@ -1,78 +1,108 @@
-{{!-- <div class="container text-center mt-5">
-    hellooo {{user}}
-</div> --}}
-
 <!-- Hero Section -->
-<main class="d-flex flex-column align-items-center min-vh-100 bg-light w-100">
-    <div class="text-center py-5">
-        <h1 class="display-1 fw-bold mb-3">10D</h1>
-        <p class="lead">Đơn giản hóa việc quản lý đại lý của bạn.</p>
+<main class="d-flex flex-column align-items-center min-vh-100 bg-white w-100 text-dark">
+    <div class="text-center py-5 container">
+        <img src="https://cdn-icons-png.flaticon.com/512/891/891419.png" alt="Logo" style="width: 120px;" class="mb-4">
+        <h1 class="display-3 fw-bold text-dark mb-3">10D</h1>
+        <p class="lead text-muted mb-4">Đơn giản hóa việc quản lý đại lý của bạn với công cụ thông minh và hiệu quả.</p>
     </div>
 
-    <!-- Cards Section -->
+    <!-- Working Principles -->
     <div class="container mb-5">
-        <h2 class="text-center mb-4">Các nguyên tắc quản lý</h2>
-        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4 justify-content-center">
+        <h2 class="text-center mb-4 fw-bold text-dark">💡 Tiêu chí làm việc của chúng tôi</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4 text-center">
+            <div class="col">
+                <div class="p-4 border rounded-4 shadow-sm bg-light">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2099/2099078.png" style="width: 50px;" class="mb-3" alt="Icon">
+                    <h5 class="fw-bold">Tối ưu hóa quản lý</h5>
+                    <p class="text-muted small">Giảm thiểu thao tác thủ công, tăng hiệu suất công việc.</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="p-4 border rounded-4 shadow-sm bg-light">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4228/4228685.png" style="width: 50px;" class="mb-3" alt="Icon">
+                    <h5 class="fw-bold">Giao diện hiện đại</h5>
+                    <p class="text-muted small">Trực quan, thân thiện với người dùng và dễ sử dụng.</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="p-4 border rounded-4 shadow-sm bg-light">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2910/2910791.png" style="width: 50px;" class="mb-3" alt="Icon">
+                    <h5 class="fw-bold">Báo cáo minh bạch</h5>
+                    <p class="text-muted small">Theo dõi doanh thu, đại lý và địa bàn theo thời gian thực.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+        
+        <!-- Stats Section -->
+    <div id="stats" class="container mb-5">
+        <h2 class="text-center mb-4 fw-bold text-dark">📈 Tổng quan hoạt động</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
             <!-- Card 1 -->
             <div class="col">
-                <div class="card text-center border-0 h-100">
-                    <div class="card-img-top mx-auto mb-3 d-flex align-items-center justify-content-center bg-secondary text-white rounded-circle" style="width: 80px; height: 80px;">
-                        <span class="fs-3">ⓘ</span>
-                    </div>
-                    <div class="card-body p-0">
-                        <h5 class="card-title">Title</h5>
-                        <p class="card-text">Body text for whatever you’d like to say. Add main takeaways points, quotes, anecdotes, or even a very short story.</p>
+                <div class="card h-100 border-0 rounded-4 text-center stat-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/854/854929.png" class="card-img-top mx-auto mt-4" style="width: 60px;" alt="Location Icon">
+                    <div class="card-body">
+                    <h5 class="card-title fw-semibold">Hoạt động tại</h5>
+                    <p class="card-text fs-4 fw-bold ">{{totalDistricts}} quận</p>
                     </div>
                 </div>
             </div>
+
             <!-- Card 2 -->
             <div class="col">
-                <div class="card text-center border-0 h-100">
-                    <div class="card-img-top mx-auto mb-3 d-flex align-items-center justify-content-center bg-secondary text-white rounded-circle" style="width: 80px; height: 80px;">
-                        <span class="fs-3">ⓘ</span>
-                    </div>
-                    <div class="card-body p-0">
-                        <h5 class="card-title">Title</h5>
-                        <p class="card-text">Body text for whatever you’d like to say. Add main takeaways points, quotes, anecdotes, or even a very short story.</p>
+                <div class="card h-100 border-0 rounded-4 text-center stat-card">
+                    <img src="https://cdn-icons-png.flaticon.com/128/2640/2640740.png" class="card-img-top mx-auto mt-4" style="width: 60px;" alt="Agency Icon">
+                    <div class="card-body">
+                    <h5 class="card-title fw-semibold">Tổng số đại lý</h5>
+                    <p class="card-text fs-4 fw-bold">{{totalAgencies}}</p>
                     </div>
                 </div>
             </div>
+
             <!-- Card 3 -->
             <div class="col">
-                <div class="card text-center border-0 h-100">
-                    <div class="card-img-top mx-auto mb-3 d-flex align-items-center justify-content-center bg-secondary text-white rounded-circle" style="width: 80px; height: 80px;">
-                        <span class="fs-3">ⓘ</span>
-                    </div>
-                    <div class="card-body p-0">
-                        <h5 class="card-title">Title</h5>
-                        <p class="card-text">Body text for whatever you’d like to say. Add main takeaways points, quotes, anecdotes, or even a very short story.</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Card 4 -->
-            <div class="col">
-                <div class="card text-center border-0 h-100">
-                    <div class="card-img-top mx-auto mb-3 d-flex align-items-center justify-content-center bg-secondary text-white rounded-circle" style="width: 80px; height: 80px;">
-                        <span class="fs-3">ⓘ</span>
-                    </div>
-                    <div class="card-body p-0">
-                        <h5 class="card-title">Title</h5>
-                        <p class="card-text">Body text for whatever you’d like to say. Add main takeaways points, quotes, anecdotes, or even a very short story.</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Card 5 -->
-            <div class="col">
-                <div class="card text-center border-0 h-100">
-                    <div class="card-img-top mx-auto mb-3 d-flex align-items-center justify-content-center bg-secondary text-white rounded-circle" style="width: 80px; height: 80px;">
-                        <span class="fs-3">ⓘ</span>
-                    </div>
-                    <div class="card-body p-0">
-                        <h5 class="card-title">Title</h5>
-                        <p class="card-text">Body text for whatever you’d like to say. Add main takeaways points, quotes, anecdotes, or even a very short story.</p>
+                <div class="card h-100 border-0 rounded-4 text-center stat-card">
+                    <img src="https://cdn-icons-png.flaticon.com/128/10365/10365210.png" class="card-img-top mx-auto mt-4" style="width: 60px;" alt="Revenue Icon">
+                    <div class="card-body">
+                    <h5 class="card-title fw-semibold">Tổng doanh thu</h5>
+                    <p class="card-text fs-4 fw-bold ">$2.420.500</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </main>
+
+<style>
+    .hover-shadow:hover {
+        transform: translateY(-5px);
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    h1, h2, h5 {
+        color: #1a1a2e;
+    }
+
+    .card-title {
+        font-weight: 600;
+    }
+
+    .stat-card {
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(0, 123, 255, 0.2); 
+    }
+
+    .stat-card .card-title {
+        font-size: 1.1rem;
+    }
+</style>
