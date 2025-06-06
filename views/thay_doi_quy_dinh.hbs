@@ -5,6 +5,10 @@
   .bg-custom {
     background-image: linear-gradient(85.2deg, rgba(33,3,40,1) 7.5%, rgba(65,5,72,1) 88.7%);
   }
+
+  .bg-success {
+    background-image: radial-gradient( circle 1292px at -13.6% 51.7%,  rgba(0,56,68,1) 0%, rgba(163,217,185,1) 51.5%, rgba(255,252,247,1) 88.6% );
+  }
 </style>
 
 <div class="container mt-4">
@@ -13,8 +17,13 @@
   <!-- Tabs -->
   <ul class="nav nav-tabs mb-4" id="quyDinhTab" role="tablist">
     <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="qd1-tab" data-bs-toggle="tab" data-bs-target="#qd1" type="button" role="tab">
-        QĐ1: Số lượng đại lý
+      <button class="nav-link active" id="qd1a-tab" data-bs-toggle="tab" data-bs-target="#qd1a  " type="button" role="tab">
+        QĐ1: Số lượng đại lý tối đa theo quận
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="qd1b-tab" data-bs-toggle="tab" data-bs-target="#qd1b" type="button" role="tab">
+        QĐ1: Quản lý loại đại lý
       </button>
     </li>
     <li class="nav-item" role="presentation">
@@ -25,41 +34,108 @@
   </ul>
 
   <div class="tab-content" id="quyDinhTabContent">
-    <!-- QĐ1 -->
-    <div class="tab-pane fade show active" id="qd1" role="tabpanel">
+    <!-- QĐ1 Số lượng đại lý tối đa theo quận -->
+    <div class="tab-pane fade show active" id="qd1a" role="tabpanel">
       <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-          QĐ1: Số lượng đại lý theo quận
+        <div class="card-header bg-custom text-white">
+          Số lượng đại lý tối đa theo quận
         </div>
+
         <div class="card-body">
-          <p class="text-muted">Nhập số lượng đại lý tối đa cho từng quận:</p>
-          <!-- Ví dụ bảng các quận -->
-          <table class="table table-bordered align-middle text-center">
-            <thead class="table-secondary">
-              <tr>
-                <th>STT</th>
-                <th>Quận</th>
-                <th>Số đại lý tối đa</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Quận 1</td>
-                <td><input type="number" min="1" class="form-control" value="5"></td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Quận 3</td>
-                <td><input type="number" min="1" class="form-control" value="7"></td>
-              </tr>
-            </tbody>
-          </table>
+          <p class="text-muted">Chọn quận và cập nhật số lượng đại lý tối đa:</p>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="districtSelect" class="form-label">Chọn quận</label>
+              <select class="form-select" id="districtSelect" onchange="onDistrictChange()">
+                <option selected disabled>-- Chọn quận --</option>
+                {{#each districts}}
+                  <option value="{{id}}" data-max="{{maximumAgenciesAvailable}}">
+                    {{districtName}}
+                  </option>
+                {{/each}}
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="maxAgencyInput" class="form-label">Số đại lý tối đa</label>
+              <input type="number" id="maxAgencyInput" class="form-control" min="1" disabled>
+            </div>
+          </div>
+
+          <div class="text-end">
+            <button class="btn bg-success text-white" onclick="saveMaxAgency()" id="saveButton" disabled>
+              <i class="bi bi-save"></i> Lưu thay đổi
+            </button>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- QĐ2 -->
+    <!-- QĐ1 Quản lý loại đại lý -->
+    <div class="tab-pane fade" id="qd1b" role="tabpanel">
+      <div class="card mb-4">
+        <div class="card-header bg-custom text-white">
+          QĐ1: Quản lý loại đại lý
+        </div>
+        <div class="card-body">
+          <p class="text-muted">Danh sách các loại đại lý:</p>
+
+          <!-- Table loại đại lý -->
+          <div class="table-responsive mb-4">
+            <table class="table table-hover text-center align-middle" id="agencyTypeTable">
+              <thead class="table-secondary">
+                <tr>
+                  <th>Loại</th>
+                  <th>Mô tả</th>
+                  <th>Số tiền nợ tối đa</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each agencyTypes}}
+                  <tr data-type="{{type}}" data-description="{{description}}" data-debt="{{maximumDebt}}">
+                    <td>{{type}}</td>
+                    <td>{{description}}</td>
+                    <td>{{maximumDebt}}</td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Form nhập liệu -->
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label for="typeInput" class="form-label">Loại đại lý</label>
+              <input type="number" class="form-control" id="typeInput" placeholder="Nhập loại" />
+            </div>
+            <div class="col-md-4">
+              <label for="descInput" class="form-label">Mô tả</label>
+              <input type="text" class="form-control" id="descInput" placeholder="Nhập mô tả" />
+            </div>
+            <div class="col-md-4">
+              <label for="debtInput" class="form-label">Số nợ tối đa</label>
+              <input type="number" class="form-control" id="debtInput" placeholder="Nhập nợ tối đa" />
+            </div>
+          </div>
+
+          <!-- Nút thao tác -->
+          <div class="text-end">
+            <button class="btn btn-success me-2" onclick="addAgencyType()">
+              <i class="bi bi-plus-circle"></i> Thêm
+            </button>
+            <button class="btn btn-primary me-2" onclick="updateAgencyType()">
+              <i class="bi bi-pencil-square"></i> Sửa
+            </button>
+            <button class="btn btn-danger" onclick="deleteAgencyType()">
+              <i class="bi bi-trash"></i> Xóa
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- QĐ2 Mặt hàng và giới hạn nợ -->
     <div class="tab-pane fade" id="qd2" role="tabpanel">
       <div class="card mb-4">
         <div class="card-header bg-success text-white">
@@ -87,8 +163,191 @@
     </div>
   </div>
 
-  <!-- Nút lưu -->
-  <div class="text-center mt-4">
-    <button class="btn bg-custom text-white px-4 py-2">Lưu quy định</button>
-  </div>
+
 </div>
+
+
+<script>
+  // Chỉnh sửa số lượng đại lý tối đa theo quận (QĐ1a)
+  function onDistrictChange() {
+    const select = document.getElementById('districtSelect');
+    const selectedOption = select.options[select.selectedIndex];
+    const max = selectedOption.getAttribute('data-max');
+
+    const maxInput = document.getElementById('maxAgencyInput');
+    const saveBtn = document.getElementById('saveButton');
+
+    maxInput.disabled = false;
+    saveBtn.disabled = false;
+    maxInput.value = max || 1;
+  }
+
+  function saveMaxAgency() {
+    const select = document.getElementById('districtSelect');
+    const districtId = select.value;
+    const max = parseInt(document.getElementById('maxAgencyInput').value);
+
+    if (!districtId || isNaN(max) || max < 1) {
+      alert('Vui lòng chọn quận và nhập số hợp lệ.');
+      return;
+    }
+
+    // Gửi yêu cầu cập nhật về server (ví dụ API)
+    fetch('/api/district/update-max-agency', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ districtId, maximumAgenciesAvailable: max })
+    })
+    .then(async res => {
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || 'Cập nhật thất bại');
+      }
+
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Thành công',
+        text: data.message || 'Cập nhật thành công!',
+        timer: 3000,
+        showConfirmButton: false
+      });
+    })
+    .catch(err => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Thất bại',
+        text: err.message || 'Có lỗi xảy ra!',
+        timer: 3000,
+        showConfirmButton: false
+      });
+    });
+  }
+
+  // Quản lý loại đại lý (QĐ1b)
+  document.addEventListener("DOMContentLoaded", function () {
+    const rows = document.querySelectorAll("#agencyTypeTable tbody tr");
+
+    rows.forEach(row => {
+      row.addEventListener("click", () => {
+        const type = row.getAttribute("data-type");
+        const desc = row.getAttribute("data-description");
+        const debt = row.getAttribute("data-debt");
+
+        // Gán vào input
+        document.getElementById("typeInput").value = type;
+        document.getElementById("descInput").value = desc;
+        document.getElementById("debtInput").value = debt;
+
+        // Tô đậm dòng được chọn (tuỳ chọn)
+        rows.forEach(r => r.classList.remove("table-primary"));
+        row.classList.add("table-primary");
+      });
+    });
+  });
+
+  function addAgencyType() {
+    const type = document.getElementById("typeInput").value;
+    const desc = document.getElementById("descInput").value;
+    const debt = document.getElementById("debtInput").value;
+
+    if (!type || !desc || !debt) {
+      return Swal.fire({
+        icon: 'warning',
+        title: 'Thiếu dữ liệu',
+        text: 'Vui lòng nhập đầy đủ thông tin.',
+        timer: 3000,
+        showConfirmButton: false
+      });
+    }
+
+    fetch('/api/agencytype/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: parseInt(type), description: desc, maximumDebt: parseFloat(debt) })
+    })
+    .then(async res => {
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      Swal.fire({ icon: 'success', text: data.message, timer: 3000, showConfirmButton: false });
+      setTimeout(() => location.reload(), 1000);
+    })
+    .catch(err => {
+      Swal.fire({ icon: 'error', title: 'Thêm thất bại', text: err.message, timer: 3000, showConfirmButton: false });
+    });
+  }
+
+
+  function updateAgencyType() {
+    const type = document.getElementById("typeInput").value;
+    const desc = document.getElementById("descInput").value;
+    const debt = document.getElementById("debtInput").value;
+
+    if (!type || !desc || !debt) {
+      return Swal.fire({
+        icon: 'warning',
+        title: 'Thiếu thông tin',
+        text: 'Vui lòng chọn loại cần sửa.',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    }
+
+    fetch('/api/agencytype', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: parseInt(type), description: desc, maximumDebt: parseFloat(debt) })
+    })
+    .then(async res => {
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      Swal.fire({ icon: 'success', text: data.message, timer: 3000, showConfirmButton: false });
+      setTimeout(() => location.reload(), 1000);
+    })
+    .catch(err => {
+      Swal.fire({ icon: 'error', title: 'Cập nhật thất bại', text: err.message, timer: 3000, showConfirmButton: false });
+    });
+  }
+
+
+  function deleteAgencyType() {
+    const type = document.getElementById("typeInput").value;
+
+    if (!type) {
+      return Swal.fire({
+        icon: 'warning',
+        title: 'Thiếu dữ liệu',
+        text: 'Vui lòng chọn loại cần xóa.',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    }
+
+    Swal.fire({
+      icon: 'question',
+      title: 'Xác nhận xóa?',
+      text: `Bạn có chắc muốn xóa loại đại lý ${type}?`,
+      showCancelButton: true,
+      confirmButtonText: 'Xóa',
+      cancelButtonText: 'Hủy'
+    }).then(result => {
+      if (!result.isConfirmed) return;
+
+      fetch(`/api/agencytype/${type}`, {
+        method: 'DELETE'
+      })
+      .then(async res => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message);
+        Swal.fire({ icon: 'success', text: data.message, timer: 3000, showConfirmButton: false });
+        setTimeout(() => location.reload(), 1000);
+      })
+      .catch(err => {
+        Swal.fire({ icon: 'error', title: 'Xóa thất bại', text: err.message, timer: 3000, showConfirmButton: false });
+      });
+    });
+  }
+
+
+
+</script>

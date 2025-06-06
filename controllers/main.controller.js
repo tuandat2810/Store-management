@@ -409,7 +409,7 @@ module.exports.load_quan_ly_dai_ly_admin = async (req, res) => {
 
 
     const data = { agencyList };
-    console.log('[+] Rendering trang quản lý đại lý');
+    // console.log('[+] Rendering trang quản lý đại lý');
     res.render('quan_ly_dai_ly_admin', {
       layout: 'main',
       title: 'Quản lý đại lý Admin',
@@ -417,7 +417,7 @@ module.exports.load_quan_ly_dai_ly_admin = async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    console.log('[!] Có lỗi, render 500');
+    // console.log('[!] Có lỗi, render 500');
     res.status(500).render('500', { layout: false });
   }
 };
@@ -436,9 +436,15 @@ module.exports.load_quan_ly_loai_dai_ly = async (req, res) => {
 
 module.exports.load_thay_doi_quy_dinh = async (req, res) => {
   try {
+    const districts = await District.find().lean();
+    const agencyTypes = await AgencyType.find().lean();
+
+    const data = { districts, agencyTypes };
+
     res.render('thay_doi_quy_dinh', {
       layout: 'main',
-      title: 'Thay đổi quy định'
+      title: 'Thay đổi quy định',
+      ...data
     });
   } catch (err) {
     console.error(err);
