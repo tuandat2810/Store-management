@@ -393,11 +393,11 @@ module.exports.load_thay_doi_quy_dinh = async (req, res) => {
   }
 };
 
-module.exports.load_thong_tin_admin = async (req, res) => {
+module.exports.load_thong_tin_tai_khoan = async (req, res) => {
   try {
-    res.render('thong_tin_admin', {
+    res.render('thong_tin_tai_khoan', {
       layout: 'main',
-      title: 'Thông tin admin'
+      title: 'Thông tin tài khoản'
     });
   } catch (err) {
     console.error(err);
@@ -405,17 +405,7 @@ module.exports.load_thong_tin_admin = async (req, res) => {
   }
 };
 
-module.exports.load_thong_tin_dai_ly = async (req, res) => {
-  try {
-    res.render('thong_tin_dai_ly', {
-      layout: 'main',
-      pageTitle: 'Thông tin đại lý'
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).render('500', { layout: false });
-  }
-};
+
 
 module.exports.dang_ky_dai_lyPOST = async (req, res) => {
     const { agencyCode, agencyName, agencyType, email, phoneNumber, district, address } = req.body;

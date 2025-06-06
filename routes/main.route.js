@@ -25,8 +25,8 @@ router.get("/xem_phieu_xuat_hang", authMiddleware.requireAuth, mainController.lo
 router.get("/quan_ly_dai_ly_admin", authMiddleware.requireAuth, mainController.load_quan_ly_dai_ly_admin);
 router.get("/quan_ly_loai_dai_ly", authMiddleware.requireAuth, mainController.load_quan_ly_loai_dai_ly);
 router.get("/thay_doi_quy_dinh", authMiddleware.requireAuth, mainController.load_thay_doi_quy_dinh);
-router.get("/thong_tin_admin", authMiddleware.requireAuth, mainController.load_thong_tin_admin);
-router.get("/thong_tin_dai_ly", authMiddleware.requireAuth, mainController.load_thong_tin_dai_ly);
+router.get("/thong_tin_tai_khoan", authMiddleware.requireAuth, mainController.load_thong_tin_tai_khoan);
+
 
 router.get('/dai-ly-suggestions', mainController.search);
 
