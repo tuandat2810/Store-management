@@ -8,8 +8,9 @@ const Receipt = require('../models/receipt.m.js');
 const District = require('../models/district.m.js');
 
 module.exports.load_dang_ki_dai_ly = async (req, res) => {
-  const agencyCode = await generateRandom.generateUniqueAgencyCode()
-  const data = { agencyCode };
+  const agencyCode = await generateRandom.generateUniqueAgencyCode();
+  const agencyTypes = await AgencyType.find().lean();
+  const data = { agencyCode, agencyTypes };
 
   try {
     res.render('dang_ki_dai_ly', {

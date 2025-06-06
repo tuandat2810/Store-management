@@ -99,8 +99,9 @@
             <div class="col-sm-9 custom-select-wrapper">
                 <select class="form-select custom-select" id="agencyType" name="agencyType" required>
                     <option value="">-- Chọn loại đại lý --</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
+                    {{#each agencyTypes}}
+                        <option value="{{type}}">{{type}}</option>
+                    {{/each}}
                 </select>
                 <span class="custom-arrow">
                     <i class="bi bi-chevron-down"></i>
