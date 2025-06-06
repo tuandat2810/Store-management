@@ -1,221 +1,200 @@
 <style>
-  .agency-list-container {
-    min-height: 100vh;
-    padding: 0;
-  }
+    .custom-select-wrapper {
+        position: relative;
+    }
 
-  .agency-list-title {
-    margin-top: 32px;
-    margin-bottom: 0;
-  }
+    .custom-arrow {
+        position: absolute;
+        top: 50%;
+        right: 26px;
+        transform: translateY(-50%);
+        font-size: 16px;
+        transition: transform 0.3s ease;
+        pointer-events: none;
+        z-index: 10;
+        background-color: #ffffff;
+    }
 
-  .agency-list-content {
-    width: 95%;
-    margin: 0 auto;
-  }
+    .custom-select:focus + .custom-arrow {
+        transform: translateY(-50%) rotate(180deg);
+    }
 
-  .agency-table-container {
-    margin: 16px;
-  }
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1050;
+        justify-content: center;
+        align-items: center;
+    }
 
-  .pagination .page-link {
-    color: black;                /* Màu chữ */
-    background-color: #fff;      /* Màu nền (trang hiện tại có thể giữ nguyên) */
-    border-color: black;         /* Màu viền */
-  }
+    .modal-content {
+        max-width: 500px;
+        width: 90%;
+        background: white; /* Nền trắng */
+    }
 
-  .pagination .page-item.active .page-link {
-    background-color: black;     /* Nền khi active */
-    border-color: black;         /* Viền khi active */
-    color: white;                /* Chữ khi active */
-  }
+    .modal-content.success {
+        border: 2px solid #28a745; /* Viền xanh cho success */
+    }
 
-  .pagination .page-link:hover {
-    background-color: #333;      /* Nền khi hover */
-    color: white;
-  }
+    .modal-content.error {
+        border: 2px solid #dc3545; /* Viền đỏ cho error */
+    }
+
+    .btn-close-custom {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
 </style>
 
-<div class="agency-list-container w-100">
-  <!-- Tiêu đề trang -->
-  <h3 class="agency-list-title text-center">
-    Danh sách đại lý
-  </h3>
-
-  <!-- Container bọc search bar và table -->
-  <div class="agency-list-content">
-    <!-- Thanh tìm kiếm (search bar) căn phải -->
-    <div class="d-flex justify-content-end mb-3">
-      <div class="input-group" style="width: 300px;">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Tìm kiếm đại lý..."
-          id="searchInput"
-          value="{{searchQuery}}"
-        />
-        <button class="btn btn-outline-secondary" type="button" onclick="clearSearch()">
-          <i class="bi bi-x"></i>
-        </button>
-        <button class="btn btn-outline-dark" type="button" onclick="performSearch()">
-          <i class="bi bi-search"></i>
-        </button>
-        <ul id="suggestions" class="list-group position-absolute w-100" style="top: 100%; z-index: 1000;"></ul>
-      </div>
+{{#if success_msg}}
+<div class="modal-overlay" id="success-popup">
+    <div class="modal-content success p-4 rounded-3 shadow">
+        <button type="button" class="btn-close btn-close-custom" aria-label="Close" onclick="closePopup('success-popup')"></button>
+        <div class="text-center">{{success_msg}}</div>
     </div>
-  </div>
+</div>
+{{/if}}
 
-    <!-- Bảng dữ liệu sử dụng Bootstrap -->
-  <div class="agency-table-container">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th scope="col" class="text-center" style="width: 5%;">#</th>
-          <th scope="col" class="text-center" style="width: 16%;">Tên đại lý</th>
-          <th scope="col" class="text-center" style="width: 15%;">Người quản lý</th>
-          <th scope="col" class="text-center" style="width: 6%;">Loại</th>
-          <th scope="col" class="text-center" style="width: 7%;">Quận</th>
-          <th scope="col" class="text-center" style="width: 30%;">Địa chỉ</th>
-          <th scope="col" class="text-center" style="width: 8%;">Tiền nợ</th>
-          <th scope="col" class="text-center" style="width: 12%;">Trạng thái</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each agencyList}}
-          <tr>
-            <td class="text-center">{{ agencyCode }}</td>
-            <td class="text-center">{{ name }}</td>
-            <td class="text-center">{{ managerUsername }}</td>
-            <td class="text-center">{{ type }}</td>
-            <td class="text-center">{{ district }}</td>
-            <td class="text-center">{{ address }}</td>
-            <td class="text-center">{{ formatCurrency debt }}</td>
-            <td class="text-center">
-              {{#eq status "Đã duyệt"}}
-                <span class="badge bg-success">Đã được duyệt</span>
-              {{/eq}}
-              {{#eq status "Đang chờ"}}
-                <span class="badge bg-secondary">Đang chờ duyệt</span>
-              {{/eq}}
-              {{#eq status "Từ chối"}}
-                <span class="badge bg-danger">Đã bị từ chối</span>
-              {{/eq}}
-            </td>
-          </tr>
-        {{/each}}
-      </tbody>
-    </table>
-  </div>
+{{#if error_msg}}
+<div class="modal-overlay" id="error-popup">
+    <div class="modal-content error p-4 rounded-3 shadow">
+        <button type="button" class="btn-close btn-close-custom" aria-label="Close" onclick="closePopup('error-popup')"></button>
+        <div class="text-center">{{error_msg}}</div>
+    </div>
+</div>
+{{/if}}
 
+<div class="container-fluid d-flex flex-column align-items-center" style="width: 100%; height: 100%;margin-top: 32px;">
+    <h3 class="mb-5 text-center w-100">
+        Đăng ký đại lý
+    </h3>
+    <form action="/main/dang_ki_dai_ly" method="POST" class="w-100" style="max-width: 600px;">
+        
+        <!-- Mã đại lý (đưa lên đầu) -->
+        <div class="mb-3 row">
+            <label for="agencyCode" class="col-sm-3 col-form-label">Mã đại lý</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="agencyCode" name="agencyCode" value="{{agencyCode}}" readonly>
+            </div>
+        </div>
 
+        <!-- Tên đại lý -->
+        <div class="mb-3 row">
+            <label for="agencyName" class="col-sm-3 col-form-label">Tên đại lý</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="agencyName" name="agencyName" placeholder="Nhập tên đại lý" required>
+            </div>
+        </div>
 
+        <!-- Loại đại lý -->
+        <div class="mb-3 row">
+            <label for="agencyType" class="col-sm-3 col-form-label">Loại đại lý</label>
+            <div class="col-sm-9 custom-select-wrapper">
+                <select class="form-select custom-select" id="agencyType" name="agencyType" required>
+                    <option value="">-- Chọn loại đại lý --</option>
+                    {{#each agencyTypes}}
+                        <option value="{{type}}">{{type}}</option>
+                    {{/each}}
+                </select>
+                <span class="custom-arrow">
+                    <i class="bi bi-chevron-down"></i>
+                </span>
+            </div>
+        </div>
 
-  <!-- Pagination căn giữa -->
-  <div class="d-flex justify-content-center agency-pagination-row">
-    <nav aria-label="Page navigation">
-      <ul class="pagination">
+        <!-- Email -->
+        <div class="mb-3 row">
+            <label for="email" class="col-sm-3 col-form-label">Email</label>
+            <div class="col-sm-9">
+                <input type="email" class="form-control" id="email" name="email" placeholder="Nhập email" required>
+            </div>
+        </div>
 
-        {{!-- Nút Previous --}}
-        <li class="page-item {{#if (eq1 currentPage 1)}}disabled{{/if}}">
-          <a class="page-link" href="?page={{subtract currentPage 1}}">&laquo;</a>
-        </li>
+        <!-- Điện thoại -->
+        <div class="mb-3 row">
+            <label for="phoneNumber" class="col-sm-3 col-form-label">Điện thoại</label>
+            <div class="col-sm-9">
+                <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Nhập số điện thoại" required>
+            </div>
+        </div>
 
-        {{!-- Danh sách số trang --}}
-        {{#each pages}}
-          <li class="page-item {{#if (eq1 this ../currentPage)}}active{{/if}}">
-            <a class="page-link" href="?page={{this}}">{{this}}</a>
-          </li>
-        {{/each}}
+        <!-- Quận -->
+        <div class="mb-3 row">
+            <label for="district" class="col-sm-3 col-form-label">Quận</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="district" name="district" placeholder="Nhập quận" required>
+            </div>
+        </div>
 
-        {{!-- Nút Next --}}
-        <li class="page-item {{#if (eq1 currentPage cntPage)}}disabled{{/if}}">
-          <a class="page-link" href="?page={{add currentPage 1}}">&raquo;</a>
-        </li>
+        <!-- Địa chỉ -->
+        <div class="mb-3 row">
+            <label for="address" class="col-sm-3 col-form-label">Địa chỉ</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="address" name="address" placeholder="Nhập địa chỉ" required>
+            </div>
+        </div>
 
-      </ul>
-    </nav>
-  </div>
+        <!-- Nút đăng ký -->
+        <div class="text-center mt-5">
+            <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold py-2" 
+                style="background-color: #C6BDBD; color: #000; width: 200px;"
+                >
+                Đăng ký
+            </button>
+        </div>
+    </form>
 </div>
 
 <script>
-  // Khi người dùng nhấn nút tìm kiếm
-  function performSearch() {
-    const searchQuery = document.getElementById('searchInput').value.trim();
-    if (searchQuery) {
-      // Thực hiện tìm kiếm với từ khóa
-      window.location.href = `/main/danh_sach_dai_ly_admin?search=${encodeURIComponent(searchQuery)}&page=1`;
-    }
-  }
+    {{!-- document.addEventListener('DOMContentLoaded', function() {
+        const successPopup = document.getElementById('success-popup');
+        const errorPopup = document.getElementById('error-popup');
 
-  // Khi người dùng nhấn nút xóa
-  function clearSearch() {
-    document.getElementById('searchInput').value = ''; // Xóa từ khóa tìm kiếm
-    window.location.href = '/main/danh_sach_dai_ly?page=1'; // Reset lại trang và tìm kiếm
-  }
-
-  // Khi người dùng nhấn phím Enter trong ô tìm kiếm
-  document.getElementById('searchInput').addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      performSearch();
-    }
-  });
-
-  const searchInput = document.getElementById('searchInput')S
-  const suggestions = document.getElementById('suggestions')
-
-  // Khi người dùng gõ tìm kiếm sẽ đề xuất nội dung liên quan
-  searchInput.addEventListener("input", () => {
-  const query = searchInput.value.trim();
-
-  if (!query) {
-    suggestions.innerHTML = "";
-    return; // return này nằm đúng trong hàm arrow function
-  }
-
-  fetch(`/main/dai-ly-suggestions?query=${encodeURIComponent(query)}`)
-    .then(res => res.json())
-    .then(data => {
-      suggestions.innerHTML = "";
-      data.forEach(name => {
-        const li = document.createElement("li");
-        li.textContent = name;
-        li.className = "list-group-item list-group-item-action";
-        li.onclick = () => {
-          searchInput.value = name;
-          suggestions.innerHTML = "";
-          performSearch();
-        };
-        suggestions.appendChild(li);
-      });
+        if (successPopup) {
+            successPopup.style.display = 'flex';
+        }
+        if (errorPopup) {
+            errorPopup.style.display = 'flex';
+        }
     });
-  });
-  // Khi click ra ngoài thì xóa gợi ý
-  document.addEventListener("click", (e) => {
-    const isClickInsideInput = searchInput.contains(e.target);
-    const isClickInsideSuggestions = suggestions.contains(e.target);
-    if (!isClickInsideInput && !isClickInsideSuggestions) {
-      suggestions.innerHTML = "";
-    }
 
-    if (isClickInsideInput && searchInput.value.trim() !== "") {
-      fetch(`/main/dai-ly-suggestions?query=${encodeURIComponent(searchInput.value.trim())}`)
-        .then(res => res.json())
-        .then(data => {
-          suggestions.innerHTML = "";
-          data.forEach(name => {
-            const li = document.createElement("li");
-            li.textContent = name;
-            li.className = "list-group-item list-group-item-action";
-            li.onclick = () => {
-              searchInput.value = name;
-              suggestions.innerHTML = "";
-              performSearch();
-            };
-            suggestions.appendChild(li);
-          });
+    function closePopup(popupId) {
+        const popup = document.getElementById(popupId);
+        if (popup) {
+            popup.style.display = 'none';
+        }
+    } --}}
+    document.addEventListener("DOMContentLoaded", function () {
+        const successPopup = document.getElementById('success-popup');
+        const errorPopup = document.getElementById('error-popup');
+
+    if (successPopup) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Thành công',
+        text: successPopup.textContent,
+        showConfirmButton: false,
+        timer: 2000
+      }).then(() => {
+        window.location.reload(); 
       });
     }
-  })
 
+    if (errorPopup) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Lỗi',
+        text: errorPopup.textContent,
+        showConfirmButton: false,
+        timer: 2500
+      });
+    }
+  });
 </script>
