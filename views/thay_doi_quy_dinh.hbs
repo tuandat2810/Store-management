@@ -28,7 +28,7 @@
     </li>
     <li class="nav-item" role="presentation">
       <button class="nav-link" id="qd2-tab" data-bs-toggle="tab" data-bs-target="#qd2" type="button" role="tab">
-        QĐ2: Mặt hàng và giới hạn nợ
+        QĐ2: Thay đổi thông tin mặt hàng
       </button>
     </li>
   </ul>
@@ -135,39 +135,122 @@
     </div>
 
 
-    <!-- QĐ2 Mặt hàng và giới hạn nợ -->
+    <!-- QĐ2: Quản lý mặt hàng -->
     <div class="tab-pane fade" id="qd2" role="tabpanel">
       <div class="card mb-4">
         <div class="card-header bg-success text-white">
-          QĐ2: Mặt hàng và giới hạn nợ
+          QĐ2: Thay đổi thông tin mặt hàng
         </div>
         <div class="card-body">
-          <div class="mb-3">
-            <label for="soLuongMatHang" class="form-label">Số lượng mặt hàng</label>
-            <input type="number" class="form-control" id="soLuongMatHang" min="1">
+          <p class="text-muted">Xem, thêm, sửa, xóa thông tin mặt hàng:</p>
+
+          <!-- Bảng mặt hàng -->
+          <div class="table-responsive mb-4">
+            <table class="table table-hover text-center align-middle" id="productTable">
+              <thead class="table-secondary">
+                <tr>
+                  <th>Mã hàng</th>
+                  <th>Tên sản phẩm</th>
+                  <th>Đơn vị</th>
+                  <th>Đơn giá</th>
+                  <th>Danh mục</th>
+                  <th>Hình ảnh</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each products}}
+                  <tr data-code="{{productCode}}" data-name="{{productName}}" data-unit="{{unit}}"
+                      data-price="{{unitPrice}}" data-category="{{category}}" data-description="{{description}}"
+                      data-image="{{image}}">
+                    <td>{{productCode}}</td>
+                    <td>{{productName}}</td>
+                    <td>{{unit}}</td>
+                    <td>{{formatCurrency unitPrice}}</td>
+                    <td>{{category}}</td>
+                    <td><img src="{{image}}" alt="Ảnh" width="40" height="40" style="object-fit: cover;" /></td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
           </div>
-          <div class="mb-3">
-            <label for="donViTinh" class="form-label">Đơn vị tính mặc định</label>
-            <input type="text" class="form-control" id="donViTinh" placeholder="ví dụ: hộp, chai, cái...">
+          
+
+          <!-- Form nhập -->
+          <div class="row mb-3">
+            <div class="col-md-2">
+              <label for="productCode" class="form-label">Mã sản phẩm</label>
+              <input type="text" class="form-control" id="productCode">
+            </div>
+            <div class="col-md-3">
+              <label for="productName" class="form-label">Tên sản phẩm</label>
+              <input type="text" class="form-control" id="productName">
+            </div>
+            <div class="col-md-3">
+              <label for="unit" class="form-label">Đơn vị tính</label>
+              <input type="text" class="form-control" id="unit">
+            </div>
+            <div class="col-md-2">
+              <label for="unitPrice" class="form-label">Đơn giá</label>
+              <input type="number" min="0" class="form-control" id="unitPrice">
+            </div>
+            <div class="col-md-2">
+              <label for="category" class="form-label">Danh mục</label>
+              <input type="text" class="form-control" id="category">
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="donGiaBan" class="form-label">Đơn giá bán mặc định</label>
-            <input type="number" class="form-control" id="donGiaBan" min="0">
+
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <label for="description" class="form-label">Mô tả</label>
+              <textarea class="form-control" id="description" rows="4" placeholder="Nhập mô tả chi tiết..."></textarea>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="tienNoToiDa" class="form-label">Tiền nợ tối đa mỗi loại đại lý</label>
-            <input type="number" class="form-control" id="tienNoToiDa" min="0">
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <label for="image" class="form-label">URL hình ảnh</label>
+              <input type="text" class="form-control" id="image" placeholder="https://...jpg">
+            </div>
+          </div>
+                    
+
+          <!-- Nút -->
+          <div class="text-end">
+            <button class="btn btn-success me-2" onclick="addProduct()">
+              <i class="bi bi-plus-circle"></i> Thêm
+            </button>
+            <button class="btn btn-primary me-2" onclick="updateProduct()">
+              <i class="bi bi-pencil-square"></i> Sửa
+            </button>
+            <button class="btn btn-danger" onclick="deleteProduct()">
+              <i class="bi bi-trash"></i> Xóa
+            </button>
           </div>
         </div>
       </div>
     </div>
   </div>
-
-
 </div>
 
-
 <script>
+  // Cập nhật hash URL khi chuyển tab
+  document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
+    tab.addEventListener('shown.bs.tab', function (e) {
+      const targetId = e.target.getAttribute('data-bs-target'); // ví dụ: #qd2
+      history.replaceState(null, null, targetId); // Cập nhật hash trên URL
+    });
+  });
+  
+  // Mở tab dựa trên hash URL khi tải trang
+  document.addEventListener('DOMContentLoaded', () => {
+    const hash = window.location.hash;
+    if (hash) {
+      const tabTrigger = document.querySelector(`[data-bs-target="${hash}"]`);
+      if (tabTrigger) {
+        const tab = new bootstrap.Tab(tabTrigger);
+        tab.show();
+      }
+    }
+  });
   // Chỉnh sửa số lượng đại lý tối đa theo quận (QĐ1a)
   function onDistrictChange() {
     const select = document.getElementById('districtSelect');
@@ -348,6 +431,104 @@
     });
   }
 
+  // Quản lý mặt hàng (QĐ2)
+  document.addEventListener("DOMContentLoaded", function () {
+    const rows = document.querySelectorAll("#productTable tbody tr");
 
+    rows.forEach(row => {
+      row.addEventListener("click", () => {
+        document.getElementById("productCode").value = row.dataset.code;
+        document.getElementById("productName").value = row.dataset.name;
+        document.getElementById("unit").value = row.dataset.unit;
+        document.getElementById("unitPrice").value = row.dataset.price;
+        document.getElementById("category").value = row.dataset.category;
+        document.getElementById("description").value = row.dataset.description;
+        document.getElementById("image").value = row.dataset.image;
+
+        rows.forEach(r => r.classList.remove("table-primary"));
+        row.classList.add("table-primary");
+      });
+    });
+  });
+
+  function addProduct() {
+    const body = getProductFormData();
+    if (!body) return;
+
+    fetch('/api/product/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    })
+    .then(async res => {
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      Swal.fire({ icon: 'success', text: data.message, timer: 3000, showConfirmButton: false });
+      setTimeout(() => location.reload(), 1000);
+    })
+    .catch(err => Swal.fire({ icon: 'error', text: err.message, timer: 3000, showConfirmButton: false }));
+  }
+
+  function updateProduct() {
+    const body = getProductFormData();
+    if (!body) return;
+
+    fetch('/api/product', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    })
+    .then(async res => {
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      Swal.fire({ icon: 'success', text: data.message, timer: 3000, showConfirmButton: false });
+      setTimeout(() => location.reload(), 1000);
+    })
+    .catch(err => Swal.fire({ icon: 'error', text: err.message, timer: 3000, showConfirmButton: false }));
+  }
+
+  function deleteProduct() {
+    const code = document.getElementById("productCode").value;
+    if (!code) return Swal.fire({ icon: 'warning', text: 'Vui lòng chọn mặt hàng.', timer: 3000, showConfirmButton: false });
+
+    Swal.fire({
+      icon: 'question',
+      title: 'Xác nhận xóa?',
+      text: `Bạn có chắc muốn xóa sản phẩm ${code}?`,
+      showCancelButton: true,
+      confirmButtonText: 'Xóa',
+      cancelButtonText: 'Hủy'
+    }).then(result => {
+      if (!result.isConfirmed) return;
+
+      fetch(`/api/product/${code}`, {
+        method: 'DELETE'
+      })
+      .then(async res => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message);
+        Swal.fire({ icon: 'success', text: data.message, timer: 2000, showConfirmButton: false });
+        setTimeout(() => location.reload(), 1000);
+      })
+      .catch(err => Swal.fire({ icon: 'error', text: err.message, timer: 2000, showConfirmButton: false }));
+    });
+  }
+
+  function getProductFormData() {
+    const productCode = document.getElementById("productCode").value;
+    const productName = document.getElementById("productName").value;
+    const unit = document.getElementById("unit").value;
+    const unitPrice = parseFloat(document.getElementById("unitPrice").value);
+    const category = document.getElementById("category").value;
+    const description = document.getElementById("description").value;
+    const image = document.getElementById("image").value;
+
+    if (!productCode || !productName || isNaN(unitPrice)) {
+      Swal.fire({ icon: 'warning', text: 'Điền đầy đủ thông tin hợp lệ.', timer: 3000, showConfirmButton: false });
+      return null;
+    }
+
+    return { productCode, productName, unit, unitPrice, category, description, image };
+  }
 
 </script>

@@ -439,7 +439,9 @@ module.exports.load_thay_doi_quy_dinh = async (req, res) => {
     const districts = await District.find().lean();
     const agencyTypes = await AgencyType.find().lean();
 
-    const data = { districts, agencyTypes };
+    const products = await Product.find().lean();
+
+    const data = { districts, agencyTypes, products };
 
     res.render('thay_doi_quy_dinh', {
       layout: 'main',

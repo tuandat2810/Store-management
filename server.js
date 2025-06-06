@@ -68,6 +68,8 @@ app.use('/main', require('./routes/main.route.js'));
 
 // Api route ho tro
 app.use('/', require('./routes/agency.route.js'));
+app.use('/', require('./routes/product.route.js'));
+
 
 // Mọi trang khác sẽ được chuyển hướng đến trang 404
 app.use('*', (req, res) => {
