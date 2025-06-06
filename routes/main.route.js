@@ -10,7 +10,7 @@ const { requireAuth } = require("../middlewares/auth.middleware");
 // Route load section
 router.get("/dang_ki_dai_ly", authMiddleware.requireAuth, mainController.load_dang_ki_dai_ly);
 router.get("/danh_sach_dai_ly", authMiddleware.requireAuth, mainController.load_danh_sach_dai_ly);
-//router.get("/danh_sach_dai_ly_admin", authMiddleware.requireAuth, mainController.load_danh_sach_dai_ly_admin);
+
 
 router.get("/bao_cao_hang_thang", authMiddleware.requireAuth, mainController.load_bao_cao_hang_thang);
 router.post("/bao_cao_hang_thang", authMiddleware.requireAuth, mainController.load_bao_cao_hang_thang);
@@ -23,7 +23,6 @@ router.get("/xem_phieu_xuat_hang", authMiddleware.requireAuth, mainController.lo
 
 
 router.get("/quan_ly_dai_ly_admin", authMiddleware.requireAuth, mainController.load_quan_ly_dai_ly_admin);
-router.get("/quan_ly_loai_dai_ly", authMiddleware.requireAuth, mainController.load_quan_ly_loai_dai_ly);
 router.get("/thay_doi_quy_dinh", authMiddleware.requireAuth, mainController.load_thay_doi_quy_dinh);
 router.get("/thong_tin_tai_khoan", authMiddleware.requireAuth, mainController.load_thong_tin_tai_khoan);
 

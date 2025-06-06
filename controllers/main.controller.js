@@ -362,17 +362,6 @@ module.exports.load_quan_ly_dai_ly_admin = async (req, res) => {
   }
 };
 
-module.exports.load_quan_ly_loai_dai_ly = async (req, res) => {
-  try {
-    res.render('quan_ly_loai_dai_ly', {
-      layout: 'main',
-      title: 'Quản lý loại đại lý'
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).render('500', { layout: false });
-  }
-};
 
 module.exports.load_thay_doi_quy_dinh = async (req, res) => {
   try {
