@@ -10,7 +10,8 @@ const District = require('../models/district.m.js');
 module.exports.load_dang_ki_dai_ly = async (req, res) => {
   const agencyCode = await generateRandom.generateUniqueAgencyCode();
   const agencyTypes = await AgencyType.find().lean();
-  const data = { agencyCode, agencyTypes };
+  const districts = await District.find().lean();
+  const data = { agencyCode, agencyTypes, districts };
 
   try {
     res.render('dang_ki_dai_ly', {
