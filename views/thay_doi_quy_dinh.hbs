@@ -431,11 +431,38 @@
     });
   }
 
+  document.addEventListener('DOMContentLoaded', () => {
+    const table = document.getElementById('agencyTypeTable');
+    const updateButton = document.getElementById('updateAgencyType');
+
+    // Gắn sự kiện click cho từng hàng
+    table.addEventListener('click', (e) => {
+      const row = e.target.closest('tr');
+      if (!row) return;
+
+      // Tô sáng dòng được chọn (optional)
+      [...table.rows].forEach(r => r.classList.remove('table-active'));
+      row.classList.add('table-active');
+
+      // Lấy data từ dòng
+      const type = row.getAttribute('data-type');
+      const desc = row.getAttribute('data-description');
+      const debt = row.getAttribute('data-debt');
+
+      // Đổ dữ liệu vào input
+      document.getElementById('typeInput').value = type;
+      document.getElementById('descInput').value = desc;
+      document.getElementById('debtInput').value = debt;
+
+      // Hiện nút "Sửa"
+      updateButton.classList.remove('d-none');
+    });
+  });
+
   // Quản lý mặt hàng (QĐ2)
   document.addEventListener("DOMContentLoaded", function () {
     const rows = document.querySelectorAll("#productTable tbody tr");
 
-<<<<<<< HEAD
   document.addEventListener('DOMContentLoaded', () => {
       const table = document.getElementById('agencyTypeTable');
       const updateButton = document.getElementById('updateAgencyType');
@@ -463,7 +490,6 @@
         updateButton.classList.remove('d-none');
       });
     });
-=======
     rows.forEach(row => {
       row.addEventListener("click", () => {
         document.getElementById("productCode").value = row.dataset.code;
@@ -559,6 +585,5 @@
 
     return { productCode, productName, unit, unitPrice, category, description, image };
   }
->>>>>>> 28b99d2066e349ca844c4371642292d5292034ca
 
 </script>
