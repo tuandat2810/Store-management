@@ -1,89 +1,612 @@
+
+
+
 <style>
-  .agency-list-container {
-    min-height: 100vh;
-    padding: 0;
+  .bg-custom {
+    background-image: linear-gradient( 111.4deg,  rgba(7,7,9,1) 6.5%, rgba(27,24,113,1) 93.2% );
   }
 
-  .agency-list-title {
-    margin-top: 32px;
-    margin-bottom: 0;
+  .bg-success {
+    background-image: radial-gradient( circle 1292px at -13.6% 51.7%,  rgba(0,56,68,1) 0%, rgba(163,217,185,1) 51.5%, rgba(255,252,247,1) 88.6% );
   }
 
-  .agency-list-content {
-    width: 95%;
-    margin: 0 auto;
+  .bg-custom2 {
+    background-image: linear-gradient( 91.2deg,  rgba(136,80,226,1) 4%, rgba(16,13,91,1) 96.5% );
   }
-
-  .agency-table-container {
-    margin: 16px;
-  }
-
-  /* .pagination .page-link {
-    color: black;                
-    background-color: #fff;      
-    border-color: black;         
-  }
-
-  .pagination .page-item.active .page-link {
-    background-color: black;     
-    border-color: black;         
-    color: white;                
-  }
-
-  .pagination .page-link:hover {
-    background-color: #333;     
-    color: white;
-  } */
-
 </style>
 
-<div class="agency-list-container w-100">
-  <h3 class="agency-list-title text-center mb-5">
-    Danh sách quy định
-  </h3>
+<div class="container mt-4">
+  <h3 class="text-center mb-5">Thay đổi quy định</h3>
 
-  <div class="agency-table-container mb-5">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th scope="col" class="text-center" style="width: 50%;">Tên quy định</th>
-          <th scope="col" class="text-center" style="width: 50%;">Nội dung</th>
-        </tr>
-      </thead>
-      <tbody>
-          {{#each agencyList}}
-            <tr>
-              <td class="text-center">{{ unknown }}</td>
-              <td class="text-center">{{ unknown }}</td>
-            </tr>
-          {{/each}}
-            <tr>
-              <td class="text-center">Data demo</td>
-              <td class="text-center">Data demo</td>
-            </tr>
-            <tr>
-              <td class="text-center">Data demo</td>
-              <td class="text-center">Data demo</td>
-            </tr>
-      </tbody>
-    </table>
-  </div>
-  
-  <div class="d-flex w-100" style="justify-content: center;">
-    <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold py-2" 
-            style="background-color: #C6BDBD; color: #000; width: 200px;"
-            >
-        Thêm
-    </button>
-    <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold mx-5 py-2" 
-            style="background-color: #C6BDBD; color: #000; width: 200px;"
-            >
-        Xóa
-    </button>
-    <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold py-2" 
-            style="background-color: #C6BDBD; color: #000; width: 200px;"
-            >
-        Sửa
-    </button>
+  <!-- Tabs -->
+  <ul class="nav nav-tabs mb-4" id="quyDinhTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="qd1a-tab" data-bs-toggle="tab" data-bs-target="#qd1a  " type="button" role="tab">
+        QĐ1: Số lượng đại lý tối đa theo quận
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="qd1b-tab" data-bs-toggle="tab" data-bs-target="#qd1b" type="button" role="tab">
+        QĐ1: Quản lý loại đại lý
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="qd2-tab" data-bs-toggle="tab" data-bs-target="#qd2" type="button" role="tab">
+        QĐ2: Thay đổi thông tin mặt hàng
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content" id="quyDinhTabContent">
+    <!-- QĐ1 Số lượng đại lý tối đa theo quận -->
+    <div class="tab-pane fade show active" id="qd1a" role="tabpanel">
+      <div class="card mb-4">
+        <div class="card-header bg-custom text-white">
+          Số lượng đại lý tối đa theo quận
+        </div>
+
+        <div class="card-body">
+          <p class="text-muted">Chọn quận và cập nhật số lượng đại lý tối đa:</p>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="districtSelect" class="form-label">Chọn quận</label>
+              <select class="form-select" id="districtSelect" onchange="onDistrictChange()">
+                <option selected disabled>-- Chọn quận --</option>
+                {{#each districts}}
+                  <option value="{{id}}" data-max="{{maximumAgenciesAvailable}}">
+                    {{districtName}}
+                  </option>
+                {{/each}}
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="maxAgencyInput" class="form-label">Số đại lý tối đa</label>
+              <input type="number" id="maxAgencyInput" class="form-control" min="1" disabled>
+            </div>
+          </div>
+
+          <div class="text-end">
+            <button class="btn bg-success text-white" onclick="saveMaxAgency()" id="saveButton" disabled>
+              <i class="bi bi-save"></i> Lưu thay đổi
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QĐ1 Quản lý loại đại lý -->
+    <div class="tab-pane fade" id="qd1b" role="tabpanel">
+      <div class="card mb-4">
+        <div class="card-header bg-custom2 text-white">
+          QĐ1: Quản lý loại đại lý
+        </div>
+        <div class="card-body">
+          <p class="text-muted">Danh sách các loại đại lý:</p>
+
+          <!-- Table loại đại lý -->
+          <div class="table-responsive mb-4">
+            <table class="table table-hover text-center align-middle" id="agencyTypeTable">
+              <thead class="table-secondary">
+                <tr>
+                  <th>Loại</th>
+                  <th>Mô tả</th>
+                  <th>Số tiền nợ tối đa</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each agencyTypes}}
+                  <tr data-type="{{type}}" data-description="{{description}}" data-debt="{{maximumDebt}}">
+                    <td>{{type}}</td>
+                    <td>{{description}}</td>
+                    <td>{{maximumDebt}}</td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Form nhập liệu -->
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label for="typeInput" class="form-label">Loại đại lý</label>
+              <input type="number" class="form-control" id="typeInput" placeholder="Nhập loại" />
+            </div>
+            <div class="col-md-4">
+              <label for="descInput" class="form-label">Mô tả</label>
+              <input type="text" class="form-control" id="descInput" placeholder="Nhập mô tả" />
+            </div>
+            <div class="col-md-4">
+              <label for="debtInput" class="form-label">Số nợ tối đa</label>
+              <input type="number" class="form-control" id="debtInput" placeholder="Nhập nợ tối đa" />
+            </div>
+          </div>
+
+          <!-- Nút thao tác -->
+          <div class="text-end">
+            <button class="btn btn-success me-2" onclick="addAgencyType()">
+              <i class="bi bi-plus-circle"></i> Thêm
+            </button>
+            <button class="btn btn-primary me-2 d-none" id="updateAgencyType" onclick="updateAgencyType()">
+              <i class="bi bi-pencil-square"></i> Sửa
+            </button>
+            <button class="btn btn-danger" onclick="deleteAgencyType()">
+              <i class="bi bi-trash"></i> Xóa
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- QĐ2: Quản lý mặt hàng -->
+    <div class="tab-pane fade" id="qd2" role="tabpanel">
+      <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+          QĐ2: Thay đổi thông tin mặt hàng
+        </div>
+        <div class="card-body">
+          <p class="text-muted">Xem, thêm, sửa, xóa thông tin mặt hàng:</p>
+
+          <!-- Bảng mặt hàng -->
+          <div class="table-responsive mb-4">
+            <table class="table table-hover text-center align-middle" id="productTable">
+              <thead class="table-secondary">
+                <tr>
+                  <th>Mã hàng</th>
+                  <th>Tên sản phẩm</th>
+                  <th>Đơn vị</th>
+                  <th>Đơn giá</th>
+                  <th>Danh mục</th>
+                  <th>Hình ảnh</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each products}}
+                  <tr data-code="{{productCode}}" data-name="{{productName}}" data-unit="{{unit}}"
+                      data-price="{{unitPrice}}" data-category="{{category}}" data-description="{{description}}"
+                      data-image="{{image}}">
+                    <td>{{productCode}}</td>
+                    <td>{{productName}}</td>
+                    <td>{{unit}}</td>
+                    <td>{{formatCurrency unitPrice}}</td>
+                    <td>{{category}}</td>
+                    <td><img src="{{image}}" alt="Ảnh" width="40" height="40" style="object-fit: cover;" /></td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+          
+
+          <!-- Form nhập -->
+          <div class="row mb-3">
+            <div class="col-md-2">
+              <label for="productCode" class="form-label">Mã sản phẩm</label>
+              <input type="text" class="form-control" id="productCode">
+            </div>
+            <div class="col-md-3">
+              <label for="productName" class="form-label">Tên sản phẩm</label>
+              <input type="text" class="form-control" id="productName">
+            </div>
+            <div class="col-md-3">
+              <label for="unit" class="form-label">Đơn vị tính</label>
+              <input type="text" class="form-control" id="unit">
+            </div>
+            <div class="col-md-2">
+              <label for="unitPrice" class="form-label">Đơn giá</label>
+              <input type="number" min="0" class="form-control" id="unitPrice">
+            </div>
+            <div class="col-md-2">
+              <label for="category" class="form-label">Danh mục</label>
+              <input type="text" class="form-control" id="category">
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <label for="description" class="form-label">Mô tả</label>
+              <textarea class="form-control" id="description" rows="4" placeholder="Nhập mô tả chi tiết..."></textarea>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <label for="image" class="form-label">URL hình ảnh</label>
+              <input type="text" class="form-control" id="image" placeholder="https://...jpg">
+            </div>
+          </div>
+                    
+
+          <!-- Nút -->
+          <div class="text-end">
+            <button class="btn btn-success me-2" onclick="addProduct()">
+              <i class="bi bi-plus-circle"></i> Thêm
+            </button>
+            <button class="btn btn-primary me-2" onclick="updateProduct()">
+              <i class="bi bi-pencil-square"></i> Sửa
+            </button>
+            <button class="btn btn-danger" onclick="deleteProduct()">
+              <i class="bi bi-trash"></i> Xóa
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
+<script>
+  // Cập nhật hash URL khi chuyển tab
+  document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
+    tab.addEventListener('shown.bs.tab', function (e) {
+      const targetId = e.target.getAttribute('data-bs-target'); // ví dụ: #qd2
+      history.replaceState(null, null, targetId); // Cập nhật hash trên URL
+    });
+  });
+  
+  // Mở tab dựa trên hash URL khi tải trang
+  document.addEventListener('DOMContentLoaded', () => {
+    const hash = window.location.hash;
+    if (hash) {
+      const tabTrigger = document.querySelector(`[data-bs-target="${hash}"]`);
+      if (tabTrigger) {
+        const tab = new bootstrap.Tab(tabTrigger);
+        tab.show();
+      }
+    }
+  });
+  // Chỉnh sửa số lượng đại lý tối đa theo quận (QĐ1a)
+  function onDistrictChange() {
+    const select = document.getElementById('districtSelect');
+    const selectedOption = select.options[select.selectedIndex];
+    const max = selectedOption.getAttribute('data-max');
+
+    const maxInput = document.getElementById('maxAgencyInput');
+    const saveBtn = document.getElementById('saveButton');
+
+    maxInput.disabled = false;
+    saveBtn.disabled = false;
+    maxInput.value = max || 1;
+  }
+
+  function saveMaxAgency() {
+    const select = document.getElementById('districtSelect');
+    const districtId = select.value;
+    const max = parseInt(document.getElementById('maxAgencyInput').value);
+
+    if (!districtId || isNaN(max) || max < 1) {
+      alert('Vui lòng chọn quận và nhập số hợp lệ.');
+      return;
+    }
+
+    // Gửi yêu cầu cập nhật về server (ví dụ API)
+    fetch('/api/district/update-max-agency', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ districtId, maximumAgenciesAvailable: max })
+    })
+    .then(async res => {
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || 'Cập nhật thất bại');
+      }
+
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Thành công',
+        text: data.message || 'Cập nhật thành công!',
+        timer: 3000,
+        showConfirmButton: false
+      });
+    })
+    .catch(err => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Thất bại',
+        text: err.message || 'Có lỗi xảy ra!',
+        timer: 3000,
+        showConfirmButton: false
+      });
+    });
+  }
+
+  // Quản lý loại đại lý (QĐ1b)
+  document.addEventListener("DOMContentLoaded", function () {
+    const rows = document.querySelectorAll("#agencyTypeTable tbody tr");
+
+    rows.forEach(row => {
+      row.addEventListener("click", () => {
+        const type = row.getAttribute("data-type");
+        const desc = row.getAttribute("data-description");
+        const debt = row.getAttribute("data-debt");
+
+        // Gán vào input
+        document.getElementById("typeInput").value = type;
+        document.getElementById("descInput").value = desc;
+        document.getElementById("debtInput").value = debt;
+
+        // Tô đậm dòng được chọn (tuỳ chọn)
+        rows.forEach(r => r.classList.remove("table-primary"));
+        row.classList.add("table-primary");
+      });
+    });
+  });
+
+  function addAgencyType() {
+    const type = document.getElementById("typeInput").value;
+    const desc = document.getElementById("descInput").value;
+    const debt = document.getElementById("debtInput").value;
+
+    if (!type || !desc || !debt) {
+      return Swal.fire({
+        icon: 'warning',
+        title: 'Thiếu dữ liệu',
+        text: 'Vui lòng nhập đầy đủ thông tin.',
+        timer: 3000,
+        showConfirmButton: false
+      });
+    }
+
+    fetch('/api/agencytype/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: parseInt(type), description: desc, maximumDebt: parseFloat(debt) })
+    })
+    .then(async res => {
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      Swal.fire({ icon: 'success', text: data.message, timer: 3000, showConfirmButton: false });
+      setTimeout(() => location.reload(), 1000);
+    })
+    .catch(err => {
+      Swal.fire({ icon: 'error', title: 'Thêm thất bại', text: err.message, timer: 3000, showConfirmButton: false });
+    });
+  }
+
+
+  function updateAgencyType() {
+    const type = document.getElementById("typeInput").value;
+    const desc = document.getElementById("descInput").value;
+    const debt = document.getElementById("debtInput").value;
+
+    if (!type || !desc || !debt) {
+      return Swal.fire({
+        icon: 'warning',
+        title: 'Thiếu thông tin',
+        text: 'Vui lòng chọn loại cần sửa.',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    }
+
+    fetch('/api/agencytype', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: parseInt(type), description: desc, maximumDebt: parseFloat(debt) })
+    })
+    .then(async res => {
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      Swal.fire({ icon: 'success', text: data.message, timer: 3000, showConfirmButton: false });
+      setTimeout(() => location.reload(), 1000);
+    })
+    .catch(err => {
+      Swal.fire({ icon: 'error', title: 'Cập nhật thất bại', text: err.message, timer: 3000, showConfirmButton: false });
+    });
+  }
+
+
+  function deleteAgencyType() {
+    const type = document.getElementById("typeInput").value;
+
+    if (!type) {
+      return Swal.fire({
+        icon: 'warning',
+        title: 'Thiếu dữ liệu',
+        text: 'Vui lòng chọn loại cần xóa.',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    }
+
+    Swal.fire({
+      icon: 'question',
+      title: 'Xác nhận xóa?',
+      text: `Bạn có chắc muốn xóa loại đại lý ${type}?`,
+      showCancelButton: true,
+      confirmButtonText: 'Xóa',
+      cancelButtonText: 'Hủy'
+    }).then(result => {
+      if (!result.isConfirmed) return;
+
+      fetch(`/api/agencytype/${type}`, {
+        method: 'DELETE'
+      })
+      .then(async res => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message);
+        Swal.fire({ icon: 'success', text: data.message, timer: 3000, showConfirmButton: false });
+        setTimeout(() => location.reload(), 1000);
+      })
+      .catch(err => {
+        Swal.fire({ icon: 'error', title: 'Xóa thất bại', text: err.message, timer: 3000, showConfirmButton: false });
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const table = document.getElementById('agencyTypeTable');
+    const updateButton = document.getElementById('updateAgencyType');
+
+    // Gắn sự kiện click cho từng hàng trong bảng
+    table.addEventListener('click', (e) => {
+      const row = e.target.closest('tr');
+      if (!row) return;
+
+      // Tô sáng dòng được chọn
+      [...table.rows].forEach(r => r.classList.remove('table-active'));
+      row.classList.add('table-active');
+
+      // Lấy data từ dòng
+      const type = row.getAttribute('data-type');
+      const desc = row.getAttribute('data-description');
+      const debt = row.getAttribute('data-debt');
+
+      // Đổ dữ liệu vào input
+      document.getElementById('typeInput').value = type;
+      document.getElementById('descInput').value = desc;
+      document.getElementById('debtInput').value = debt;
+
+      // Hiện nút "Sửa"
+      updateButton.classList.remove('d-none');
+    });
+
+    // Xử lý click bên ngoài bảng và form input
+    document.addEventListener('click', (e) => {
+      const isClickInside = e.target.closest('#agencyTypeTable') || 
+                            e.target.closest('#typeInput') ||
+                            e.target.closest('#descInput') ||
+                            e.target.closest('#debtInput') ||
+                            e.target.closest('#updateAgencyType');
+      if (!isClickInside) {
+        // Ẩn nút "Sửa"
+        updateButton.classList.add('d-none');
+
+        // Xóa dữ liệu input và bỏ highlight bảng (optional)
+        document.getElementById('typeInput').value = '';
+        document.getElementById('descInput').value = '';
+        document.getElementById('debtInput').value = '';
+        [...table.rows].forEach(r => r.classList.remove('table-active'));
+      }
+    });
+  });
+
+  // Quản lý mặt hàng (QĐ2)
+  document.addEventListener("DOMContentLoaded", function () {
+    const rows = document.querySelectorAll("#productTable tbody tr");
+
+  document.addEventListener('DOMContentLoaded', () => {
+      const table = document.getElementById('agencyTypeTable');
+      const updateButton = document.getElementById('updateAgencyType');
+
+      // Gắn sự kiện click cho từng hàng
+      table.addEventListener('click', (e) => {
+        const row = e.target.closest('tr');
+        if (!row) return;
+
+        // Tô sáng dòng được chọn (optional)
+        [...table.rows].forEach(r => r.classList.remove('table-active'));
+        row.classList.add('table-active');
+
+        // Lấy data từ dòng
+        const type = row.getAttribute('data-type');
+        const desc = row.getAttribute('data-description');
+        const debt = row.getAttribute('data-debt');
+
+        // Đổ dữ liệu vào input
+        document.getElementById('typeInput').value = type;
+        document.getElementById('descInput').value = desc;
+        document.getElementById('debtInput').value = debt;
+
+        // Hiện nút "Sửa"
+        updateButton.classList.remove('d-none');
+      });
+    });
+    rows.forEach(row => {
+      row.addEventListener("click", () => {
+        document.getElementById("productCode").value = row.dataset.code;
+        document.getElementById("productName").value = row.dataset.name;
+        document.getElementById("unit").value = row.dataset.unit;
+        document.getElementById("unitPrice").value = row.dataset.price;
+        document.getElementById("category").value = row.dataset.category;
+        document.getElementById("description").value = row.dataset.description;
+        document.getElementById("image").value = row.dataset.image;
+
+        rows.forEach(r => r.classList.remove("table-primary"));
+        row.classList.add("table-primary");
+      });
+    });
+  });
+
+  function addProduct() {
+    const body = getProductFormData();
+    if (!body) return;
+
+    fetch('/api/product/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    })
+    .then(async res => {
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      Swal.fire({ icon: 'success', text: data.message, timer: 3000, showConfirmButton: false });
+      setTimeout(() => location.reload(), 1000);
+    })
+    .catch(err => Swal.fire({ icon: 'error', text: err.message, timer: 3000, showConfirmButton: false }));
+  }
+
+  function updateProduct() {
+    const body = getProductFormData();
+    if (!body) return;
+
+    fetch('/api/product', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    })
+    .then(async res => {
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      Swal.fire({ icon: 'success', text: data.message, timer: 3000, showConfirmButton: false });
+      setTimeout(() => location.reload(), 1000);
+    })
+    .catch(err => Swal.fire({ icon: 'error', text: err.message, timer: 3000, showConfirmButton: false }));
+  }
+
+  function deleteProduct() {
+    const code = document.getElementById("productCode").value;
+    if (!code) return Swal.fire({ icon: 'warning', text: 'Vui lòng chọn mặt hàng.', timer: 3000, showConfirmButton: false });
+
+    Swal.fire({
+      icon: 'question',
+      title: 'Xác nhận xóa?',
+      text: `Bạn có chắc muốn xóa sản phẩm ${code}?`,
+      showCancelButton: true,
+      confirmButtonText: 'Xóa',
+      cancelButtonText: 'Hủy'
+    }).then(result => {
+      if (!result.isConfirmed) return;
+
+      fetch(`/api/product/${code}`, {
+        method: 'DELETE'
+      })
+      .then(async res => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message);
+        Swal.fire({ icon: 'success', text: data.message, timer: 2000, showConfirmButton: false });
+        setTimeout(() => location.reload(), 1000);
+      })
+      .catch(err => Swal.fire({ icon: 'error', text: err.message, timer: 2000, showConfirmButton: false }));
+    });
+  }
+
+  function getProductFormData() {
+    const productCode = document.getElementById("productCode").value;
+    const productName = document.getElementById("productName").value;
+    const unit = document.getElementById("unit").value;
+    const unitPrice = parseFloat(document.getElementById("unitPrice").value);
+    const category = document.getElementById("category").value;
+    const description = document.getElementById("description").value;
+    const image = document.getElementById("image").value;
+
+    if (!productCode || !productName || isNaN(unitPrice)) {
+      Swal.fire({ icon: 'warning', text: 'Điền đầy đủ thông tin hợp lệ.', timer: 3000, showConfirmButton: false });
+      return null;
+    }
+
+    return { productCode, productName, unit, unitPrice, category, description, image };
+  }
+
+</script>

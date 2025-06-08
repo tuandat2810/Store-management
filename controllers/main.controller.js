@@ -8,8 +8,9 @@ const Receipt = require('../models/receipt.m.js');
 const District = require('../models/district.m.js');
 
 module.exports.load_dang_ki_dai_ly = async (req, res) => {
-  const agencyCode = await generateRandom.generateUniqueAgencyCode()
-  const data = { agencyCode };
+  const agencyCode = await generateRandom.generateUniqueAgencyCode();
+  const agencyTypes = await AgencyType.find().lean();
+  const data = { agencyCode, agencyTypes };
 
   try {
     res.render('dang_ki_dai_ly', {
@@ -152,30 +153,40 @@ module.exports.search = async (req, res) => {
 
 module.exports.load_bao_cao_hang_thang = async (req, res) => {
   try {
+    const userType = res.locals.user.type;
+
     // Lấy danh sách quận từ District model
-    const districts = await District.find().lean();
+    const districts = await District.find().lean(); 
 
     // Lấy tháng, năm, quận từ body hoặc mặc định
     const selectedMonth = parseInt(req.body.thang) || new Date().getMonth() + 1;
     const selectedYear = parseInt(req.body.nam) || new Date().getFullYear();
     const selectedDistrict = req.body.district || '';
 
-        // Lấy ngày bắt đầu và kết thúc trong tháng
+    // Lấy ngày bắt đầu và kết thúc trong tháng
     const fromDate = new Date(selectedYear, selectedMonth - 1, 1);
+    // console.log('fromDate: ', fromDate);
     const toDate = new Date(selectedYear, selectedMonth, 1);
+    // console.log('toDate: ', toDate);
 
     // Lọc agency theo quận (nếu có)
-    const agencyFilter = selectedDistrict
-      ? { district: selectedDistrict, status: 'Đã duyệt' }
-      : { status: 'Đã duyệt' };
+    let agencyFilter = { status: 'Đã duyệt' };
+    if (userType === 'user') {
+      // Nếu là user (đại lý), chỉ lấy các đại lý do họ quản lý
+      agencyFilter.managerUsername = res.locals.user.fullname;
+    }
+    if (selectedDistrict) {
+      agencyFilter.district = selectedDistrict;
+    }
 
     const agencies = await Agency.find(agencyFilter).lean();
 
     // Map từ agencyCode => agencyName
     const agencyMap = {};
     agencies.forEach(a => agencyMap[a.agencyCode] = a.name);
-
+    // console.log('agencyMap: ', agencyMap);
     const agencyCodes = agencies.map(a => a.agencyCode);
+    // console.log('agencyCodes: ', agencyCodes);
 
     // Lấy tất cả đơn hàng trong tháng
     const orders = await Order.find({
@@ -183,20 +194,22 @@ module.exports.load_bao_cao_hang_thang = async (req, res) => {
       orderDate: { $gte: fromDate, $lt: toDate }
     }).lean();
 
-    
+    // console.log('orders: ', orders);
+
     // Tính tổng doanh số và số phiếu xuất theo đại lý
     const salesSummary = {};
     for (const order of orders) {
-      const code = order.agencyCode;
-      if (!salesSummary[code]) {
+      const code = order.agencyCode; // Lấy mã đại lý từ đơn hàng
+      if (!salesSummary[code]) { // Nếu chưa có đại lý này trong báo cáo
+        // Khởi tạo đối tượng cho đại lý này
         salesSummary[code] = { numOrders: 0, totalSales: 0 };
       }
-      salesSummary[code].numOrders += 1;
-      salesSummary[code].totalSales += order.totalAmount;
+      salesSummary[code].numOrders += 1; // Tăng số phiếu xuất hàng
+      salesSummary[code].totalSales += order.totalAmount;  // Cộng dồn doanh số
     }
 
-    // Tổng doanh số toàn bộ
-    const totalSalesAll = Object.values(salesSummary).reduce((sum, a) => sum + a.totalSales, 0);
+    // Tổng doanh số toàn bộ (để tính phần trăm tỷ lệ)
+    const totalSalesAll = Object.values(salesSummary).reduce((sum, a) => sum + a.totalSales, 0); 
 
     // Tạo mảng báo cáo doanh thu (BM5.1)
     const salesReport = Object.entries(salesSummary).map(([code, data]) => ({
@@ -215,14 +228,14 @@ module.exports.load_bao_cao_hang_thang = async (req, res) => {
     // Tính phát sinh thu tiền theo đại lý
     const receiptMap = {};
     for (const r of receipts) {
-      const code = r.agencyCode;
-      if (!receiptMap[code]) receiptMap[code] = 0;
-      receiptMap[code] += r.amountCollected;
+      const code = r.agencyCode; // Lấy mã đại lý từ phiếu thu
+      if (!receiptMap[code]) receiptMap[code] = 0; // Nếu chưa có đại lý này trong báo cáo, khởi tạo
+      receiptMap[code] += r.amountCollected; // Cộng dồn số tiền thu
     }
 
     // Tạo báo cáo công nợ (BM5.2)
     const debtReport = agencies.map(agency => {
-      const code = agency.agencyCode;
+      const code = agency.agencyCode; 
       const incurred = salesSummary[code]?.totalSales || 0;
       const collected = receiptMap[code] || 0;
       const openingDebt = Math.max((agency.debt || 0) - incurred + collected, 0); // gần đúng
@@ -236,18 +249,16 @@ module.exports.load_bao_cao_hang_thang = async (req, res) => {
       };
     });
     
+    const data = { districts,
+      salesReport, debtReport,
+      selectedMonth, selectedYear, selectedDistrict,
+      months: [1,2,3,4,5,6,7,8,9,10,11,12], years: [2024, 2025]
+    };
 
     res.render('bao_cao_hang_thang', {
       layout: 'main',
       title: 'Báo cáo hàng tháng',
-      districts,
-      salesReport,
-      debtReport,
-      selectedMonth,
-      selectedYear,
-      selectedDistrict,
-      months: [1,2,3,4,5,6,7,8,9,10,11,12],
-      years: [2024, 2025]
+      ...data
     });
   } catch (err) {
     console.error(err);
@@ -397,7 +408,9 @@ module.exports.load_quan_ly_dai_ly_admin = async (req, res) => {
     }).lean();
 
 
+
     const data = { agencyList };
+    // console.log('[+] Rendering trang quản lý đại lý');
     res.render('quan_ly_dai_ly_admin', {
       layout: 'main',
       title: 'Quản lý đại lý Admin',
@@ -405,6 +418,7 @@ module.exports.load_quan_ly_dai_ly_admin = async (req, res) => {
     });
   } catch (err) {
     console.error(err);
+    // console.log('[!] Có lỗi, render 500');
     res.status(500).render('500', { layout: false });
   }
 };
@@ -423,9 +437,17 @@ module.exports.load_quan_ly_loai_dai_ly = async (req, res) => {
 
 module.exports.load_thay_doi_quy_dinh = async (req, res) => {
   try {
+    const districts = await District.find().lean();
+    const agencyTypes = await AgencyType.find().lean();
+
+    const products = await Product.find().lean();
+
+    const data = { districts, agencyTypes, products };
+
     res.render('thay_doi_quy_dinh', {
       layout: 'main',
-      title: 'Thay đổi quy định'
+      title: 'Thay đổi quy định',
+      ...data
     });
   } catch (err) {
     console.error(err);

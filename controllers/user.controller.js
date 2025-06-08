@@ -68,7 +68,8 @@ module.exports.login = async (req, res) => {
     res.render('login', {
         layout: 'main',
         pageTitle: 'Đăng nhập',
-        error: req.flash('error')[0],
+        username_error: req.flash('username_error')[0],
+        password_error: req.flash('password_error')[0],
         success: req.flash('success')[0]
     });
 };
@@ -79,13 +80,13 @@ module.exports.loginPost = async (req, res) => {
         const user = await User.findOne({ username: username });
 
         if (!user) {
-            req.flash("error", "Username không tồn tại!");
+            req.flash("username_error", "Tài khoản không tồn tại!");
             return res.redirect('/page/login');
         }
 
         const isMatch = await Crypto.verifyPassword(password, user.password);
         if (!isMatch) {
-            req.flash("error", "Sai tài khoản hoặc mật khẩu!");
+            req.flash("password_error", "Mật khẩu sai!");
             return res.redirect('/page/login');
         }
 

@@ -86,10 +86,10 @@
         <tbody>
           {{#each salesReport}}
             <tr>
-              <td>{{@index}}</td>
+              <td>{{addOne @index}}</td>
               <td>{{agencyName}}</td>
               <td>{{numOrders}}</td>
-              <td>{{totalSales}}</td>
+              <td>{{formatCurrency totalSales}}</td>
               <td>{{percentage}}</td>
             </tr>
           {{else}}
@@ -102,7 +102,7 @@
 
     <!-- Báo cáo Công Nợ -->
     <div class="report-box">
-      <div class="table-title py-2">  Báo Cáo Công Nợ Đại Lý</div>
+      <div class="table-title py-2">Báo Cáo Công Nợ Đại Lý</div>
       <p><strong>Tháng:</strong> {{selectedMonth}}/{{selectedYear}}</p>
       <table class="table table-bordered align-middle text-center">
         <thead class="table-secondary">
@@ -117,11 +117,11 @@
         <tbody>
           {{#each debtReport}}
             <tr>
-              <td>{{@index}}</td>
+              <td>{{addOne @index}}</td>
               <td>{{agencyName}}</td>
-              <td>{{openingDebt}}</td>
-              <td>{{incurred}}</td>
-              <td>{{closingDebt}}</td>
+              <td>{{formatCurrency openingDebt}}</td>
+              <td>{{formatCurrency incurred}}</td>
+              <td>{{formatCurrency closingDebt}}</td>
             </tr>
           {{else}}
             <tr><td colspan="5">Không có dữ liệu</td></tr>
