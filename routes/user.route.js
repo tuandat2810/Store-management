@@ -17,6 +17,18 @@ router.post("/login", validation.loginPost, userController.loginPost);
 
 router.get("/logout", userController.logout);
 
+router.get("/forgot-password", userController.forgotPassword);
+
+router.post("/forgot-password", userController.forgotPasswordPost);
+
+router.get("/password/otp", userController.otpPassword);
+
+router.post("/password/otp", userController.otpPasswordPost);
+
+router.get("/password/reset", userController.resetPassword);
+
+router.post("/password/reset", userController.resetPasswordPost);
+
 router.get("/about", authMiddleware.requireAuth, userController.showAboutPage);
 
 router.get('/home', authMiddleware.requireAuth, userController.home);
