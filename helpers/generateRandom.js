@@ -30,7 +30,6 @@ function generateRandomAgencyCode() {
   return code;
 }
 
-// console.log(generateRandomAgencyCode()); // Ví dụ: "AB3D9"
 
 const Agency = require('../models/agency.m.js')
 module.exports.generateUniqueAgencyCode = async () => {

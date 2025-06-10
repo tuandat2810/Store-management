@@ -17,7 +17,6 @@ module.exports.registerPost = (req, res, next) => {
         return res.redirect("back");
     }
 
-    // Kiểm tra định dạng email đơn giản
     const emailRegex = /^\S+@\S+\.\S+$/;
     if (!emailRegex.test(email)) {
         req.flash('error', 'Email không hợp lệ');
@@ -56,36 +55,3 @@ module.exports.loginPost =  (req,res, next) => {
     }
     next();
 }
-
-// module.exports.forgotPasswordPost =  (req,res, next) => {
-//     if(!req.body.email) {
-//         req.flash('error', `Vui lòng nhập email`);
-//         res.redirect("back");
-//         return;
-//     }
-//     // dùng cái này để nó chạy sang phần kế tiếp để xử lí tiếp logic (trong file product.route)
-//     next();
-// }
-
-// module.exports.resetPasswordPost =  (req,res, next) => {
-//     if(!req.body.password) {
-//         req.flash('error', `Vui lòng nhập mật khẩu mới`);
-//         res.redirect("back");
-//         return;
-//     }
-
-//     if(!req.body.confirmPassword) {
-//         req.flash('error', `Vui lòng xác nhận mật khẩu`);
-//         res.redirect("back");
-//         return;
-//     }
-
-//     if(req.body.confirmPassword != req.body.password) {
-//         req.flash('error', `Mật khẩu xác nhận không trùng khớp`);
-//         res.redirect("back");
-//         return;
-//     }
-
-//     // dùng cái này để nó chạy sang phần kế tiếp để xử lí tiếp logic (trong file product.route)
-//     next();
-// }

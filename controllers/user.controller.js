@@ -20,14 +20,12 @@ module.exports.registerPost = async (req, res) => {
     const { username, password, confirmPassword, fullname, email } = req.body;
 
     try {
-        // Kiểm tra username đã tồn tại
         const existedUser = await User.findOne({ username: username });
         if (existedUser) {
             req.flash("error", "Username đã tồn tại!");
             return res.redirect('/page/register');
         }
 
-        // Kiểm tra mật khẩu nhập lại
         if (password !== confirmPassword) {
             req.flash("error", "Mật khẩu không khớp!");
             return res.redirect('/page/register');
@@ -50,7 +48,6 @@ module.exports.registerPost = async (req, res) => {
             httpOnly: true,
         });
 
-        // Chuyển sang trang đăng nhập sau khi đăng ký
         req.flash("success", "Đăng ký thành công. Hãy đăng nhập!");
         return res.redirect('/page/login');
     } catch (error) {
@@ -117,7 +114,6 @@ module.exports.home = async(req, res) => {
     });
 };
 
-// controllers/about.controller.js
 module.exports.showAboutPage = (req, res) => {
     res.render('about', {
         layout: 'main',
@@ -139,7 +135,6 @@ module.exports.forgotPasswordPost = async (req, res) => {
     const { email } = req.body;
     try {
         const user = await User.findOne({ email: email });
-        // console.log('email: ', email);
         if (!user) {
             req.flash("error", "Tài khoản không tồn tại!");
             return res.redirect('/page/forgot-password');
@@ -184,7 +179,7 @@ module.exports.resendOtp = async (req, res) => {
         const objectForgotPassword = {
             email,
             OTP: otp,
-            expireAt: Date.now() + 180000 // 3 phút
+            expireAt: Date.now() + 180000
         };
 
         await ForgotPassword.deleteMany({ email });
@@ -228,13 +223,12 @@ module.exports.otpPasswordPost = async (req, res) => {
         const forgotPassword = await ForgotPassword.findOne({
             email: email,
             OTP: otp,
-            expireAt: { $gt: Date.now() } // Kiểm tra OTP còn hiệu lực
+            expireAt: { $gt: Date.now() }
         }); 
         if (!forgotPassword) {
             req.flash("error", "Mã OTP không hợp lệ hoặc đã hết hạn!");
             return res.redirect(`/page/password/otp?email=${email}`);
         }
-        // Nếu OTP hợp lệ, chuyển hướng đến trang đặt lại mật khẩu
         res.render('resetPassword', {
             layout: 'main',
             pageTitle: 'Đặt lại mật khẩu',
@@ -265,7 +259,6 @@ module.exports.resetPasswordPost = async (req, res) => {
     console.log('password: ', password);
     console.log('confirmPassword: ', confirmPassword);
     try {
-        // Kiểm tra mật khẩu nhập lại
         if (password !== confirmPassword) {
             req.flash("error", "Mật khẩu không khớp!");
             return res.redirect(`/page/password/reset?email=${email}`);
@@ -273,10 +266,8 @@ module.exports.resetPasswordPost = async (req, res) => {
 
         const hashedPassword = await Crypto.hashedPassword(password);
 
-        // Cập nhật mật khẩu cho người dùng
         await User.updateOne({ email: email }, { password: hashedPassword });
 
-        // Xóa OTP đã sử dụng
         await ForgotPassword.deleteOne({ email: email });
 
         req.flash("success", "Đặt lại mật khẩu thành công!");
