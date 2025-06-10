@@ -150,7 +150,7 @@ module.exports.forgotPasswordPost = async (req, res) => {
         const objectForgotPassword = {
             email: email,
             OTP: otp,
-            expireAt: Date.now() + 3000000
+            expireAt: Date.now() + 180000
         }
 
         const forgotPassword = new ForgotPassword(objectForgotPassword);
@@ -160,6 +160,7 @@ module.exports.forgotPasswordPost = async (req, res) => {
         const html = `Mã OTP để lấy lại mật khẩu là: <b>${otp}</b>. Thời hạn sử dụng là 3p`;
         await BrevoProvider.sendEmail(email, subject, html);
 
+        req.flash("success", "Mã OTP đã được gửi đến email của bạn. Vui lòng kiểm tra hộp thư đến!");
         res.redirect(`/page/password/otp?email=${email}`);
 
     } catch (error) {
@@ -170,13 +171,48 @@ module.exports.forgotPasswordPost = async (req, res) => {
 
 }
 
+module.exports.resendOtp = async (req, res) => {
+    const { email } = req.query;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            req.flash("error", "Email không hợp lệ!");
+            return res.redirect("/page/forgot-password");
+        }
+
+        const otp = generateRandomNumber.generateRandomNumber(8);
+        const objectForgotPassword = {
+            email,
+            OTP: otp,
+            expireAt: Date.now() + 180000 // 3 phút
+        };
+
+        await ForgotPassword.deleteMany({ email });
+        await new ForgotPassword(objectForgotPassword).save();
+
+        const subject = "Mã OTP mới để lấy lại mật khẩu";
+        const html = `Mã OTP mới là: <b>${otp}</b>. Thời hạn sử dụng là 3 phút.`;
+        await BrevoProvider.sendEmail(email, subject, html);
+
+        req.flash("success", "Yêu cầu gửi lại mã OTP thành công! Vui lòng kiểm tra email của bạn.");
+        res.redirect(`/page/password/otp?email=${email}`);
+    } catch (error) {
+        console.error("Lỗi gửi lại OTP:", error);
+        req.flash("error", "Có lỗi xảy ra khi gửi lại OTP.");
+        res.redirect("/page/forgot-password");
+    }
+};
+
+
 module.exports.otpPassword = async (req, res) => {
     const email = req.query.email;
     try {
         res.render('otpPassword', {
             layout: 'main',
             pageTitle: 'Xác minh OTP',
-            email: email
+            email: email,
+            success: req.flash('success')[0],
+            error: req.flash('error')[0]
         });
     } catch (err) {
         console.error('Render lỗi:', err);
