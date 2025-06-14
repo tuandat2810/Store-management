@@ -1,35 +1,100 @@
 <style>
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .profile-container {
+        max-width: 900px;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .profile-header h2 {
+        font-size: 2rem;
+        color: #333;
+        margin-right: 0.5rem;
+    }
+
+    .profile-header p {
+        color: #6c757d;
+    }
+
+    .profile-info label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        box-shadow: none;
+        border: 1px solid #ddd;
+        padding: 10px;
+    }
+
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+
+    .btn {
+      background-image: linear-gradient( 177.6deg,  rgba(20,0,113,1) 15.3%, rgba(1,0,62,1) 91.3% );
+  }
+
 </style>
 
-<div class="container-user container-fluid d-flex flex-column align-items-center" style="width: 100%; height: 100%;margin-top: 32px;">
-  <h3 class="mb-5 text-center w-100">
-    Thông tin tài khoản
-  </h3>    
-  
-  <form id="admin-form" action="/submit-data-user" method="POST" class="w-100" style="max-width: 600px;">
-    <div class="mb-3 row">
-        <label for="hoten" class="col-sm-3 col-form-label">Họ và tên</label>
-        <div class="col-sm-9">
-            <input type="text" class="form-control" id="hoten" name="hoten" placeholder="Data họ tên" readonly>
+
+<!-- User Profile -->
+<div class="container profile-container">
+    <div class="profile-header text-center">
+        <div class="d-flex justify-content-center align-items-center gap-2">
+            <h2 class="fw-bold mb-0">Thông tin tài khoản</h2>
+            <i class="bi bi-person-circle" style="font-size: 2.2rem;"></i>
         </div>
     </div>
-    <div class="mb-3 row">
-        <label for="phone" class="col-sm-3 col-form-label">Điện thoại</label>
-        <div class="col-sm-9">
-            <input type="text" class="form-control" id="phone" name="phone" placeholder="Data số điện thoại" readonly>
-        </div>        
-    </div>
-    <div class="mb-3 row">
-        <label for="email" class="col-sm-3 col-form-label">Email</label>
-        <div class="col-sm-9">
-            <input type="text" class="form-control" id="email" name="email" placeholder="Data email" readonly>
-        </div>        
-    </div>
-    <div class="mb-3 row">
-        <label for="address" class="col-sm-3 col-form-label">Địa chỉ</label>
-        <div class="col-sm-9">
-            <input type="text" class="form-control" id="address" name="address" placeholder="Data địa chỉ" readonly>
-        </div>        
-    </div>
-  </form>
+
+    <form id="profileForm">
+        <!-- Full Name and Email -->
+        <div class="row profile-info">
+            <div class="col-md-6">
+                <label for="name" class="ms-2">Họ và tên</label>
+                <input type="text" class="form-control" id="name" value="{{user.fullname}}">
+            </div>
+            <div class="col-md-6">
+                <label for="email" class="ms-2">Email</label>
+                <input type="email" class="form-control" id="email" value="{{user.email}}">
+            </div>
+        </div>
+
+        <!-- Phone Number and Date of Birth -->
+        <div class="row profile-info mt-2">
+            <div class="col-md-6"> 
+                <label for="phone" class="ms-2">Số điện thoại</label>
+                <input type="text" class="form-control" id="phone" value="{{user.phone}}">
+            </div>
+            <div class="col-md-6">
+                <label for="addr" class="ms-2">Địa chỉ</label>
+                <input type="addr" class="form-control" id="addr" value="{{user.dob}}">
+            </div>
+        </div>
+
+       <!-- Save Button Centered -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn bg-custom fw-semibold rounded px-4 py-2 text-white">
+                <i class="bi me-2"></i> Cập nhật
+            </button>
+        </div>
+
+
+    </form>
 </div>
+
