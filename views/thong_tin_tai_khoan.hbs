@@ -62,39 +62,77 @@
         </div>
     </div>
 
-    <form id="profileForm">
+    <form id="profileForm" action="/main/thong_tin_tai_khoan" method="POST">
         <!-- Full Name and Email -->
-        <div class="row profile-info">
-            <div class="col-md-6">
-                <label for="name" class="ms-2">Họ và tên</label>
-                <input type="text" class="form-control" id="name" value="{{user.fullname}}">
+        <form id="profileForm" action="/main/thong_tin_tai_khoan" method="POST">
+            <!-- Full Name and Email -->
+            <div class="row profile-info">
+                <div class="col-md-6">
+                    <label for="name" class="ms-2">Họ và tên</label>
+                    <input type="text" class="form-control" id="name" name="fullname" value="{{user.fullname}}">
+                </div>
+                <div class="col-md-6">
+                    <label for="email" class="ms-2">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{user.email}}">
+                </div>
             </div>
-            <div class="col-md-6">
-                <label for="email" class="ms-2">Email</label>
-                <input type="email" class="form-control" id="email" value="{{user.email}}">
-            </div>
-        </div>
 
-        <!-- Phone Number and Date of Birth -->
-        <div class="row profile-info mt-2">
-            <div class="col-md-6"> 
-                <label for="phone" class="ms-2">Số điện thoại</label>
-                <input type="text" class="form-control" id="phone" value="{{user.phone}}">
+            <!-- Phone Number and Address -->
+            <div class="row profile-info mt-2">
+                <div class="col-md-6"> 
+                    <label for="phone" class="ms-2">Số điện thoại</label>
+                    <input type="text" class="form-control" id="phone" name="phone" value="{{user.phone}}">
+                </div>
+                <div class="col-md-6">
+                    <label for="addr" class="ms-2">Địa chỉ</label>
+                    <input type="text" class="form-control" id="addr" name="addr" value="{{user.address}}">
+                </div>
             </div>
-            <div class="col-md-6">
-                <label for="addr" class="ms-2">Địa chỉ</label>
-                <input type="addr" class="form-control" id="addr" value="{{user.dob}}">
-            </div>
-        </div>
+
+
 
        <!-- Save Button Centered -->
         <div class="text-center mt-4">
             <button type="submit" class="btn bg-custom fw-semibold rounded px-4 py-2 text-white">
-                <i class="bi me-2"></i> Cập nhật
+                Cập nhật
             </button>
         </div>
 
 
     </form>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    const successMsg = "{{success_msg}}";
+    const errorMsg = "{{error_msg}}";
+    console.log("Success Message:", successMsg);
+    console.log("Error Message:", errorMsg);
+
+    if(successMsg) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: 'Thành công!',
+            text: successMsg,
+            timer: 5000,
+            timerProgressBar: true,
+            showConfirmButton: false
+        });
+    }
+
+    if(errorMsg) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'error',
+            title: 'Thất bại!',
+            text: errorMsg,
+            timer: 5000,
+            timerProgressBar: true,
+            showConfirmButton: false
+        });
+    }
+</script>
 

@@ -6,6 +6,7 @@ const Order = require('../models/order.m.js');
 const AgencyType = require('../models/agencytype.m.js');
 const Receipt = require('../models/receipt.m.js');
 const District = require('../models/district.m.js');
+const User = require('../models/user.m.js');
 
 module.exports.load_dang_ki_dai_ly = async (req, res) => {
   const agencyCode = await generateRandom.generateUniqueAgencyCode();
@@ -206,17 +207,6 @@ module.exports.load_bao_cao_hang_thang = async (req, res) => {
 };
 
 
-module.exports.load_duyet_phieu_xuat_hang = async (req, res) => {
-  try {
-    res.render('duyet_phieu_xuat_hang', {
-      layout: 'main',
-      title: 'Duyệt phiếu xuất hàng'
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).render('500', { layout: false });
-  }
-};
 
 module.exports.load_lap_phieu_thu_tien = async (req, res) => {
   try {
@@ -395,7 +385,30 @@ module.exports.load_thong_tin_tai_khoan = async (req, res) => {
   }
 };
 
+module.exports.update_thong_tin_tai_khoan = async (req, res) => {
+  const { email, phone, addr } = req.body; 
+  try {
+    const user = await User.findOne({ tokenUser: res.locals.user.tokenUser });
+    if (!user) {
+      req.flash("error", "Không tìm thấy người dùng!");
+      return res.redirect("/main/thong_tin_tai_khoan");
+    }
 
+    // Cập nhật thông tin người dùng
+    user.email = email || user.email;
+    user.phone = phone || user.phone;
+    user.address = addr || user.address;
+
+    await user.save();
+
+    req.flash("success", "Cập nhật thông tin tài khoản thành công!");
+    return res.redirect("/main/thong_tin_tai_khoan");
+  } catch (error) {
+    console.error("Lỗi cập nhật thông tin:", error);
+    req.flash("error", "Lỗi hệ thống khi cập nhật thông tin tài khoản!");
+    return res.redirect("/main/thong_tin_tai_khoan");
+  }
+};
 
 module.exports.dang_ky_dai_lyPOST = async (req, res) => {
     const { agencyCode, agencyName, agencyType, email, phoneNumber, district, address } = req.body;
