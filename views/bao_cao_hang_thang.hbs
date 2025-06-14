@@ -1,71 +1,133 @@
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+
 <style>
-    .custom-select-wrapper {
-        position: relative;
-        width: 100%;
-    }
+  .bg-custom {
+    background-image: linear-gradient(177.6deg, rgba(20, 0, 113, 1) 15.3%, rgba(1, 0, 62, 1) 91.3%);
+  }
 
-    .custom-arrow {
-        position: absolute;
-        top: 50%;
-        right: 26px;
-        transform: translateY(-50%);
-        font-size: 16px;
-        transition: transform 0.3s ease;
-        pointer-events: none;
-        z-index: 10;
-        background-color: #ffffff;
-    }
+  .table-title {
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+  }
 
-    /* Khi select đang được focus (được mở), xoay mũi tên */
-    .custom-select:focus + .custom-arrow {
-        transform: translateY(-50%) rotate(180deg);
-    }
+  .report-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+  }
 
-    .button-left {
-        margin-right: 30px;
-    }
+  .report-box {
+    flex: 1;
+    min-width: 450px;
+  }
 </style>
 
-<div class="container-fluid d-flex flex-column mt-5 justify-content-center align-items-center px-5" style="width: 100%;">
-    <h3 class="mb-5 text-start" style="width: 100%;">
-        Báo cáo tháng
-    </h3>
-    <form action="/bao-cao-thang" method="POST" class="w-100">
-        <div class="row d-flex flex-column mb-4" style="width: 550px; margin: auto;">
-            <label for="thang" class="text-start mb-2" style="width: 100px; margin-left: 66px">Tháng</label>
-            <div class="custom-select-wrapper w-75 " style="margin: auto;">
-                <select class="form-select custom-select" id="thang" name="thang" required>
-                    <option value="">-- Chọn tháng --</option>
-                    <option value="1">Loại 1</option>
-                    <option value="2">Loại 2</option>
-                    <option value="1">Loại 3</option>
-                    <option value="1">Loại 4</option>
-                    <option value="1">Loại 5</option>
-                    <option value="1">Loại 6</option>
-                    <option value="1">Loại 7</option>
-                    <option value="1">Loại 8</option>
-                    <option value="1">Loại 9</option>
-                    <option value="1">Loại 10</option>
-                    <option value="1">Loại 11</option>
-                    <option value="1">Loại 12</option>
-                </select>
-                <span class="custom-arrow">
-                    <i class="bi bi-chevron-down"></i>
-                </span>
-            </div>
-        </div>
-        <div class="row d-flex align-items-center" style="width: 75%; margin: auto; margin-top: 50px; justify-content: center;">
-            <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold button-left" 
-                style="width: 200px; background-color: #C6BDBD; color: #000000;"
-                >
-                Báo cáo công nợ
-            </button>
-            <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold" 
-                style="width: 200px; background-color: #C6BDBD; color: #000000;"
-                >
-                Báo cáo doanh thu
-            </button>
+<div class="container-user container-fluid d-flex flex-column align-items-center" style="margin-top: 32px; max-width: 1200px;">
+  <h3 class="mb-4 text-center w-100">Báo cáo tháng</h3>
 
-        </div>
-    </form>
+  <!-- Form chọn tháng/năm/quận -->
+  <form action="/main/bao_cao_hang_thang" method="POST" class="row g-3 w-100 mb-5" style="justify-content: center;">
+    <div class="col-md-3">
+      <label for="thang" class="form-label">Tháng</label>
+      <select class="form-select" id="thang" name="thang" required>
+        {{#each months}}
+          <option value="{{this}}" {{#eq ../selectedMonth this}}selected{{/eq}}>Tháng {{this}}</option>
+        {{/each}}
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <label for="nam" class="form-label">Năm</label>
+      <select class="form-select" id="nam" name="nam" required>
+        {{#each years}}
+          <option value="{{this}}" {{#eq ../selectedYear this}}selected{{/eq}}>{{this}}</option>
+        {{/each}}
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <label for="district" class="form-label">Quận</label>
+      <select class="form-select" id="district" name="district">
+        <option value="">-- Tất cả --</option>
+        {{#each districts}}
+          <option value="{{id}}" {{#eq ../selectedDistrict districtName}}selected{{/eq}}>{{districtName}}</option>
+        {{/each}}
+      </select>
+    </div>
+
+    <div class="col-md-3 d-flex align-items-end">
+      <button type="submit" class="btn bg-custom text-white fw-semibold w-100">
+        <i class="bi bi-bar-chart-line me-2"></i> Lập báo cáo
+      </button>
+    </div>
+  </form>
+
+
+
+  <!-- 🔀 2 phần chia ngang: Doanh thu | Công nợ -->
+  <div class="report-wrapper w-100">
+    <!-- Báo cáo Doanh Số -->
+    <div class="report-box">
+      <div class="table-title py-2">Báo Cáo Doanh Số</div>
+      <p><strong>Tháng:</strong> {{selectedMonth}}/{{selectedYear}}</p>
+      <table class="table table-bordered align-middle text-center">
+        <thead class="table-secondary">
+          <tr>
+            <th>STT</th>
+            <th>Đại lý</th>
+            <th>Số Phiếu Xuất</th>
+            <th>Tổng Trị Giá</th>
+            <th>Tỷ Lệ (%)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each salesReport}}
+            <tr>
+              <td>{{addOne @index}}</td>
+              <td>{{agencyName}}</td>
+              <td>{{numOrders}}</td>
+              <td>{{formatCurrency totalSales}}</td>
+              <td>{{percentage}}</td>
+            </tr>
+          {{else}}
+            <tr><td colspan="5">Không có dữ liệu</td></tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Báo cáo Công Nợ -->
+    <div class="report-box">
+      <div class="table-title py-2">Báo Cáo Công Nợ Đại Lý</div>
+      <p><strong>Tháng:</strong> {{selectedMonth}}/{{selectedYear}}</p>
+      <table class="table table-bordered align-middle text-center">
+        <thead class="table-secondary">
+          <tr>
+            <th>STT</th>
+            <th>Đại lý</th>
+            <th>Nợ Đầu</th>
+            <th>Phát Sinh</th>
+            <th>Nợ Cuối</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each debtReport}}
+            <tr>
+              <td>{{addOne @index}}</td>
+              <td>{{agencyName}}</td>
+              <td>{{formatCurrency openingDebt}}</td>
+              <td>{{formatCurrency incurred}}</td>
+              <td>{{formatCurrency closingDebt}}</td>
+            </tr>
+          {{else}}
+            <tr><td colspan="5">Không có dữ liệu</td></tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

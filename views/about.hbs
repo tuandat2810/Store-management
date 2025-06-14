@@ -1,0 +1,127 @@
+<style>
+  .member-name {
+    position: relative;
+    z-index: 2;
+    background: #fff;
+    color: #222;
+    font-weight: bold;
+    text-align: center;
+    padding: 8px 0;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    margin-bottom: 0;
+    transition: opacity 0.3s;
+  }
+  .team-member {
+    position: relative;
+    overflow: hidden;
+    min-height: 450px;
+    border-radius: 0.5rem;
+    padding-bottom: 0;
+  }
+  .team-member img {
+    height: 450px;
+    object-fit: cover;
+    transition: transform 0.3s;
+    width: 100%;
+    display: block;
+    border-radius: inherit;
+  }
+  .team-member:hover img {
+    transform: scale(1.05);
+    filter: brightness(0.7);
+  }
+  .member-info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+    padding: 20px;
+    border-radius: inherit;
+  }
+  .team-member:hover .member-info {
+    opacity: 1;
+  }
+  .team-member:hover .member-name {
+    opacity: 0;
+  }
+</style>
+
+<div class="container team-section mt-5">
+  <h2 class="text-center mb-5">Ngũ Lão Tinh</h2>
+  <!-- Hàng trên: 3 thành viên -->
+  <div class="row justify-content-center g-4 mb-2">
+    <div class="col-md-4 col-sm-6 d-flex">
+      <div class="team-member bg-white shadow rounded h-100 d-flex flex-column w-100">
+        <img src="https://img4.thuthuatphanmem.vn/uploads/2020/12/26/hinh-anh-con-trau-hai-huoc_034005666.jpg" class="w-100 rounded-top" alt="Thành viên 3">
+        <div class="member-name text-center fw-bold py-2" style="background:#fff;">Ngô Phương Đông</div>
+        <div class="member-info">
+          <h5>Ngô Phương Đông</h5>
+          <p>Backend Developer</p>
+          <p>Tuổi: 21</p>
+          <p>Sở thích: Chơi liqi</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-6 d-flex">
+      <div class="team-member bg-white shadow rounded h-100 d-flex flex-column w-100">
+        <img src="https://i.pinimg.com/736x/fd/9a/a7/fd9aa7acb7ab4ee2ebc707036e9ee034.jpg" class="w-100 rounded-top" alt="Thành viên 4">
+        <div class="member-name text-center fw-bold py-2" style="background:#fff;">Phạm Hoàng Giang</div>
+        <div class="member-info">
+          <h5>Phạm Hoàng Giang</h5>
+          <p>Frontend Developer</p>
+          <p>Tuổi: 21</p>
+          <p>Sở thích: Nghe nhạc, đọc sách</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-6 d-flex">
+      <div class="team-member bg-white shadow rounded h-100 d-flex flex-column w-100">
+        <img src="https://th.bing.com/th/id/OIP.MqVwVEaoBZNq6S709CGdxwHaHa?rs=1&pid=ImgDetMain" class="w-100 rounded-top" alt="Thành viên 5">
+        <div class="member-name text-center fw-bold py-2" style="background:#fff;">Đỗ Nhật Duy</div>
+        <div class="member-info">
+          <h5>Đỗ Nhật Duy</h5>
+          <p>Frontend Developer</p>
+          <p>Tuổi: 21</p>
+          <p>Sở thích: Xem anime</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Hàng dưới: 2 thành viên -->
+  <div class="row justify-content-center g-4">
+    <div class="col-md-4 col-sm-6 d-flex">
+      <div class="team-member bg-white shadow rounded h-100 d-flex flex-column w-100">
+        <img src="https://genk.mediacdn.vn/2018/8/30/1-15356157253371457513965.jpg" class="w-100 rounded-top" alt="Thành viên 1">
+        <div class="member-name text-center fw-bold py-2" style="background:#fff;">Trần Minh Đạt</div>
+        <div class="member-info">
+          <h5>Trần Minh Đạt</h5>
+          <p>Frontend Developer</p>
+          <p>Tuổi: 21</p>
+          <p>Sở thích: Nghe nhạc, nấu ăn</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-6 d-flex">
+      <div class="team-member bg-white shadow rounded h-100 d-flex flex-column w-100">
+        <img src="https://th.bing.com/th/id/R.b8e9ee2d5ba8af659054cc9bf97c98d2?rik=6pF7%2bwGkt%2fYpHg&pid=ImgRaw&r=0" class="w-100 rounded-top" alt="Thành viên 2">
+        <div class="member-name text-center fw-bold py-2" style="background:#fff;">Vũ Thê Tuấn Đạt</div>
+        <div class="member-info">
+          <h5>Vũ Thế Tuấn Đạt</h5>
+          <p>Backend Developer</p>
+          <p>Tuổi: 21</p>
+          <p>Sở thích: Chơi PUBG</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

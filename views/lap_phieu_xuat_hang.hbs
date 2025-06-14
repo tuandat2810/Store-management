@@ -1,39 +1,256 @@
-<div class="container-fluid d-flex flex-column mt-5 justify-content-center align-items-center px-5 w-100">
-    <h3 class="mb-5 text-start w-100">
-        Lập phiếu xuất hàng
-    </h3>
-    <form action="/lap-phieu-xuat-hang" method="POST" class="w-100">
-        <div class="row d-flex flex-nowrap align-items-center mb-4" style="width: 550px; margin: auto;">
-            <label for="ma_dai_ly" class="text-start" style="width: 100px;">Mã đại lý</label>
-            <div class="text-start form-control" style="flex: 1; margin-left: 12px; margin-right: 12px;">
-                Mã đại lý
-            </div>
-        </div>
-        <div class="row d-flex flex-nowrap align-items-center mb-4" style="width: 550px; margin: auto;">
-            <label for="ma_phieu" class="text-start" style="width: 100px;">Mã phiếu</label>
-            <div class="text-start form-control" style="flex: 1; margin-left: 12px; margin-right: 12px;">
-                Mã phiếu
-            </div>
-        </div>
-        <div class="row d-flex flex-nowrap align-items-center mb-4" style="width: 550px; margin: auto;">
-            <label for="mat_hang" class="text-start" style="width: 100px;">Mặt hàng</label>
-            <div class="" style="flex: 1">
-                <input type="text" class="form-control" id="mat_hang" name="mat_hang" placeholder="Nhập mặt hàng" required>
-            </div>
-        </div>
-         <div class="row d-flex flex-nowrap align-items-center mb-4" style="width: 550px; margin: auto;">
-            <label for="so_luong" class="text-start" style="width: 100px;">Số lượng</label>
-            <div class="" style="flex: 1">
-                <input type="text" class="form-control" id="so_luong" name="so_luong" placeholder="Nhập số lượng" required>
-            </div>
-        </div>
-        <div class="row d-flex align-items-center justify-content-center" style="width: 400px; margin: auto; margin-top: 50px; ">
-            <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold" 
-                style="width: 50%; background-color: #C6BDBD; color: #000000;"
-                >
-                Lập
-            </button>
-        </div>
-    </form>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<style>
+    .badge-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem; /* Replaces me-1 and mb-1 for better control */
+    }
+
+    .badge-container .badge {
+        display: inline-block;
+    }
+
+    .input-group {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap; /* Prevents wrapping to a new line */
+    }
+
+    .form-select, .form-control {
+        flex-shrink: 0; /* Prevents shrinking beyond specified width */
+    }
+
+    .btn-outline-dark {
+        flex-shrink: 0; /* Ensures button doesn't shrink */
+    }
+
+    .bg-custom {
+        background-image: linear-gradient( 177.6deg,  rgba(20,0,113,1) 15.3%, rgba(1,0,62,1) 91.3% );
+    }
+</style>
+
+<div class="container-fluid mt-5">
+    <h3 class="text-center mb-5">Lập phiếu xuất hàng</h3>
+    <div class="row justify-content-center">
+        <!-- Form nhập -->
+        <div class="col-md-6" style="">
+            <form action="/main/lap_phieu_xuat_hang" method="POST">
+            <!-- Mã phiếu -->
+            <div class="mb-3 row">
+                <label for="agencyTicket" class="col-sm-4 col-form-label text-end">Mã phiếu:</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="orderCode" name="orderCode" value="{{orderCode}}" readonly>
+                </div>
+            </div>
+
+            <!-- Mã đại lý -->
+            <div class="mb-3 row">
+                <label for="agencyCode" class="col-sm-4 col-form-label text-end">Mã đại lý:</label>
+                <div class="col-sm-8">
+                    <select class="form-select" id="agencyCode" name="agencyCode" required>
+                        <option value="" selected disabled>Chọn đại lý</option>
+                        {{#each agencies}}
+                            <option value="{{agencyCode}}" data-name="{{name}}">
+                                {{agencyCode}} - {{name}}
+                            </option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+
+
+            <!-- Mặt hàng -->
+            <div class="mb-3 row">
+                <label for="mat_hang" class="col-sm-4 col-form-label text-end">Chọn mặt hàng:</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <!-- Chọn mặt hàng -->
+                        <select class="form-select" id="mat_hang" name="mat_hang" style="width: 60%;" required>
+                            <option value="" selected disabled>Mặt hàng</option>
+                            {{#each products}}
+                                <option value="{{productCode}}" data-unitprice="{{unitPrice}}"
+                                data-unit="{{unit}}" data-productName="{{productName}}"
+                                data-image="{{image}}">
+                                    {{productName}}
+                                </option>
+                            {{/each}}
+                        </select>
+
+                        <!-- Nhập số lượng -->
+                        <input type="number" class="form-control" id="so_luong" name="so_luong" placeholder="Số lượng" style="width: 20%;" min="0" max="2000" required />
+
+                        <!-- Nút thêm vào giỏ -->
+                        <button class="btn btn-outline-dark" type="button" onclick="themVaoGio()">
+                            <i class="bi bi-cart-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Giả sử ở cuối form -->
+            <input type="hidden" id="cartData" name="cartData" value="">
+
+            <!-- Nút lập phiếu -->
+            <div class="mb-3 row">
+                <div class="col-sm-8 offset-sm-4 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-dark fw-semibold rounded px-5 bg-custom"
+                    onclick="prepareAndSubmit(event)">
+                        <i class="bi bi-clipboard-check me-2"></i> Lập phiếu
+                    </button>
+                </div>
+            </div>
+
+
+            </form>
+        </div>
+
+        <!-- Giỏ hàng -->
+        <div class="col-md-6" style="padding-right: 50px !important;">
+            <div class="card shadow">
+                <div class="card-header d-flex justify-content-between align-items-center text-white bg-custom">
+                    <h5 class="mb-0">
+                        <i class="bi bi-box-seam me-2"></i>Kho hàng
+                    </h5>    
+                    <span class="badge bg-light text-dark" id="gioCount">0 sản phẩm</span>
+                </div>
+                <div class="p-2 badge-container" id="gioHang">
+                    <!-- Các sản phẩm sẽ được thêm vào đây -->
+                </div>
+                <!-- Thêm phần tổng tiền ở dưới cùng của card -->
+                <div id="tongTien" class="p-3 text-end fw-semibold fs-5 border-top">
+                    Tổng tiền: 0₫
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+<script>
+    let cart = [];
+
+    function themVaoGio() {
+        const select = document.getElementById("mat_hang");
+        const matHang = select.value;
+        const soLuong = parseInt(document.getElementById("so_luong").value);
+        if (!matHang || isNaN(soLuong) || soLuong <= 0) return;
+
+        // Lấy đơn giá từ option được chọn
+        const productName = select.options[select.selectedIndex].getAttribute('data-productName');
+        const unitPrice = parseFloat(select.options[select.selectedIndex].getAttribute('data-unitprice'));
+        const unit = select.options[select.selectedIndex].getAttribute('data-unit');
+
+
+        const imageURL = select.options[select.selectedIndex].getAttribute('data-image');
+
+        if (isNaN(unitPrice)) return;
+
+        const existing = cart.find(item => item.productCode  === matHang);
+        if (existing) {
+            existing.qty += soLuong;
+        } else {
+            cart.push({ productCode: matHang, productName, qty: soLuong, unitPrice: unitPrice, unit, imageURL });
+        }
+
+        renderGioHang();        
+    }
+
+
+    function renderGioHang() {
+        const gio = document.getElementById("gioHang");
+        gio.innerHTML = "";
+
+        let totalAmount = 0;
+
+        cart.forEach(item => {
+            const itemTotal = item.qty * item.unitPrice;
+            totalAmount += itemTotal;
+
+            // Tạo phần tử chứa mặt hàng
+            const itemDiv = document.createElement("div");
+            itemDiv.className = "d-flex align-items-center mb-2 border rounded p-2";
+            itemDiv.style.backgroundColor = "#f8f9fa"; // Màu nền nhẹ
+
+            // Hình ảnh sản phẩm
+            const img = document.createElement("img");
+            img.src = item.imageURL;
+            img.alt = item.productName;
+            img.style.width = "40px";
+            img.style.height = "40px";
+            img.style.objectFit = "cover";
+            img.className = "me-2 rounded";
+
+            // Thông tin mặt hàng
+            const info = document.createElement("div");
+            info.innerHTML = `
+                <strong>${item.productName}</strong><br>
+                ${item.qty} cái - $${itemTotal.toLocaleString('us-US')}
+            `;
+            info.style.fontSize = "0.85rem";
+
+            // Gắn vào itemDiv
+            itemDiv.appendChild(img);
+            itemDiv.appendChild(info);
+
+            gio.appendChild(itemDiv);
+        });
+
+        // Hiển thị tổng tiền
+        let totalDiv = document.getElementById("tongTien");
+        if (!totalDiv) {
+            totalDiv = document.createElement("div");
+            totalDiv.id = "tongTien";
+            totalDiv.className = "p-3 text-end fw-semibold fs-5 border-top";
+            gio.parentNode.appendChild(totalDiv);
+        }
+        totalDiv.innerText = `Tổng tiền: $${totalAmount.toLocaleString('us-US')}`;
+
+        document.getElementById("gioCount").innerText = `${cart.length} sản phẩm`;
+    }
+
+    function prepareAndSubmit(event) {
+        if (cart.length === 0) {
+            event.preventDefault(); 
+            Swal.fire({
+                icon: 'warning',
+                title: 'Giỏ hàng trống!',
+                text: 'Vui lòng thêm ít nhất một mặt hàng trước khi lập phiếu.'
+            });
+            return;
+        }
+
+        document.getElementById("cartData").value = JSON.stringify(cart);
+    }
+
+    const successMsg = "{{success_msg}}";
+    const errorMsg = "{{error_msg}}";
+    console.log("Success Message:", successMsg);
+    console.log("Error Message:", errorMsg);
+
+    if(successMsg) {
+        Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: 'Thành công!',
+        text: successMsg,
+        timer: 5000,
+        timerProgressBar: true,
+        showConfirmButton: false
+        });
+    }
+
+    if(errorMsg) {
+        Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'error',
+        title: 'Thất bại!',
+        text: errorMsg,
+        timer: 5000,
+        timerProgressBar: true,
+        showConfirmButton: false
+        });
+    }
+</script>

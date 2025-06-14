@@ -28,8 +28,19 @@ const userSchema = new mongoose.Schema({
     tokenUser: {
         type: String,
         default: generate.generateRandomString(20)
-    }
-
+    },
+    phone: {
+        type: String,
+        validate: {
+            validator: function(v) {
+                return /^0\d{9}$/.test(v);
+            },
+            message: props => `${props.value} không phải là số điện thoại hợp lệ!`
+        }
+    },  
+    address: {
+        type: String,
+    },
 });
 
 const User = mongoose.model('User', userSchema);
