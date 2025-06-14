@@ -77,6 +77,7 @@
           <th scope="col" class="text-center" style="width: 7%;">Quận</th>
           <th scope="col" class="text-center" style="width: 30%;">Địa chỉ</th>
           <th scope="col" class="text-center" style="width: 8%;">Tiền nợ</th>
+          <th scope="col" class="text-center" style="width: 11%;">Ngày duyệt</th>
           <th scope="col" class="text-center" style="width: 12%;">Trạng thái</th>
         </tr>
       </thead>
@@ -90,6 +91,11 @@
             <td class="text-center">{{ district }}</td>
             <td class="text-center">{{ address }}</td>
             <td class="text-center">{{ formatCurrency debt }}</td>
+            <td class="text-center">
+              {{#eq status "Đã duyệt"}}
+                {{formatDate2 acceptedDate}}
+              {{/eq}}
+            </td>
             <td class="text-center">
               {{#eq status "Đã duyệt"}}
                 <span class="badge bg-success">Đã được duyệt</span>

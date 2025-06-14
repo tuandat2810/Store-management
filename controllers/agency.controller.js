@@ -30,7 +30,12 @@ module.exports.update_status = async (req, res) => {
             }
         }
         
-        const agency = await Agency.findOneAndUpdate({ agencyCode }, { status }, { new: true });
+        const updateData = { status };
+        if (status === 'Đã duyệt') {
+            updateData.acceptedDate = new Date();
+        }
+
+        const agency = await Agency.findOneAndUpdate({ agencyCode }, updateData, { new: true });
 
         if (!agency) {
             return res.status(404).json({ message: 'Không tìm thấy đại lý' });

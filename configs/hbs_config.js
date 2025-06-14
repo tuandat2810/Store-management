@@ -34,6 +34,14 @@ module.exports = (app) => {
       addOne: (value) => {
         return parseInt(value) + 1;
       },
+      formatDate2: (date) => {
+        const d = new Date(date);
+        return d.toLocaleDateString('vi-VN', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric'
+        });
+      }
     }
   }));
 
