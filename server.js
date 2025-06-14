@@ -12,6 +12,9 @@ const Agency = require('./models/agency.m.js'); // Import model Agency
 // Cấu hình cổng
 const port = process.env.PORT || 3000;
 
+// Cấu hình public folder
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Kết nối MongoDB
 const database = require('./configs/database.js');
 const { infoUser } = require('./middlewares/user.middleware.js');
