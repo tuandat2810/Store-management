@@ -6,6 +6,7 @@ const router = express.Router();
 const authMiddleware = require("../middlewares/auth.middleware")
 const mainController = require('../controllers/main.controller');
 const { requireAuth } = require("../middlewares/auth.middleware");
+const validation = require('../validates/client/user.validate')
 
 // upload middleware
 const upload = require('../middlewares/upload.middleware');
@@ -29,7 +30,7 @@ router.get("/quan_ly_dai_ly_admin", authMiddleware.requireAuth, mainController.l
 router.get("/thay_doi_quy_dinh", authMiddleware.requireAuth, mainController.load_thay_doi_quy_dinh);
 
 router.get("/thong_tin_tai_khoan", authMiddleware.requireAuth, mainController.load_thong_tin_tai_khoan);
-router.post("/thong_tin_tai_khoan", authMiddleware.requireAuth, upload.single('avatar'), mainController.update_thong_tin_tai_khoan);
+router.post("/thong_tin_tai_khoan", authMiddleware.requireAuth, upload.single('avatar'), validation.update_thong_tin_tai_khoan, mainController.update_thong_tin_tai_khoan);
 
 
 router.get('/dai-ly-suggestions', mainController.search);

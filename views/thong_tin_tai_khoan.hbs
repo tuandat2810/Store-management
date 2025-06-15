@@ -94,7 +94,7 @@
                     </div>
                     <div class="col-md-6">
                         <label for="email" class="ms-2">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" value="{{user.email}}">
+                        <input type="text" class="form-control" id="email" name="email" value="{{user.email}}">
                     </div>
                 </div>
 
@@ -127,9 +127,6 @@
 <script>    
     const successMsg = "{{success_msg}}";
     const errorMsg = "{{error_msg}}";
-
-    console.log("Success:", successMsg);
-    console.log("Error:", errorMsg);
 
     if(successMsg) {
         Swal.fire({

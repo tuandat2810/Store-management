@@ -65,4 +65,18 @@
             showConfirmButton: false
             });
         }
+        const errorMsg = "{{error_msg}}";
+        console.log("Error Message:", errorMsg);
+        if(errorMsg) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'error',
+                title: 'Thất bại!',
+                text: errorMsg,
+                timer: 5000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            });
+        }
 </script>

@@ -384,7 +384,9 @@ module.exports.load_thong_tin_tai_khoan = async (req, res) => {
   try {
     res.render('thong_tin_tai_khoan', {
       layout: 'main',
-      title: 'Thông tin tài khoản'
+      title: 'Thông tin tài khoản',
+      error: req.flash('error'),
+      success: req.flash('success')
     });
   } catch (err) {
     console.error(err);
@@ -409,6 +411,8 @@ module.exports.update_thong_tin_tai_khoan = async (req, res) => {
           phone: phone || user.phone,
           address: addr || user.address
     });
+    
+    console.log(req.file)
 
     if (req.file) {
       // Upload ảnh đại diện lên Cloudinary
