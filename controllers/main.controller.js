@@ -395,6 +395,34 @@ module.exports.load_thong_tin_tai_khoan = async (req, res) => {
 };
 
 
+module.exports.upload_avatar = async (req, res) => {
+  try {
+    const user = await User.findOne({ tokenUser: res.locals.user.tokenUser });
+    if (!user) {
+      req.flash("error", "Không tìm thấy người dùng!");
+      return res.redirect("/main/thong_tin_tai_khoan");
+    }
+
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'avatars'
+      });
+      user.avatar = result.secure_url;
+      await user.save();
+      req.flash("success", "Cập nhật ảnh đại diện thành công!");
+    } else {
+      req.flash("error", "Vui lòng chọn một ảnh để tải lên.");
+    }
+
+    return res.redirect("/main/thong_tin_tai_khoan");
+  } catch (err) {
+    console.error("Lỗi upload avatar:", err);
+    req.flash("error", "Lỗi hệ thống khi cập nhật ảnh đại diện!");
+    return res.redirect("/main/thong_tin_tai_khoan");
+  }
+};
+
+
 
 module.exports.update_thong_tin_tai_khoan = async (req, res) => {
   const { email, phone, addr } = req.body; 
@@ -405,26 +433,13 @@ module.exports.update_thong_tin_tai_khoan = async (req, res) => {
       return res.redirect("/main/thong_tin_tai_khoan");
     }
 
-    // Gán các trường với hàm set để mongoose validator hoạt động
+    
     user.set({
           email: email || user.email,
           phone: phone || user.phone,
           address: addr || user.address
     });
     
-    console.log(req.file)
-
-    if (req.file) {
-      // Upload ảnh đại diện lên Cloudinary
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: 'avatars'
-      });
-
-      // Lưu URL ảnh vào user
-      console.log('Uploaded avatar URL:', result.secure_url);
-      user.avatar = result.secure_url;
-    } 
-
     await user.save();
 
     req.flash("success", "Cập nhật thông tin tài khoản thành công!");
