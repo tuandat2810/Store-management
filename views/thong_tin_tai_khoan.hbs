@@ -47,8 +47,12 @@
 
 
     .btn {
-      background-image: linear-gradient( 177.6deg,  rgba(20,0,113,1) 15.3%, rgba(1,0,62,1) 91.3% );
-  }
+        background-image: linear-gradient( 177.6deg,  rgba(20,0,113,1) 15.3%, rgba(1,0,62,1) 91.3% );
+    }
+
+    label[for="avatar"] {
+        color: #FFFFFF !important;
+    }
 
 </style>
 
@@ -62,52 +66,70 @@
         </div>
     </div>
 
-    <form id="profileForm" action="/main/thong_tin_tai_khoan" method="POST">
-        <!-- Full Name and Email -->
-        <form id="profileForm" action="/main/thong_tin_tai_khoan" method="POST">
-            <!-- Full Name and Email -->
-            <div class="row profile-info">
-                <div class="col-md-6">
-                    <label for="name" class="ms-2">Họ và tên</label>
-                    <input type="text" class="form-control" id="name" name="fullname" value="{{user.fullname}}">
+    <form id="profileForm" action="/main/thong_tin_tai_khoan" method="POST" enctype="multipart/form-data">
+        <div class="row profile-info align-items-start">
+            <!-- Avatar Section (Hiển thị avatar + input) -->
+            <div class="col-md-4 text-center">
+                <label class="mb-2 fw-semibold">Ảnh đại diện</label><br>
+
+                <!-- Ảnh đại diện -->
+                <img src="{{user.avatar}}" alt="avatar" class="img-fluid rounded-circle mb-3" style="max-height: 150px;">
+                
+                <!-- Nút Upload -->
+                <div>
+                    <label for="avatar" class="btn btn-outline-primary btn-sm px-4 d-inline-flex align-items-center gap-2">
+                        <i class="bi bi-upload"></i>
+                        Upload
+                    </label>
+                    <input type="file" class="d-none" id="avatar" name="avatar" accept="image/*">
                 </div>
-                <div class="col-md-6">
-                    <label for="email" class="ms-2">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" value="{{user.email}}">
+            </div>  
+
+            <!-- Thông tin cá nhân -->
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="name" class="ms-2">Họ và tên</label>
+                        <input type="text" class="form-control" id="name" name="fullname" value="{{user.fullname}}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="email" class="ms-2">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{user.email}}">
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label for="phone" class="ms-2">Số điện thoại</label>
+                        <input type="text" class="form-control" id="phone" name="phone" value="{{user.phone}}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="addr" class="ms-2">Địa chỉ</label>
+                        <input type="text" class="form-control" id="addr" name="addr" value="{{user.address}}">
+                    </div>
+                    <!-- Nút lưu -->
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn bg-custom fw-semibold rounded px-4 py-2 text-white d-inline-flex align-items-center gap-2">
+                            <i class="bi bi-person-check"></i>
+                            <span>Cập nhật</span>
+                        </button>
+                    </div>
                 </div>
             </div>
-
-            <!-- Phone Number and Address -->
-            <div class="row profile-info mt-2">
-                <div class="col-md-6"> 
-                    <label for="phone" class="ms-2">Số điện thoại</label>
-                    <input type="text" class="form-control" id="phone" name="phone" value="{{user.phone}}">
-                </div>
-                <div class="col-md-6">
-                    <label for="addr" class="ms-2">Địa chỉ</label>
-                    <input type="text" class="form-control" id="addr" name="addr" value="{{user.address}}">
-                </div>
-            </div>
-
-
-
-       <!-- Save Button Centered -->
-        <div class="text-center mt-4">
-            <button type="submit" class="btn bg-custom fw-semibold rounded px-4 py-2 text-white">
-                Cập nhật
-            </button>
         </div>
 
 
     </form>
 </div>
 
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
+<script>    
     const successMsg = "{{success_msg}}";
     const errorMsg = "{{error_msg}}";
-    console.log("Success Message:", successMsg);
-    console.log("Error Message:", errorMsg);
+
+    console.log("Success:", successMsg);
+    console.log("Error:", errorMsg);
 
     if(successMsg) {
         Swal.fire({
@@ -134,5 +156,8 @@
             showConfirmButton: false
         });
     }
+
+    
 </script>
+
 
