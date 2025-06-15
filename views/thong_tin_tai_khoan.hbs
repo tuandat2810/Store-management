@@ -124,11 +124,12 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
+<script>    
     const successMsg = "{{success_msg}}";
     const errorMsg = "{{error_msg}}";
-    console.log("Success Message:", successMsg);
-    console.log("Error Message:", errorMsg);
+
+    console.log("Success:", successMsg);
+    console.log("Error:", errorMsg);
 
     if(successMsg) {
         Swal.fire({
@@ -155,5 +156,8 @@
             showConfirmButton: false
         });
     }
+
+    
 </script>
+
 

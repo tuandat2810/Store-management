@@ -403,10 +403,12 @@ module.exports.update_thong_tin_tai_khoan = async (req, res) => {
       return res.redirect("/main/thong_tin_tai_khoan");
     }
 
-    // Cập nhật thông tin người dùng
-    user.email = email || user.email;
-    user.phone = phone || user.phone;
-    user.address = addr || user.address;
+    // Gán các trường với hàm set để mongoose validator hoạt động
+    user.set({
+          email: email || user.email,
+          phone: phone || user.phone,
+          address: addr || user.address
+    });
 
     if (req.file) {
       // Upload ảnh đại diện lên Cloudinary
@@ -423,10 +425,16 @@ module.exports.update_thong_tin_tai_khoan = async (req, res) => {
 
     req.flash("success", "Cập nhật thông tin tài khoản thành công!");
     return res.redirect("/main/thong_tin_tai_khoan");
-  } catch (error) {
-    console.error("Lỗi cập nhật thông tin:", error);
-    req.flash("error", "Lỗi hệ thống khi cập nhật thông tin tài khoản!");
-    return res.redirect("/main/thong_tin_tai_khoan");
+  } catch (err) {
+    if (err.name === "ValidationError") {
+      const messages = Object.values(err.errors).map(e => e.message);
+      req.flash("error", "Lỗi xác thực: " + messages.join(", "));
+      return res.redirect("/main/thong_tin_tai_khoan");
+    } else {
+      console.error("Lỗi khác khi lưu user:", err);
+      req.flash("error", "Lỗi hệ thống khi lưu thông tin tài khoản!");
+      return res.redirect("/main/thong_tin_tai_khoan");
+    }
   }
 };
 
