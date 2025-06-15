@@ -8,6 +8,11 @@ const Receipt = require('../models/receipt.m.js');
 const District = require('../models/district.m.js');
 const User = require('../models/user.m.js');
 
+// Cloudinary
+const multer = require('multer');
+const { cloudinary, storage } = require('../utils/cloudinary.js');
+const upload = multer({ storage });
+
 module.exports.load_dang_ki_dai_ly = async (req, res) => {
   const agencyCode = await generateRandom.generateUniqueAgencyCode();
   const agencyTypes = await AgencyType.find().lean();
@@ -373,6 +378,8 @@ module.exports.load_thay_doi_quy_dinh = async (req, res) => {
   }
 };
 
+
+
 module.exports.load_thong_tin_tai_khoan = async (req, res) => {
   try {
     res.render('thong_tin_tai_khoan', {
@@ -384,6 +391,8 @@ module.exports.load_thong_tin_tai_khoan = async (req, res) => {
     res.status(500).render('500', { layout: false });
   }
 };
+
+
 
 module.exports.update_thong_tin_tai_khoan = async (req, res) => {
   const { email, phone, addr } = req.body; 
@@ -398,6 +407,17 @@ module.exports.update_thong_tin_tai_khoan = async (req, res) => {
     user.email = email || user.email;
     user.phone = phone || user.phone;
     user.address = addr || user.address;
+
+    if (req.file) {
+      // Upload ảnh đại diện lên Cloudinary
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'avatars'
+      });
+
+      // Lưu URL ảnh vào user
+      console.log('Uploaded avatar URL:', result.secure_url);
+      user.avatar = result.secure_url;
+    } 
 
     await user.save();
 

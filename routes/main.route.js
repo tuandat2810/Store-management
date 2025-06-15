@@ -7,6 +7,9 @@ const authMiddleware = require("../middlewares/auth.middleware")
 const mainController = require('../controllers/main.controller');
 const { requireAuth } = require("../middlewares/auth.middleware");
 
+// upload middleware
+const upload = require('../middlewares/upload.middleware');
+
 // Route load section
 router.get("/dang_ki_dai_ly", authMiddleware.requireAuth, mainController.load_dang_ki_dai_ly);
 router.get("/danh_sach_dai_ly", authMiddleware.requireAuth, mainController.load_danh_sach_dai_ly);
@@ -26,7 +29,7 @@ router.get("/quan_ly_dai_ly_admin", authMiddleware.requireAuth, mainController.l
 router.get("/thay_doi_quy_dinh", authMiddleware.requireAuth, mainController.load_thay_doi_quy_dinh);
 
 router.get("/thong_tin_tai_khoan", authMiddleware.requireAuth, mainController.load_thong_tin_tai_khoan);
-router.post("/thong_tin_tai_khoan", authMiddleware.requireAuth, mainController.update_thong_tin_tai_khoan);
+router.post("/thong_tin_tai_khoan", authMiddleware.requireAuth, upload.single('avatar'), mainController.update_thong_tin_tai_khoan);
 
 
 router.get('/dai-ly-suggestions', mainController.search);
