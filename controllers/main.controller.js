@@ -7,6 +7,7 @@ const AgencyType = require('../models/agencytype.m.js');
 const Receipt = require('../models/receipt.m.js');
 const District = require('../models/district.m.js');
 const User = require('../models/user.m.js');
+const ProductUnit = require('../models/productunit.m.js');
 
 // Cloudinary
 const multer = require('multer');
@@ -364,8 +365,10 @@ module.exports.load_thay_doi_quy_dinh = async (req, res) => {
     const agencyTypes = await AgencyType.find().lean();
 
     const products = await Product.find().lean();
+    
+    const productUnits = await ProductUnit.find().lean();
 
-    const data = { districts, agencyTypes, products };
+    const data = { districts, agencyTypes, products, productUnits };
 
     res.render('thay_doi_quy_dinh', {
       layout: 'main',

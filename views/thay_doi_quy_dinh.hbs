@@ -31,8 +31,13 @@
       </button>
     </li>
     <li class="nav-item" role="presentation">
-      <button class="nav-link" id="qd2-tab" data-bs-toggle="tab" data-bs-target="#qd2" type="button" role="tab">
+      <button class="nav-link" id="qd2a-tab" data-bs-toggle="tab" data-bs-target="#qd2a" type="button" role="tab">
         QĐ2: Thay đổi thông tin mặt hàng
+      </button>
+    </li>
+        <li class="nav-item" role="presentation">
+      <button class="nav-link" id="qd2b-tab" data-bs-toggle="tab" data-bs-target="#qd2b" type="button" role="tab">
+        QĐ2: Quản lý các loại đơn vị tính
       </button>
     </li>
   </ul>
@@ -140,7 +145,7 @@
 
 
     <!-- QĐ2: Quản lý mặt hàng -->
-    <div class="tab-pane fade" id="qd2" role="tabpanel">
+    <div class="tab-pane fade" id="qd2a" role="tabpanel">
       <div class="card mb-4">
         <div class="card-header bg-success text-white">
           QĐ2: Thay đổi thông tin mặt hàng
@@ -191,7 +196,11 @@
             </div>
             <div class="col-md-3">
               <label for="unit" class="form-label">Đơn vị tính</label>
-              <input type="text" class="form-control" id="unit">
+              <select id="unit" class="form-select">
+                {{#each productUnits}}
+                  <option value="{{value}}">{{value}}</option>
+                {{/each}}
+              </select>
             </div>
             <div class="col-md-2">
               <label for="unitPrice" class="form-label">Đơn giá</label>
@@ -232,6 +241,61 @@
         </div>
       </div>
     </div>
+
+
+    <!-- QĐ2: Quản lý đơn vị tính -->
+    <div class="tab-pane fade" id="qd2b" role="tabpanel">
+      <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+          QĐ2: Quản lý các loại đơn vị tính
+        </div>
+        <div class="card-body">
+          <p class="text-muted">Xem, thêm, sửa, xóa các loại đơn vị tính:</p>
+
+          <!-- Bảng đơn vị tính -->
+          <div class="table-responsive mb-4">
+            <table class="table table-hover text-center align-middle" id="unitTable">
+              <thead class="table-secondary">
+                <tr>
+                  <th>STT</th>
+                  <th>Tên đơn vị tính</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each productUnits}}
+                  <tr data-value="{{value}}">
+                    <td>{{addOne @index}}</td>
+                    <td>{{value}}</td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Form đơn vị tính -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="unitValue" class="form-label">Tên đơn vị tính</label>
+              <input type="text" class="form-control" id="unitValue" placeholder="Nhập đơn vị (VD: Đơn, Đôi, Bộ...)">
+            </div>
+          </div>
+
+          <!-- Nút thao tác -->
+          <div class="text-end">
+            <button class="btn btn-success me-2" onclick="addUnit()">
+              <i class="bi bi-plus-circle"></i> Thêm
+            </button>
+            <button class="btn btn-primary me-2" onclick="updateUnit()">
+              <i class="bi bi-pencil-square"></i> Sửa
+            </button>
+            <button class="btn btn-danger" onclick="deleteUnit()">
+              <i class="bi bi-trash"></i> Xóa
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -517,7 +581,7 @@
       row.addEventListener("click", () => {
         document.getElementById("productCode").value = row.dataset.code;
         document.getElementById("productName").value = row.dataset.name;
-        document.getElementById("unit").value = row.dataset.unit;
+        document.getElementById("unit").value = row.dataset.unit || '';
         document.getElementById("unitPrice").value = row.dataset.price;
         document.getElementById("category").value = row.dataset.category;
         document.getElementById("description").value = row.dataset.description;
@@ -607,6 +671,107 @@
     }
 
     return { productCode, productName, unit, unitPrice, category, description, image };
+  }
+
+
+  // Quản lý đơn vị tính (QĐ2b)
+  document.addEventListener("DOMContentLoaded", function () {
+    const rows = document.querySelectorAll("#unitTable tbody tr");
+
+    rows.forEach(row => {
+      row.addEventListener("click", () => {
+        const value = row.getAttribute("data-value");
+        document.getElementById("unitValue").value = value;
+
+        // Tô đậm dòng được chọn (tuỳ chọn)
+        rows.forEach(r => r.classList.remove("table-primary"));
+        row.classList.add("table-primary");
+      });
+    });
+  });
+
+  function getUnitFormValue() {
+    const value = document.getElementById("unitValue").value.trim();
+    if (!value) {
+      Swal.fire({ icon: 'warning', text: 'Vui lòng nhập tên đơn vị tính.', timer: 3000, showConfirmButton: false });
+      return null;
+    }
+    return { value };
+  }
+
+  function addUnit() {
+    const body = getUnitFormValue();
+    if (!body) return;
+
+    fetch('/api/unit/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    })
+    .then(async res => {
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      Swal.fire({ icon: 'success', text: data.message, timer: 3000, showConfirmButton: false });
+      setTimeout(() => location.reload(), 1000);
+    })
+    .catch(err => Swal.fire({ icon: 'error', text: err.message, timer: 3000, showConfirmButton: false }));
+  }
+
+  function updateUnit() {
+    const oldRow = document.querySelector("#unitTable tbody tr.table-primary");
+    if (!oldRow) {
+      return Swal.fire({ icon: 'warning', text: 'Vui lòng chọn một đơn vị tính để sửa.', timer: 3000, showConfirmButton: false });
+    }
+
+    const oldValue = oldRow.dataset.value;
+    const newValue = document.getElementById("unitValue").value.trim();
+    if (!newValue) {
+      return Swal.fire({ icon: 'warning', text: 'Tên đơn vị mới không được để trống.', timer: 3000, showConfirmButton: false });
+    }
+
+    fetch(`/api/unit/${encodeURIComponent(oldValue)}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ newValue })
+    })
+    .then(async res => {
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      Swal.fire({ icon: 'success', text: data.message, timer: 3000, showConfirmButton: false });
+      setTimeout(() => location.reload(), 1000);
+    })
+    .catch(err => Swal.fire({ icon: 'error', text: err.message, timer: 3000, showConfirmButton: false }));
+  }
+
+  function deleteUnit() {
+    const selectedRow = document.querySelector("#unitTable tbody tr.table-primary");
+    if (!selectedRow) {
+      return Swal.fire({ icon: 'warning', text: 'Vui lòng chọn đơn vị tính cần xóa.', timer: 3000, showConfirmButton: false });
+    }
+
+    const value = selectedRow.dataset.value;
+
+    Swal.fire({
+      icon: 'question',
+      title: 'Xác nhận xóa?',
+      text: `Bạn có chắc muốn xóa đơn vị tính "${value}"?`,
+      showCancelButton: true,
+      confirmButtonText: 'Xóa',
+      cancelButtonText: 'Hủy'
+    }).then(result => {
+      if (!result.isConfirmed) return;
+
+      fetch(`/api/unit/${encodeURIComponent(value)}`, {
+        method: 'DELETE'
+      })
+      .then(async res => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message);
+        Swal.fire({ icon: 'success', text: data.message, timer: 2000, showConfirmButton: false });
+        setTimeout(() => location.reload(), 1000);
+      })
+      .catch(err => Swal.fire({ icon: 'error', text: err.message, timer: 2000, showConfirmButton: false }));
+    });
   }
 
 </script>
