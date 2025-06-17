@@ -54,6 +54,20 @@
         color: #FFFFFF !important;
     }
 
+    .swal-success-toast {
+        border-left: 6px solid #28a745;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    }
+
+    .swal-error-toast {
+        border-left: 6px solid #dc3545;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+    }
+</style>
+
+
 </style>
 
 
@@ -130,29 +144,39 @@
     const successMsg = "{{success_msg}}";
     const errorMsg = "{{error_msg}}";
 
-    if(successMsg) {
-        Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'success',
-            title: 'Thành công!',
-            text: successMsg,
-            timer: 5000,
-            timerProgressBar: true,
-            showConfirmButton: false
-        });
-    }
+    if (successMsg) {
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: 'success',
+      title: 'Thành công!',
+      text: successMsg,
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+      background: '#e6f9f0',
+      color: '#155724',
+      customClass: {
+        popup: 'animate__animated animate__fadeInDown swal-success-toast'
+      }
+    });
+  }
 
-    if(errorMsg) {
+    if (errorMsg) {
         Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'error',
-            title: 'Thất bại!',
-            text: errorMsg,
-            timer: 5000,
-            timerProgressBar: true,
-            showConfirmButton: false
+        toast: true,
+        position: 'top-end',
+        icon: 'error',
+        title: 'Thất bại!',
+        text: errorMsg,
+        showConfirmButton: false,
+        timer: 2500,
+        timerProgressBar: true,
+        background: '#fdecea',
+        color: '#721c24',
+        customClass: {
+            popup: 'animate__animated animate__fadeInDown swal-error-toast'
+        }
         });
     }
 
