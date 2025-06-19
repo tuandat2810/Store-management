@@ -703,7 +703,7 @@
     const body = getUnitFormValue();
     if (!body) return;
 
-    fetch('/api/unit/add', {
+    fetch('/product/api/unit/add', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
@@ -729,7 +729,7 @@
       return Swal.fire({ icon: 'warning', text: 'Tên đơn vị mới không được để trống.', timer: 3000, showConfirmButton: false });
     }
 
-    fetch(`/api/unit/${encodeURIComponent(oldValue)}`, {
+    fetch(`/product/api/unit/${encodeURIComponent(oldValue)}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ newValue })
@@ -761,7 +761,7 @@
     }).then(result => {
       if (!result.isConfirmed) return;
 
-      fetch(`/api/unit/${encodeURIComponent(value)}`, {
+      fetch(`/product/api/unit/${encodeURIComponent(value)}`, {
         method: 'DELETE'
       })
       .then(async res => {

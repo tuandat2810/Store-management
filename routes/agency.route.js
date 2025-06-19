@@ -11,8 +11,8 @@ router.get('/manage', authMiddleware.requireAuth, agencyController.manage);
 
 router.get('/view', authMiddleware.requireAuth, agencyController.viewAllAgencies);
 
-
-
+router.get('/register', authMiddleware.requireAuth, agencyController.registerView);
+router.post('/register', authMiddleware.requireAuth, agencyController.register);
 
 
 

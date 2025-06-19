@@ -74,7 +74,8 @@ app.use('/main', require('./routes/main.route.js'));
 app.use('/agency', require('./routes/agency.route.js'));
 app.use('/policy', require('./routes/policy.route.js'));
 app.use('/product', require('./routes/product.route.js'));
-
+app.use('/order', require('./routes/order.route.js'));
+app.use('/receipt', require('./routes/receipt.route.js'));
 
 // Mọi trang khác sẽ được chuyển hướng đến trang 404
 app.use('*', (req, res) => {

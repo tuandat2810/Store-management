@@ -1,3 +1,6 @@
+const generateRandom = require('../helpers/generateRandom');
+const { sortDistricts } = require('../helpers/sort.js');
+
 const Agency = require('../models/agency.m.js');
 const District = require('../models/district.m.js');
 const AgencyType = require('../models/agencytype.m.js');
@@ -87,6 +90,72 @@ module.exports.viewAllAgencies = async (req, res) => {
     res.status(500).render('500', { layout: false });
   }
 };
+
+
+module.exports.registerView = async (req, res) => {
+  const agencyCode = await generateRandom.generateUniqueAgencyCode();
+  const agencyTypes = await AgencyType.find().lean();
+
+  const districts = await District.find().lean();
+  const sortedDistricts = sortDistricts(districts);
+
+  const data = { agencyCode, agencyTypes, districts: sortedDistricts };
+
+  try {
+    res.render('dang_ki_dai_ly', {
+      layout: 'main',
+      title: 'Đăng ký đại lý',
+      ...data
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).render('500', { layout: false });
+  }
+};
+
+module.exports.register = async (req, res) => {
+    const { agencyCode, agencyName, agencyType, email, phoneNumber, district, address } = req.body;
+
+    try {
+      const user = res.locals.user;
+      const fullname = user.fullname;
+      const newAgency = new Agency({
+          agencyCode,
+          managerUsername: fullname,
+          name: agencyName,
+          type: agencyType,
+          email,
+          phone: phoneNumber,
+          district,
+          address,
+          acceptedDate: new Date().toISOString(),
+          status: "Đang chờ",
+      });
+
+      await newAgency.save();
+
+      req.flash("success", "Đăng ký đại lý thành công. Vui lòng chờ duyệt!");
+      return res.redirect("/agency/register");
+
+    } catch (error) {
+      console.error("Lỗi đăng ký:", error);
+      req.flash("error", "Lỗi hệ thống khi đăng ký đại lý!");
+      return res.redirect("/agency/register");
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 module.exports.update_status = async (req, res) => {

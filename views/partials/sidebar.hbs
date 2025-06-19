@@ -38,7 +38,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="/main/dang_ki_dai_ly" class="sidebar-item nav-link link-body-emphasis"
+            <a href="/agency/register" class="sidebar-item nav-link link-body-emphasis"
                 data-section="dang_ki_dai_ly">
                 <i class="bi bi-pen me-2"></i>
                 Đăng ký đại lý
@@ -51,21 +51,21 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="/main/lap_phieu_xuat_hang" class="sidebar-item nav-link link-body-emphasis"
+            <a href="/order/create" class="sidebar-item nav-link link-body-emphasis"
                 data-section="lap_phieu_xuat_hang">
                 <i class="bi bi-clipboard2-fill me-2"></i>
                 Lập phiếu xuất hàng
             </a>
         </li>
         <li class="nav-item">
-            <a href="/main/xem_phieu_xuat_hang" class="sidebar-item nav-link link-body-emphasis"
+            <a href="/order/view" class="sidebar-item nav-link link-body-emphasis"
                 data-section="xem_phieu_xuat_hang">
                 <i class="bi bi-file-earmark-check me-2"></i>
                 Xem phiếu xuất hàng
             </a>
         </li>
         <li class="nav-item">
-            <a href="/main/xem_phieu_thu_tien" class="sidebar-item nav-link link-body-emphasis"
+            <a href="/receipt/view" class="sidebar-item nav-link link-body-emphasis"
                 data-section="xem_phieu_thu_tien">
                 <i class="bi bi-receipt me-2"></i>
                 Xem phiếu thu tiền
@@ -129,13 +129,13 @@
             </a>
         </li>
         <li>
-            <a href="/main/lap_phieu_thu_tien" class="sidebar-item nav-link link-body-emphasis"
+            <a href="/receipt/create" class="sidebar-item nav-link link-body-emphasis"
                 data-section="lap_phieu_thu_tien">
                 <i class="bi bi-clipboard2-fill me-2"></i>
                 Lập phiếu thu tiền
             </a>
         </li>
-        <li>
+        <li class="nav-item">
             <a href="/main/bao_cao_hang_thang" class="sidebar-item nav-link link-body-emphasis"
                 data-section="bao_cao_hang_thang">
                 <i class="bi bi-graph-up me-2"></i>
@@ -143,14 +143,14 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="/main/xem_phieu_xuat_hang" class="sidebar-item nav-link link-body-emphasis"
+            <a href="/order/view" class="sidebar-item nav-link link-body-emphasis"
                 data-section="xem_phieu_xuat_hang">
                 <i class="bi bi-file-earmark-check me-2"></i>
                 Xem phiếu xuất hàng
             </a>
         </li>
         <li class="nav-item">
-            <a href="/main/xem_phieu_thu_tien" class="sidebar-item nav-link link-body-emphasis"
+            <a href="/receipt/view" class="sidebar-item nav-link link-body-emphasis"
                 data-section="xem_phieu_thu_tien">
                 <i class="bi bi-receipt me-2"></i>
                 Xem phiếu thu tiền
@@ -192,14 +192,20 @@
 
             if (lastPart === 'info') section = 'thong_tin_tai_khoan';
             else if (lastPart === 'manage') section = 'quan_ly_dai_ly';
+            else if (lastPart === 'register') section = 'dang_ky_dai_ly';
+            else if (lastPart === 'create') {
+                if (secondPart === 'order') section = 'lap_phieu_xuat_hang';
+                else if (secondPart === 'receipt') section = 'lap_phieu_thu_tien';
+            } 
             else if (lastPart === 'view') {
                 if (secondPart === 'agency') section = 'danh_sach_dai_ly';
                 else if (secondPart === 'policy') section = 'thay_doi_quy_dinh';
+                else if (secondPart === 'order') section = 'xem_phieu_xuat_hang';
+                else if (secondPart === 'receipt') section = 'xem_phieu_thu_tien';
             } else {
                 section = lastPart;
             }
         }
-
 
         // Chạy lần đầu để highlight
         updateActive(section);
