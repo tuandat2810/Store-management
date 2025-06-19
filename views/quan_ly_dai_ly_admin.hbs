@@ -133,14 +133,14 @@
     const searchQuery = document.getElementById('searchInput').value.trim();
     if (searchQuery) {
       // Thực hiện tìm kiếm với từ khóa
-      window.location.href = `/main/quan_ly_dai_ly_admin?search=${encodeURIComponent(searchQuery)}`;
+      window.location.href = `/agency/manage?search=${encodeURIComponent(searchQuery)}`;
     }
   }
 
   // Khi người dùng nhấn nút xóa
   function clearSearch() {
     document.getElementById('searchInput').value = ''; // Xóa từ khóa tìm kiếm
-    window.location.href = '/main/quan_ly_dai_ly_admin?page=1'; // Reset lại trang và tìm kiếm
+    window.location.href = '/agency/manage?page=1'; // Reset lại trang và tìm kiếm
   }
 
   // Khi người dùng nhấn phím Enter trong ô tìm kiếm
@@ -235,7 +235,7 @@
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const response = await fetch('/api/agency/update-status', {
+            const response = await fetch('/agency/api/agency/update-status', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ agencyCode: id, status: newStatus, district }),

@@ -21,7 +21,7 @@
   <!-- Tabs -->
   <ul class="nav nav-tabs mb-4" id="quyDinhTab" role="tablist">
     <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="qd1a-tab" data-bs-toggle="tab" data-bs-target="#qd1a  " type="button" role="tab">
+      <button class="nav-link active" id="qd1a-tab" data-bs-toggle="tab" data-bs-target="#qd1a" type="button" role="tab">
         QĐ1: Số lượng đại lý tối đa theo quận
       </button>
     </li>
@@ -344,9 +344,9 @@
     }
 
     // Gửi yêu cầu cập nhật về server (ví dụ API)
-    fetch('/api/district/update-max-agency', {
+    fetch('/agency/api/district/update-max-agency', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' },  
       body: JSON.stringify({ districtId, maximumAgenciesAvailable: max })
     })
     .then(async res => {
@@ -412,7 +412,7 @@
       });
     }
 
-    fetch('/api/agencytype/add', {
+    fetch('/agency/api/agencytype/add', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ type: parseInt(type), description: desc, maximumDebt: parseFloat(debt) })
@@ -444,7 +444,7 @@
       });
     }
 
-    fetch('/api/agencytype', {
+    fetch('/agency/api/agencytype', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ type: parseInt(type), description: desc, maximumDebt: parseFloat(debt) })
@@ -484,7 +484,7 @@
     }).then(result => {
       if (!result.isConfirmed) return;
 
-      fetch(`/api/agencytype/${type}`, {
+      fetch(`/agency/api/agencytype/${type}`, {
         method: 'DELETE'
       })
       .then(async res => {
@@ -597,7 +597,7 @@
     const body = getProductFormData();
     if (!body) return;
 
-    fetch('/api/product/add', {
+    fetch('/product/api/product/add', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
@@ -615,7 +615,7 @@
     const body = getProductFormData();
     if (!body) return;
 
-    fetch('/api/product', {
+    fetch('/product/api/product', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
@@ -643,7 +643,7 @@
     }).then(result => {
       if (!result.isConfirmed) return;
 
-      fetch(`/api/product/${code}`, {
+      fetch(`/product/api/product/${code}`, {
         method: 'DELETE'
       })
       .then(async res => {

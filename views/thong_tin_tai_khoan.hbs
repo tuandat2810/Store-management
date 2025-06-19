@@ -1,8 +1,5 @@
 <style>
-    body {
-        background-color: #f8f9fa;
-        font-family: 'Arial', sans-serif;
-    }
+
 
     .profile-container {
         max-width: 900px;
@@ -69,7 +66,7 @@
     <div class="row profile-info align-items-start mt-4">
         <!-- Form Upload Avatar -->
         <div class="col-md-4 text-center">
-            <form action="/main/upload_avatar" method="POST" enctype="multipart/form-data">
+            <form action="/user/upload_avatar" method="POST" enctype="multipart/form-data">
                 <label class="mb-2 fw-semibold">Ảnh đại diện</label><br>
 
                 <!-- Ảnh hiện tại -->
@@ -88,7 +85,7 @@
 
         <!-- Form Cập nhật thông tin cá nhân -->
         <div class="col-md-8">
-            <form id="profileForm" action="/main/thong_tin_tai_khoan" method="POST">
+            <form id="profileForm" action="/user/info" method="POST">
                 <div class="row">
                     <div class="col-md-6">
                         <label for="name" class="ms-2">Họ và tên</label>

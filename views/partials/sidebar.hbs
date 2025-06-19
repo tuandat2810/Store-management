@@ -4,68 +4,76 @@
         background-color: #808080 !important;
         color: white !important;
     }
+
     .sidebar-item.nav-link:hover {
         background-color: #ccc !important;
         color: white !important;
     }
-
 </style>
 
 {{#eq user.type "user"}}
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="position: fixed; top: 70px; left: 0; width: 280px; height: 100vh; overflow-y: auto;">
-<a href="/page/home" class="d-flex align-items-center me-md-auto link-body-emphasis text-decoration-none sidebar-item" style="gap: 8px; padding-left: 15px; margin-bottom: 4px;"data-section="thong_tin_dai_ly">
-  <i class="bi bi-person-circle" style="width: 32px; height: 36px; line-height: 36px; font-size: 24px;"></i>
-  <div class="d-flex flex-column justify-content-center" style="line-height: 1; margin: 0;">
-    <span class="fs-7 fw-semibold mb-0" style="margin: 0; line-height: 1;">{{user.fullname}}</span>
-    <small class="text-muted" style="font-size: 12px; margin: 0; line-height: 1;">{{user.type}}</small>
-  </div>
-</a>
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary"
+    style="position: fixed; top: 70px; left: 0; width: 280px; height: 100vh; overflow-y: auto;">
+    <a href="/user/home"
+        class="d-flex align-items-center me-md-auto link-body-emphasis text-decoration-none sidebar-item"
+        style="gap: 8px; padding-left: 15px; margin-bottom: 4px;" data-section="thong_tin_dai_ly">
+        <i class="bi bi-person-circle" style="width: 32px; height: 36px; line-height: 36px; font-size: 24px;"></i>
+        <div class="d-flex flex-column justify-content-center" style="line-height: 1; margin: 0;">
+            <span class="fs-7 fw-semibold mb-0" style="margin: 0; line-height: 1;">{{user.fullname}}</span>
+            <small class="text-muted" style="font-size: 12px; margin: 0; line-height: 1;">{{user.type}}</small>
+        </div>
+    </a>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-            <a href="/page/home" class="sidebar-item nav-link link-body-emphasis" data-section="home">
+            <a href="/user/home" class="sidebar-item nav-link link-body-emphasis" data-section="home">
                 <i class="bi bi-house-door me-2"></i>
                 Trang chủ
             </a>
         </li>
         <li class="nav-item">
-            <a href="/main/thong_tin_tai_khoan" class="sidebar-item nav-link link-body-emphasis" data-section="thong_tin_dai_ly">
+            <a href="/user/info" class="sidebar-item nav-link link-body-emphasis" data-section="thong_tin_tai_khoan">
                 <i class="bi bi-people me-2"></i>
                 Thông tin tài khoản
             </a>
         </li>
         <li class="nav-item">
-            <a href="/main/dang_ki_dai_ly" class="sidebar-item nav-link link-body-emphasis" data-section="dang_ki_dai_ly">
+            <a href="/main/dang_ki_dai_ly" class="sidebar-item nav-link link-body-emphasis"
+                data-section="dang_ki_dai_ly">
                 <i class="bi bi-pen me-2"></i>
                 Đăng ký đại lý
             </a>
         </li>
         <li class="nav-item">
-            <a href="/main/danh_sach_dai_ly" class="sidebar-item nav-link link-body-emphasis" data-section="danh_sach_dai_ly">
+            <a href="/agency/view" class="sidebar-item nav-link link-body-emphasis" data-section="danh_sach_dai_ly">
                 <i class="bi bi-grid me-2"></i>
                 Danh sách đại lý
             </a>
         </li>
         <li class="nav-item">
-            <a href="/main/lap_phieu_xuat_hang" class="sidebar-item nav-link link-body-emphasis" data-section="lap_phieu_xuat_hang">
+            <a href="/main/lap_phieu_xuat_hang" class="sidebar-item nav-link link-body-emphasis"
+                data-section="lap_phieu_xuat_hang">
                 <i class="bi bi-clipboard2-fill me-2"></i>
                 Lập phiếu xuất hàng
             </a>
         </li>
         <li class="nav-item">
-            <a href="/main/xem_phieu_xuat_hang" class="sidebar-item nav-link link-body-emphasis" data-section="xem_phieu_xuat_hang">
+            <a href="/main/xem_phieu_xuat_hang" class="sidebar-item nav-link link-body-emphasis"
+                data-section="xem_phieu_xuat_hang">
                 <i class="bi bi-file-earmark-check me-2"></i>
                 Xem phiếu xuất hàng
             </a>
         </li>
         <li class="nav-item">
-            <a href="/main/xem_phieu_thu_tien" class="sidebar-item nav-link link-body-emphasis" data-section="xem_phieu_thu_tien">
+            <a href="/main/xem_phieu_thu_tien" class="sidebar-item nav-link link-body-emphasis"
+                data-section="xem_phieu_thu_tien">
                 <i class="bi bi-receipt me-2"></i>
                 Xem phiếu thu tiền
             </a>
         </li>
         <li class="nav-item">
-            <a href="/main/bao_cao_hang_thang" class="sidebar-item nav-link link-body-emphasis" data-section="bao_cao_hang_thang">
+            <a href="/main/bao_cao_hang_thang" class="sidebar-item nav-link link-body-emphasis"
+                data-section="bao_cao_hang_thang">
                 <i class="bi bi-graph-up me-2"></i>
                 Báo cáo hàng tháng
             </a>
@@ -79,76 +87,82 @@
         background-color: #808080 !important;
         color: white !important;
     }
-
 </style>
 
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="position: fixed; top: 70px; left: 0; width: 280px; height: 100vh; overflow-y: auto;">
-<a href="/page/home" class="d-flex align-items-center me-md-auto link-body-emphasis text-decoration-none sidebar-item" style="gap: 8px; padding-left: 15px; margin-bottom: 4px;"data-section="thong_tin_admin">
-  <i class="bi bi-person-circle" style="width: 32px; height: 36px; line-height: 36px; font-size: 24px;"></i>
-  <div class="d-flex flex-column justify-content-center" style="line-height: 1; margin: 0;">
-    <span class="fs-7 fw-semibold mb-0" style="margin: 0; line-height: 1;">{{user.fullname}}</span>
-    <small class="text-muted" style="font-size: 12px; margin: 0; line-height: 1;">{{user.type}}</small>
-  </div>
-</a>
-<hr>
-<ul class="nav nav-pills flex-column mb-auto">
-    <li class="nav-item">
-        <a href="/page/home" class="sidebar-item nav-link link-body-emphasis" data-section="home">
-            <i class="bi bi-house-door me-2"></i>
-            Trang chủ
-        </a>
-    </li>
-    
-    <li>
-        <a href="/main/thong_tin_tai_khoan" class="sidebar-item nav-link link-body-emphasis" data-section="thong_tin_admin">
-            <i class="bi bi-people me-2"></i>
-            Thông tin admin
-        </a>
-    </li>
-    
-    <li>
-        <a href="/main/quan_ly_dai_ly_admin" class="sidebar-item nav-link link-body-emphasis" data-section="quan_ly_dai_ly_admin">
-            <i class="bi bi-table me-2"></i>
-            Quản lý đại lý
-        </a>
-    </li>
-    <li>
-        <a href="/main/danh_sach_dai_ly" class="sidebar-item nav-link link-body-emphasis" data-section="danh_sach_dai_ly_admin">
-            <i class="bi bi-grid me-2"></i>
-            Danh sách đại lý
-        </a>
-    </li>
-    <li>
-        <a href="/main/lap_phieu_thu_tien" class="sidebar-item nav-link link-body-emphasis" data-section="lap_phieu_thu_tien">
-            <i class="bi bi-clipboard2-fill me-2"></i>
-            Lập phiếu thu tiền
-        </a>
-    </li>
-    <li>
-        <a href="/main/bao_cao_hang_thang" class="sidebar-item nav-link link-body-emphasis" data-section="bao_cao_hang_thang_admin">
-            <i class="bi bi-graph-up me-2"></i>
-            Báo cáo hàng tháng
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="/main/xem_phieu_xuat_hang" class="sidebar-item nav-link link-body-emphasis" data-section="xem_phieu_xuat_hang">
-            <i class="bi bi-file-earmark-check me-2"></i>
-            Xem phiếu xuất hàng
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="/main/xem_phieu_thu_tien" class="sidebar-item nav-link link-body-emphasis" data-section="xem_phieu_thu_tien">
-            <i class="bi bi-receipt me-2"></i>
-            Xem phiếu thu tiền
-        </a>
-    </li>
-    <li>
-        <a href="/main/thay_doi_quy_dinh" class="sidebar-item nav-link link-body-emphasis" data-section="thay_doi_quy_dinh">
-            <i class="bi bi-pen me-2"></i>
-            Thay đổi quy định
-        </a>
-    </li>
-</ul>
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary"
+    style="position: fixed; top: 70px; left: 0; width: 280px; height: 100vh; overflow-y: auto;">
+    <a href="/user/home"
+        class="d-flex align-items-center me-md-auto link-body-emphasis text-decoration-none sidebar-item"
+        style="gap: 8px; padding-left: 15px; margin-bottom: 4px;" data-section="thong_tin_admin">
+        <i class="bi bi-person-circle" style="width: 32px; height: 36px; line-height: 36px; font-size: 24px;"></i>
+        <div class="d-flex flex-column justify-content-center" style="line-height: 1; margin: 0;">
+            <span class="fs-7 fw-semibold mb-0" style="margin: 0; line-height: 1;">{{user.fullname}}</span>
+            <small class="text-muted" style="font-size: 12px; margin: 0; line-height: 1;">{{user.type}}</small>
+        </div>
+    </a>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            <a href="/user/home" class="sidebar-item nav-link link-body-emphasis" data-section="home">
+                <i class="bi bi-house-door me-2"></i>
+                Trang chủ
+            </a>
+        </li>
+
+        <li>
+            <a href="/user/info" class="sidebar-item nav-link link-body-emphasis" data-section="thong_tin_tai_khoan">
+                <i class="bi bi-people me-2"></i>
+                Thông tin tài khoản
+            </a>
+        </li>
+
+        <li>
+            <a href="/agency/manage" class="sidebar-item nav-link link-body-emphasis" data-section="quan_ly_dai_ly">
+                <i class="bi bi-table me-2"></i>
+                Quản lý đại lý
+            </a>
+        </li>
+        <li>
+            <a href="/agency/view" class="sidebar-item nav-link link-body-emphasis" data-section="danh_sach_dai_ly">
+                <i class="bi bi-grid me-2"></i>
+                Danh sách đại lý
+            </a>
+        </li>
+        <li>
+            <a href="/main/lap_phieu_thu_tien" class="sidebar-item nav-link link-body-emphasis"
+                data-section="lap_phieu_thu_tien">
+                <i class="bi bi-clipboard2-fill me-2"></i>
+                Lập phiếu thu tiền
+            </a>
+        </li>
+        <li>
+            <a href="/main/bao_cao_hang_thang" class="sidebar-item nav-link link-body-emphasis"
+                data-section="bao_cao_hang_thang">
+                <i class="bi bi-graph-up me-2"></i>
+                Báo cáo hàng tháng
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="/main/xem_phieu_xuat_hang" class="sidebar-item nav-link link-body-emphasis"
+                data-section="xem_phieu_xuat_hang">
+                <i class="bi bi-file-earmark-check me-2"></i>
+                Xem phiếu xuất hàng
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="/main/xem_phieu_thu_tien" class="sidebar-item nav-link link-body-emphasis"
+                data-section="xem_phieu_thu_tien">
+                <i class="bi bi-receipt me-2"></i>
+                Xem phiếu thu tiền
+            </a>
+        </li>
+        <li>
+            <a href="/policy/view" class="sidebar-item nav-link link-body-emphasis" data-section="thay_doi_quy_dinh">
+                <i class="bi bi-pen me-2"></i>
+                Thay đổi quy định
+            </a>
+        </li>
+    </ul>
 </div>
 {{/eq}}
 
@@ -159,20 +173,33 @@
 
         function updateActive(section) {
             sidebarItems.forEach(item => {
-            item.classList.remove('active');
-            if (item.dataset.section === section) {
-                item.classList.add('active');
-                item.setAttribute('aria-current', 'page');
-            }
+                item.classList.remove('active');
+                if (item.dataset.section === section) {
+                    item.classList.add('active');
+                    item.setAttribute('aria-current', 'page');
+                }
             });
         }
 
         // Lấy section từ URL, ví dụ /main/dang_ki_dai_ly
         let path = window.location.pathname;
         let section = 'home';
-        if (path.startsWith('/main/')) {
-            section = path.split('/').pop();
+
+        if (path.startsWith('/main/') || path.startsWith('/user/') || path.startsWith('/agency/') || path.startsWith('/policy/')) {
+            const parts = path.split('/');
+            const lastPart = parts[parts.length - 1]; // view
+            const secondPart = parts[1];              // agency hoặc policy
+
+            if (lastPart === 'info') section = 'thong_tin_tai_khoan';
+            else if (lastPart === 'manage') section = 'quan_ly_dai_ly';
+            else if (lastPart === 'view') {
+                if (secondPart === 'agency') section = 'danh_sach_dai_ly';
+                else if (secondPart === 'policy') section = 'thay_doi_quy_dinh';
+            } else {
+                section = lastPart;
+            }
         }
+
 
         // Chạy lần đầu để highlight
         updateActive(section);

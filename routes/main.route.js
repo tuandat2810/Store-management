@@ -8,12 +8,10 @@ const mainController = require('../controllers/main.controller');
 const { requireAuth } = require("../middlewares/auth.middleware");
 const validation = require('../validates/client/user.validate')
 
-// upload middleware
-const upload = require('../middlewares/upload.middleware');
+
 
 // Route load section
 router.get("/dang_ki_dai_ly", authMiddleware.requireAuth, mainController.load_dang_ki_dai_ly);
-router.get("/danh_sach_dai_ly", authMiddleware.requireAuth, mainController.load_danh_sach_dai_ly);
 
 
 router.get("/bao_cao_hang_thang", authMiddleware.requireAuth, mainController.load_bao_cao_hang_thang);
@@ -26,12 +24,6 @@ router.get("/lap_phieu_xuat_hang", authMiddleware.requireAuth, mainController.lo
 router.get("/xem_phieu_xuat_hang", authMiddleware.requireAuth, mainController.load_xem_phieu_xuat_hang);
 
 
-router.get("/quan_ly_dai_ly_admin", authMiddleware.requireAuth, mainController.load_quan_ly_dai_ly_admin);
-router.get("/thay_doi_quy_dinh", authMiddleware.requireAuth, mainController.load_thay_doi_quy_dinh);
-
-router.post("/upload_avatar", authMiddleware.requireAuth, upload.single('avatar'), mainController.upload_avatar);
-router.get("/thong_tin_tai_khoan", authMiddleware.requireAuth, mainController.load_thong_tin_tai_khoan);
-router.post("/thong_tin_tai_khoan", authMiddleware.requireAuth, validation.update_thong_tin_tai_khoan, mainController.update_thong_tin_tai_khoan);
 
 
 router.get('/dai-ly-suggestions', mainController.search);

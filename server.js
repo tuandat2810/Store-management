@@ -7,8 +7,11 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const flash = require('express-flash');
 const exphbs = require('express-handlebars');
+
 const District = require('./models/district.m.js'); // Import model District
 const Agency = require('./models/agency.m.js'); // Import model Agency
+
+
 // Cấu hình cổng
 const port = process.env.PORT || 3000;
 
@@ -63,13 +66,14 @@ app.get('/', async (req, res) => {
 });
 app.use(infoUser)
 // Sử dụng router người dùng
-app.use('/page', require('./routes/user.route.js'));
+app.use('/user', require('./routes/user.route.js'));
 // Sử dụng router chính của Người dùng
 app.use('/main', require('./routes/main.route.js'));
 
-// Api route ho tro
-app.use('/', require('./routes/agency.route.js'));
-app.use('/', require('./routes/product.route.js'));
+
+app.use('/agency', require('./routes/agency.route.js'));
+app.use('/policy', require('./routes/policy.route.js'));
+app.use('/product', require('./routes/product.route.js'));
 
 
 // Mọi trang khác sẽ được chuyển hướng đến trang 404

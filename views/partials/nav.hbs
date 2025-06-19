@@ -41,7 +41,7 @@
 <nav class="navbar navbar-expand-lg navbar-light fixed-top "style= "background-color:#343a40" >
     <div class="container-fluid d-flex justify-content-between align-items-center">
         {{#if user}}
-            <a class="navbar-brand" style="margin-left: 30px; font-size :30px ;font-family: 'Poppins', sans-serif; font-weight: 500;color:white;" href="/page/home">
+            <a class="navbar-brand" style="margin-left: 30px; font-size :30px ;font-family: 'Poppins', sans-serif; font-weight: 500;color:white;" href="/user/home">
                 <i class="bi bi-globe mx-3" style="font-size: 30px"></i>
                 Dealio
             </a>
@@ -59,9 +59,9 @@
                 {{#if user}}
                     <li class="nav-item d-flex justify-content-center align-items-center" style="">
                         <ul class="d-flex align-items-center gap-4 p-0 mb-0 ms-auto list-item-link" style="list-style: none; margin-right: 30px;">
-                            <li><a href="/page/home" class="nav-link text-light">Trang chủ</a></li>
+                            <li><a href="/user/home" class="nav-link text-light">Trang chủ</a></li>
                             {{!-- <li><a href="#" class="nav-link text-dark">Liên hệ</a></li> --}}
-                            <li><a href="/page/about" class="nav-link text-light">Giới thiệu</a></li>
+                            <li><a href="/user/about" class="nav-link text-light">Giới thiệu</a></li>
                         </ul>
                         {{!-- <a href="#" style="color: black; text-decoration: none; display: flex; align-items: center;">
                                 <i class="bi bi-person mx-3 user-icon w-25  "></i> --}}
@@ -69,7 +69,7 @@
                         <a class="nav-link btn-logout d-flex justify-content-center align-items-center" 
                             {{!-- style="background-color: black; width: 150px; height: 30px; color: white;
                                 border-radius: 5px; margin-right: 30px; "  --}}
-                            href="/page/logout"
+                            href="/user/logout"
                             >
                             <i class="bi bi-box-arrow-right me-2"></i> Đăng xuất
                         </a>
@@ -77,10 +77,10 @@
                 {{else}}
                     <div class="d-flex align-items-center gap-4 p-0 mb-0 ms-auto list-item-link" style="list-style: none; margin-right: 30px;">
                         <li class="nav-item">
-                            <a class="nav-link" style="color: white;" href="/page/login">Đăng nhập</a>
+                            <a class="nav-link" style="color: white;" href="/user/login">Đăng nhập</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" style="color: white;" href="/page/register">Đăng ký</a>
+                            <a class="nav-link" style="color: white;" href="/user/register">Đăng ký</a>
                         </li>
                     </div>
                     

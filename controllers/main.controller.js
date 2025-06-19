@@ -1,6 +1,5 @@
 const generateRandom = require('../helpers/generateRandom');
 const Agency = require('../models/agency.m.js');
-const getDate = require('../helpers/getDate');
 const Product = require('../models/product.m.js');
 const Order = require('../models/order.m.js');
 const AgencyType = require('../models/agencytype.m.js');
@@ -9,10 +8,6 @@ const District = require('../models/district.m.js');
 const User = require('../models/user.m.js');
 const ProductUnit = require('../models/productunit.m.js');
 
-// Cloudinary
-const multer = require('multer');
-const { cloudinary, storage } = require('../utils/cloudinary.js');
-const upload = multer({ storage });
 
 module.exports.load_dang_ki_dai_ly = async (req, res) => {
   const agencyCode = await generateRandom.generateUniqueAgencyCode();
@@ -32,53 +27,7 @@ module.exports.load_dang_ki_dai_ly = async (req, res) => {
   }
 };
 
-module.exports.load_danh_sach_dai_ly = async (req, res) => {
-  try {
-    const numberAgencyPerPage = 5;
-    const page = parseInt(req.query.page) || 1;
-    const searchQuery = req.query.search || '';
-    const isAdmin = res.locals.user.type === 'admin';
 
-    // Điều kiện tìm kiếm
-    const searchCondition = {
-      $or: [
-        { agencyCode: { $regex: searchQuery, $options: 'i' } },
-        { name: { $regex: searchQuery, $options: 'i' } },
-        { managerUsername: { $regex: searchQuery, $options: 'i' } },
-        { district: { $regex: searchQuery, $options: 'i' } },
-        { address: { $regex: searchQuery, $options: 'i' } },
-      ],
-    };
-
-    // Nếu là user thì thêm điều kiện quản lý đại lý
-    if (!isAdmin) {
-      searchCondition.$and = [{ managerUsername: res.locals.user.fullname }];
-    }
-
-    // Truy vấn danh sách đại lý
-    const agencyList = await Agency.find(searchCondition)
-      .skip((page - 1) * numberAgencyPerPage)
-      .limit(numberAgencyPerPage)
-      .lean();
-
-    const cntAgency = await Agency.countDocuments(searchCondition);
-    const cntPage = Math.ceil(cntAgency / numberAgencyPerPage);
-    const pages = Array.from({ length: cntPage }, (_, i) => i + 1);
-
-    res.render('danh_sach_dai_ly', {
-      layout: 'main',
-      title: isAdmin ? 'Danh sách đại lý Admin' : 'Danh sách đại lý',
-      agencyList,
-      currentPage: page,
-      cntPage,
-      pages,
-      searchQuery,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).render('500', { layout: false });
-  }
-};
 
 
 module.exports.search = async (req, res) => {
@@ -332,33 +281,6 @@ module.exports.load_xem_phieu_xuat_hang = async (req, res) => {
 };
 
 
-module.exports.load_quan_ly_dai_ly_admin = async (req, res) => {
-  try {
-    const searchQuery = req.query.search || '';
-    const agencyList = await Agency.find({
-      $or: [
-        { agencyCode: { $regex: searchQuery, $options: 'i' } },
-        { name: { $regex: searchQuery, $options: 'i' } },
-      ],
-    }).lean();
-
-
-
-    const data = { agencyList };
-    // console.log('[+] Rendering trang quản lý đại lý');
-    res.render('quan_ly_dai_ly_admin', {
-      layout: 'main',
-      title: 'Quản lý đại lý Admin',
-      ...data
-    });
-  } catch (err) {
-    console.error(err);
-    // console.log('[!] Có lỗi, render 500');
-    res.status(500).render('500', { layout: false });
-  }
-};
-
-
 module.exports.load_thay_doi_quy_dinh = async (req, res) => {
   try {
     const districts = await District.find().lean();
@@ -383,82 +305,9 @@ module.exports.load_thay_doi_quy_dinh = async (req, res) => {
 
 
 
-module.exports.load_thong_tin_tai_khoan = async (req, res) => {
-  try {
-    res.render('thong_tin_tai_khoan', {
-      layout: 'main',
-      title: 'Thông tin tài khoản',
-      error: req.flash('error'),
-      success: req.flash('success')
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).render('500', { layout: false });
-  }
-};
-
-
-module.exports.upload_avatar = async (req, res) => {
-  try {
-    const user = await User.findOne({ tokenUser: res.locals.user.tokenUser });
-    if (!user) {
-      req.flash("error", "Không tìm thấy người dùng!");
-      return res.redirect("/main/thong_tin_tai_khoan");
-    }
-
-    if (req.file) {
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: 'avatars'
-      });
-      user.avatar = result.secure_url;
-      await user.save();
-      req.flash("success", "Cập nhật ảnh đại diện thành công!");
-    } else {
-      req.flash("error", "Vui lòng chọn một ảnh để tải lên.");
-    }
-
-    return res.redirect("/main/thong_tin_tai_khoan");
-  } catch (err) {
-    console.error("Lỗi upload avatar:", err);
-    req.flash("error", "Lỗi hệ thống khi cập nhật ảnh đại diện!");
-    return res.redirect("/main/thong_tin_tai_khoan");
-  }
-};
 
 
 
-module.exports.update_thong_tin_tai_khoan = async (req, res) => {
-  const { email, phone, addr } = req.body; 
-  try {
-    const user = await User.findOne({ tokenUser: res.locals.user.tokenUser });
-    if (!user) {
-      req.flash("error", "Không tìm thấy người dùng!");
-      return res.redirect("/main/thong_tin_tai_khoan");
-    }
-
-    
-    user.set({
-          email: email || user.email,
-          phone: phone || user.phone,
-          address: addr || user.address
-    });
-    
-    await user.save();
-
-    req.flash("success", "Cập nhật thông tin tài khoản thành công!");
-    return res.redirect("/main/thong_tin_tai_khoan");
-  } catch (err) {
-    if (err.name === "ValidationError") {
-      const messages = Object.values(err.errors).map(e => e.message);
-      req.flash("error", "Lỗi xác thực: " + messages.join(", "));
-      return res.redirect("/main/thong_tin_tai_khoan");
-    } else {
-      console.error("Lỗi khác khi lưu user:", err);
-      req.flash("error", "Lỗi hệ thống khi lưu thông tin tài khoản!");
-      return res.redirect("/main/thong_tin_tai_khoan");
-    }
-  }
-};
 
 module.exports.dang_ky_dai_lyPOST = async (req, res) => {
     const { agencyCode, agencyName, agencyType, email, phoneNumber, district, address } = req.body;

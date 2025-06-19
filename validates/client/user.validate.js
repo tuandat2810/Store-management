@@ -98,12 +98,12 @@ module.exports.update_thong_tin_tai_khoan = (req, res, next) => {
 
     if (email && !emailRegex.test(email)) {
         req.flash("error", "Email không hợp lệ!");
-        return res.redirect("/main/thong_tin_tai_khoan");
+        return res.redirect("/user/info");
     }
 
     if (phone && !phoneRegex.test(phone)) {
         req.flash("error", "Số điện thoại không hợp lệ!");
-        return res.redirect("/main/thong_tin_tai_khoan");
+        return res.redirect("/user/info");
     }
 
     next();
