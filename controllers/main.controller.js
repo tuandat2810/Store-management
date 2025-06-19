@@ -26,7 +26,7 @@ module.exports.search = async (req, res) => {
   }
 }
 
-module.exports.load_bao_cao_hang_thang = async (req, res) => {
+module.exports.report = async (req, res) => {
   try {
     const userType = res.locals.user.type;
 
