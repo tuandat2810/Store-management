@@ -181,7 +181,7 @@ module.exports.resendOtp = async (req, res) => {
         const user = await User.findOne({ email });
         if (!user) {
             req.flash("error", "Email không hợp lệ!");
-            return res.redirect("/page/forgot-password");
+            return res.redirect("/user/forgot-password");
         }
 
         const otp = generateRandomNumber.generateRandomNumber(8);
@@ -199,11 +199,11 @@ module.exports.resendOtp = async (req, res) => {
         await BrevoProvider.sendEmail(email, subject, html);
 
         req.flash("success", "Yêu cầu gửi lại mã OTP thành công! Vui lòng kiểm tra email của bạn.");
-        res.redirect(`/page/password/otp?email=${email}`);
+        res.redirect(`/user/password/otp?email=${email}`);
     } catch (error) {
         console.error("Lỗi gửi lại OTP:", error);
         req.flash("error", "Có lỗi xảy ra khi gửi lại OTP.");
-        res.redirect("/page/forgot-password");
+        res.redirect("/user/forgot-password");
     }
 };
 
