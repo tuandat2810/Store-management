@@ -35,21 +35,43 @@
     .modal-content {
         max-width: 500px;
         width: 90%;
-        background: white; /* Nền trắng */
+        background: white;
     }
 
     .modal-content.success {
-        border: 2px solid #28a745; /* Viền xanh cho success */
+        border: 2px solid #28a745;
     }
 
     .modal-content.error {
-        border: 2px solid #dc3545; /* Viền đỏ cho error */
+        border: 2px solid #dc3545;
     }
 
     .btn-close-custom {
         position: absolute;
         top: 10px;
         right: 10px;
+    }
+
+    .btn-outline-dark {
+        flex-shrink: 0;
+    }
+
+    .bg-custom {
+        background-image: linear-gradient(177.6deg, rgba(20, 0, 113, 1) 15.3%, rgba(1, 0, 62, 1) 91.3%);
+    }
+
+    .form-preview-watermark {
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-35deg);
+        font-size: 70px;
+        color: rgba(128, 128, 128, 0.1);
+        white-space: nowrap;
+        z-index: 2;
+        font-style: italic;
+        font-weight: bold;
+        pointer-events: none;
     }
 </style>
 
@@ -71,98 +93,158 @@
 </div>
 {{/if}}
 
-<div class="container-fluid d-flex flex-column align-items-center" style="width: 100%; height: 100%;margin-top: 32px;">
-    <h3 class="mb-5 text-center w-100">
-        Đăng ký đại lý
-    </h3>
-    <form action="/main/dang_ki_dai_ly" method="POST" class="w-100" style="max-width: 600px;">
-        
-        <!-- Mã đại lý (đưa lên đầu) -->
-        <div class="mb-3 row">
-            <label for="agencyCode" class="col-sm-3 col-form-label">Mã đại lý</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="agencyCode" name="agencyCode" value="{{agencyCode}}" readonly>
+<div class="container-fluid d-flex" style="width: 100%; height: 100%; margin-top: 32px;">
+    <!-- Form nhập liệu -->
+    <div class="w-50 p-4">
+        <h3 class="mb-5 text-center w-100">Đăng ký đại lý</h3>
+        <form action="/agency/register" method="POST" class="w-100" style="max-width: 600px;">
+            <div class="mb-3 row">
+                <label for="agencyCode" class="col-sm-3 col-form-label">Mã đại lý</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="agencyCode" name="agencyCode" value="{{agencyCode}}" readonly>
+                </div>
             </div>
-        </div>
 
-        <!-- Tên đại lý -->
-        <div class="mb-3 row">
-            <label for="agencyName" class="col-sm-3 col-form-label">Tên đại lý</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="agencyName" name="agencyName" placeholder="Nhập tên đại lý" required>
+            <div class="mb-3 row">
+                <label for="agencyName" class="col-sm-3 col-form-label">Tên đại lý</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="agencyName" name="agencyName" placeholder="Nhập tên đại lý" required oninput="updateForm()">
+                </div>
             </div>
-        </div>
 
-        <!-- Loại đại lý -->
-        <div class="mb-3 row">
-            <label for="agencyType" class="col-sm-3 col-form-label">Loại đại lý</label>
-            <div class="col-sm-9 custom-select-wrapper">
-                <select class="form-select custom-select" id="agencyType" name="agencyType" required>
-                    <option value="">-- Chọn loại đại lý --</option>
-                    {{#each agencyTypes}}
+            <div class="mb-3 row">
+                <label for="agencyType" class="col-sm-3 col-form-label">Loại đại lý</label>
+                <div class="col-sm-9 custom-select-wrapper">
+                    <select class="form-select custom-select" id="agencyType" name="agencyType" required oninput="updateForm()">
+                        <option value="">-- Chọn loại đại lý --</option>
+                        {{#each agencyTypes}}
                         <option value="{{type}}">{{type}}</option>
-                    {{/each}}
-                </select>
-                <span class="custom-arrow">
-                    <i class="bi bi-chevron-down"></i>
-                </span>
+                        {{/each}}
+                    </select>
+                    <span class="custom-arrow">
+                        <i class="bi bi-chevron-down"></i>
+                    </span>
+                </div>
             </div>
-        </div>
 
-        <!-- Email -->
-        <div class="mb-3 row">
-            <label for="email" class="col-sm-3 col-form-label">Email</label>
-            <div class="col-sm-9">
-                <input type="email" class="form-control" id="email" name="email" placeholder="Nhập email" required>
+            <div class="mb-3 row">
+                <label for="email" class="col-sm-3 col-form-label">Email</label>
+                <div class="col-sm-9">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Nhập email" required oninput="updateForm()">
+                </div>
             </div>
-        </div>
 
-        <!-- Điện thoại -->
-        <div class="mb-3 row">
-            <label for="phoneNumber" class="col-sm-3 col-form-label">Điện thoại</label>
-            <div class="col-sm-9">
-                <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Nhập số điện thoại" required>
+            <div class="mb-3 row">
+                <label for="phoneNumber" class="col-sm-3 col-form-label">Điện thoại</label>
+                <div class="col-sm-9">
+                    <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Nhập số điện thoại" required oninput="updateForm()">
+                </div>
             </div>
-        </div>
 
-        <!-- Quận -->
-        <div class="mb-3 row">
-            <label for="district" class="col-sm-3 col-form-label">Quận</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="district" name="district" placeholder="Nhập quận" required>
+            <div class="mb-3 row">
+                <label for="district" class="col-sm-3 col-form-label">Quận</label>
+                <div class="col-sm-9 custom-select-wrapper">
+                    <select class="form-select custom-select" id="district" name="district" required oninput="updateForm()">
+                        <option value="">-- Chọn quận --</option>
+                        {{#each districts}}
+                        <option value="{{id}}">{{districtName}}</option>
+                        {{/each}}
+                    </select>
+                    <span class="custom-arrow">
+                        <i class="bi bi-chevron-down"></i>
+                    </span>
+                </div>
             </div>
-        </div>
 
-        <!-- Địa chỉ -->
-        <div class="mb-3 row">
-            <label for="address" class="col-sm-3 col-form-label">Địa chỉ</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="address" name="address" placeholder="Nhập địa chỉ" required>
+            <div class="mb-3 row">
+                <label for="address" class="col-sm-3 col-form-label">Địa chỉ</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="address" name="address" placeholder="Nhập địa chỉ" required oninput="updateForm()">
+                </div>
             </div>
-        </div>
 
-        <!-- Nút đăng ký -->
-        <div class="text-center mt-5">
-            <button type="submit" class="btn btn-primary border-0 rounded-5 fw-semibold py-2" 
-                style="background-color: #C6BDBD; color: #000; width: 200px;"
-                >
-                Đăng ký
-            </button>
+            <div class="text-center mt-5">
+                <button type="submit" class="btn btn-dark fw-semibold rounded px-5 bg-custom">
+                    Đăng ký
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Form preview với watermark -->
+    <div class="w-50 p-4 position-relative" id="formPreviewWrapper">
+        <div class="form-preview-watermark">
+            <i class="bi bi-globe"></i>
+            Dealio
         </div>
-    </form>
+        <div id="formPreview" style="position: relative; z-index: 1;"></div>
+    </div>
 </div>
 
 <script>
-    {{!-- document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const successPopup = document.getElementById('success-popup');
         const errorPopup = document.getElementById('error-popup');
+        const formPreview = document.getElementById('formPreview');
 
         if (successPopup) {
-            successPopup.style.display = 'flex';
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công',
+                text: successPopup.textContent,
+                showConfirmButton: false,
+                timer: 2000
+            }).then(() => {
+                window.location.reload();
+            });
         }
+
         if (errorPopup) {
-            errorPopup.style.display = 'flex';
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: errorPopup.textContent,
+                showConfirmButton: false,
+                timer: 2500
+            });
         }
+
+        window.updateForm = function () {
+            const agencyCode = document.getElementById('agencyCode').value;
+            const agencyName = document.getElementById('agencyName').value || '________________';
+            const agencyType = document.getElementById('agencyType').value || '____________________';
+            const email = document.getElementById('email').value || '____________________';
+            const phoneNumber = document.getElementById('phoneNumber').value || '_________________';
+            const district = document.getElementById('district')?.value || '_________________________';
+            const address = document.getElementById('address').value || '___________________';
+
+            formPreview.innerHTML = `
+                <div style="border: 2px solid black; padding: 20px; background: white;">
+                    <h3 class="mb-2 text-center w-100">ĐƠN ĐĂNG KÝ ĐẠI LÝ</h3>
+                    <div class="mb-4 text-end fst-italic">Ngày lập đơn đăng ký: ${new Date().toLocaleDateString('vi-VN')}</div>
+                    <div class="mb-3">Mã đại lý: ${agencyCode}</div>
+                    <div class="mb-3 d-flex">
+                        <div class="w-50 me-5">Tên đại lý: ${agencyName}</div>
+                        <div class="w-50 ms-5">Loại đại lý: ${agencyType}</div>
+                    </div>
+                    <div class="mb-3 d-flex">
+                        <div class="w-50 me-5">Email: ${email}</div>
+                        <div class="w-50 ms-5">Số điện thoại: ${phoneNumber}</div>
+                    </div>
+                    <div class="mb-5 d-flex">
+                        <div class="w-50 me-5">Địa chỉ: ${address}</div>
+                        <div class="w-50 ms-5">Quận: ${district}</div>
+                    </div>
+                    <div class="mb-2 text-end fst-italic">Người làm đơn</div>
+                    <div class="mb-3 text-end ">{{user.fullname}}</div>
+                </div>
+            `;
+        };
+
+        updateForm();
+        document.querySelectorAll('input, select').forEach(el => {
+            el.addEventListener('input', updateForm);
+        });
     });
 
     function closePopup(popupId) {
@@ -170,31 +252,5 @@
         if (popup) {
             popup.style.display = 'none';
         }
-    } --}}
-    document.addEventListener("DOMContentLoaded", function () {
-        const successPopup = document.getElementById('success-popup');
-        const errorPopup = document.getElementById('error-popup');
-
-    if (successPopup) {
-      Swal.fire({
-        icon: 'success',
-        title: 'Thành công',
-        text: successPopup.textContent,
-        showConfirmButton: false,
-        timer: 2000
-      }).then(() => {
-        window.location.reload(); 
-      });
     }
-
-    if (errorPopup) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Lỗi',
-        text: errorPopup.textContent,
-        showConfirmButton: false,
-        timer: 2500
-      });
-    }
-  });
 </script>

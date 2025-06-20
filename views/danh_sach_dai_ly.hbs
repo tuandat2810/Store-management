@@ -19,19 +19,26 @@
   }
 
   .pagination .page-link {
-    color: black;                /* Màu chữ */
-    background-color: #fff;      /* Màu nền (trang hiện tại có thể giữ nguyên) */
-    border-color: black;         /* Màu viền */
+    color: black;
+    /* Màu chữ */
+    background-color: #fff;
+    /* Màu nền (trang hiện tại có thể giữ nguyên) */
+    border-color: black;
+    /* Màu viền */
   }
 
   .pagination .page-item.active .page-link {
-    background-color: black;     /* Nền khi active */
-    border-color: black;         /* Viền khi active */
-    color: white;                /* Chữ khi active */
+    background-color: black;
+    /* Nền khi active */
+    border-color: black;
+    /* Viền khi active */
+    color: white;
+    /* Chữ khi active */
   }
 
   .pagination .page-link:hover {
-    background-color: #333;      /* Nền khi hover */
+    background-color: #333;
+    /* Nền khi hover */
     color: white;
   }
 </style>
@@ -47,13 +54,8 @@
     <!-- Thanh tìm kiếm (search bar) căn phải -->
     <div class="d-flex justify-content-end mb-3">
       <div class="input-group" style="width: 300px;">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Tìm kiếm đại lý..."
-          id="searchInput"
-          value="{{searchQuery}}"
-        />
+        <input type="text" class="form-control" placeholder="Tìm kiếm đại lý..." id="searchInput"
+          value="{{searchQuery}}" />
         <button class="btn btn-outline-secondary" type="button" onclick="clearSearch()">
           <i class="bi bi-x"></i>
         </button>
@@ -65,11 +67,11 @@
     </div>
   </div>
 
-    <!-- Bảng dữ liệu sử dụng Bootstrap -->
+  <!-- Bảng dữ liệu sử dụng Bootstrap -->
   <div class="agency-table-container mb-5">
     <table class="table table-striped">
       <thead>
-         <tr>
+        <tr>
           <th scope="col" class="text-center" style="width: 5%;">#</th>
           <th scope="col" class="text-center" style="width: 16%;">Tên đại lý</th>
           <th scope="col" class="text-center" style="width: 15%;">Người quản lý</th>
@@ -77,31 +79,37 @@
           <th scope="col" class="text-center" style="width: 7%;">Quận</th>
           <th scope="col" class="text-center" style="width: 30%;">Địa chỉ</th>
           <th scope="col" class="text-center" style="width: 8%;">Tiền nợ</th>
+          <th scope="col" class="text-center" style="width: 11%;">Ngày duyệt</th>
           <th scope="col" class="text-center" style="width: 12%;">Trạng thái</th>
         </tr>
       </thead>
       <tbody>
         {{#each agencyList}}
-          <tr>
-            <td class="text-center">{{ agencyCode }}</td>
-            <td class="text-center">{{ name }}</td>
-            <td class="text-center">{{ managerUsername }}</td>
-            <td class="text-center">{{ type }}</td>
-            <td class="text-center">{{ district }}</td>
-            <td class="text-center">{{ address }}</td>
-            <td class="text-center">{{ formatCurrency debt }}</td>
-            <td class="text-center">
-              {{#eq status "Đã duyệt"}}
-                <span class="badge bg-success">Đã được duyệt</span>
-              {{/eq}}
-              {{#eq status "Đang chờ"}}
-                <span class="badge bg-secondary">Đang chờ duyệt</span>
-              {{/eq}}
-              {{#eq status "Từ chối"}}
-                <span class="badge bg-danger">Đã bị từ chối</span>
-              {{/eq}}
-            </td>
-          </tr>
+        <tr>
+          <td class="text-center">{{ agencyCode }}</td>
+          <td class="text-center">{{ name }}</td>
+          <td class="text-center">{{ managerUsername }}</td>
+          <td class="text-center">{{ type }}</td>
+          <td class="text-center">{{ district }}</td>
+          <td class="text-center">{{ address }}</td>
+          <td class="text-center">{{ formatCurrency debt }}</td>
+          <td class="text-center">
+            {{#eq status "Đã duyệt"}}
+            {{formatDate2 acceptedDate}}
+            {{/eq}}
+          </td>
+          <td class="text-center">
+            {{#eq status "Đã duyệt"}}
+            <span class="badge bg-success">Đã được duyệt</span>
+            {{/eq}}
+            {{#eq status "Đang chờ"}}
+            <span class="badge bg-secondary">Đang chờ duyệt</span>
+            {{/eq}}
+            {{#eq status "Từ chối"}}
+            <span class="badge bg-danger">Đã bị từ chối</span>
+            {{/eq}}
+          </td>
+        </tr>
         {{/each}}
       </tbody>
     </table>
@@ -117,19 +125,20 @@
 
         {{!-- Nút Previous --}}
         <li class="page-item {{#if (eq1 currentPage 1)}}disabled{{/if}}">
-          <a class="page-link" href="?page={{subtract currentPage 1}}">&laquo;</a>
+          <a class="page-link"
+            href="?page={{subtract currentPage 1}}{{#if searchQuery}}&search={{searchQuery}}{{/if}}">&laquo;</a>
         </li>
 
         {{!-- Danh sách số trang --}}
         {{#each pages}}
-          <li class="page-item {{#if (eq1 this ../currentPage)}}active{{/if}}">
-            <a class="page-link" href="?page={{this}}">{{this}}</a>
-          </li>
+        <li class="page-item {{#if (eq1 this ../currentPage)}}active{{/if}}">
+          <a class="page-link" href="?page={{this}}{{#if ../searchQuery}}&search={{../searchQuery}}{{/if}}">{{this}}</a>
+        </li>
         {{/each}}
 
         {{!-- Nút Next --}}
         <li class="page-item {{#if (eq1 currentPage cntPage)}}disabled{{/if}}">
-          <a class="page-link" href="?page={{add currentPage 1}}">&raquo;</a>
+          <a class="page-link" href="?page={{add currentPage 1}}{{#if searchQuery}}&search={{searchQuery}}{{/if}}">&raquo;</a>
         </li>
 
       </ul>
@@ -143,18 +152,18 @@
     const searchQuery = document.getElementById('searchInput').value.trim();
     if (searchQuery) {
       // Thực hiện tìm kiếm với từ khóa
-      window.location.href = `/main/danh_sach_dai_ly?search=${encodeURIComponent(searchQuery)}&page=1`;
+      window.location.href = `/agency/view?search=${encodeURIComponent(searchQuery)}&page=1`;
     }
   }
 
   // Khi người dùng nhấn nút xóa
   function clearSearch() {
     document.getElementById('searchInput').value = ''; // Xóa từ khóa tìm kiếm
-    window.location.href = '/main/danh_sach_dai_ly?page=1'; // Reset lại trang và tìm kiếm
+    window.location.href = '/agency/view?page=1'; // Reset lại trang và tìm kiếm
   }
 
   // Khi người dùng nhấn phím Enter trong ô tìm kiếm
-  document.getElementById('searchInput').addEventListener('keypress', function(event) {
+  document.getElementById('searchInput').addEventListener('keypress', function (event) {
     if (event.key === 'Enter') {
       event.preventDefault();
       performSearch();
@@ -163,29 +172,29 @@
 
   // Khi người dùng gõ tìm kiếm sẽ đề xuất nội dung liên quan
   searchInput.addEventListener("input", () => {
-  const query = searchInput.value.trim();
+    const query = searchInput.value.trim();
 
-  if (!query) {
-    suggestions.innerHTML = "";
-    return; // return này nằm đúng trong hàm arrow function
-  }
-
-  fetch(`/main/dai-ly-suggestions?query=${encodeURIComponent(query)}`)
-    .then(res => res.json())
-    .then(data => {
+    if (!query) {
       suggestions.innerHTML = "";
-      data.forEach(name => {
-        const li = document.createElement("li");
-        li.textContent = name;
-        li.className = "list-group-item list-group-item-action";
-        li.onclick = () => {
-          searchInput.value = name;
-          suggestions.innerHTML = "";
-          performSearch();
-        };
-        suggestions.appendChild(li);
+      return; // return này nằm đúng trong hàm arrow function
+    }
+
+    fetch(`/main/dai-ly-suggestions?query=${encodeURIComponent(query)}`)
+      .then(res => res.json())
+      .then(data => {
+        suggestions.innerHTML = "";
+        data.forEach(name => {
+          const li = document.createElement("li");
+          li.textContent = name;
+          li.className = "list-group-item list-group-item-action";
+          li.onclick = () => {
+            searchInput.value = name;
+            suggestions.innerHTML = "";
+            performSearch();
+          };
+          suggestions.appendChild(li);
+        });
       });
-    });
   });
   // Khi click ra ngoài thì xóa gợi ý
   document.addEventListener("click", (e) => {
@@ -211,7 +220,7 @@
             };
             suggestions.appendChild(li);
           });
-      });
+        });
     }
   })
 

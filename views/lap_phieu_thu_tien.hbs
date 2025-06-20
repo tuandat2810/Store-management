@@ -2,67 +2,100 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <style>
-  .bg-custom {
-      background-image: linear-gradient( 177.6deg,  rgba(20,0,113,1) 15.3%, rgba(1,0,62,1) 91.3% );
-  }
+    .bg-custom {
+        background-image: linear-gradient(177.6deg, rgba(20, 0, 113, 1) 15.3%, rgba(1, 0, 62, 1) 91.3%);
+    }
+
+    .form-preview-watermark {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-35deg);
+        font-size: 70px;
+        color: rgba(128, 128, 128, 0.1);
+        white-space: nowrap;
+        z-index: 2;
+        font-style: italic;
+        font-weight: bold;
+        pointer-events: none;
+    }
 </style>
 
-<div class="container-user container-fluid d-flex flex-column align-items-center" style="width: 100%; height: 100%;margin-top: 32px;">
-  <h3 class="mb-5 text-center w-100">
-    Lập phiếu thu tiền
-  </h3>    
 
-  <form id="receipt-form" action="/main/lap_phieu_thu_tien" method="POST" class="w-100 text-center" style="max-width: 600px;">    
-    <div class="mb-3 row">
-        <label for="maphieu" class="col-sm-3 col-form-label">Mã phiếu</label>
-        <div class="col-sm-9">
-            <input type="text" class="form-control" id="maphieu" name="maphieu" value="{{receiptCode}}" readonly>
-        </div>
+<div class="container-fluid d-flex" style="width: 100%; height: 100%; margin-top: 32px;">
+    <!-- Form nhập liệu -->
+    <div class="w-50 p-4">
+        <h3 class="mb-5 text-center w-100">Lập phiếu thu tiền</h3>
+        <form id="receipt-form" action="/main/lap_phieu_thu_tien" method="POST" class="w-100 text-center"
+            style="max-width: 600px;">
+            <div class="mb-3 row">
+                <label for="maphieu" class="col-sm-3 col-form-label">Mã phiếu</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="maphieu" name="maphieu" value="{{receiptCode}}"
+                        readonly>
+                </div>
+            </div>
+
+
+            <!-- Mã đại lý -->
+            <div class="mb-3 row">
+                <label for="agencyCode" class="col-sm-3 col-form-label">Mã đại lý</label>
+                <div class="col-sm-9">
+                    <select class="form-select" id="agencyCode" name="agencyCode" required
+                        style="font-family: 'Roboto Mono', monospace;">
+                        <option value="" selected disabled>-- Chọn đại lý --</option>
+                        {{#each formattedAgencies}}
+                        <option value="{{value}}">{{{display}}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="mb-3 row">
+                <label for="sotien" class="col-sm-3 col-form-label">Số tiền</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="sotien" name="sotien" placeholder="Nhập số tiền"
+                        required>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="ghichu" class="col-sm-3 col-form-label">Ghi chú</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="ghichu" name="ghichu" value="Phiếu thu tiền đại lý"
+                        required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn bg-custom fw-semibold rounded px-4 py-2 text-white"
+                onclick="prepareAndSubmit(event)">
+                <i class="bi bi-receipt me-2"></i> Lập phiếu
+            </button>
+
+
+        </form>
     </div>
 
-
-    <!-- Mã đại lý -->
-    <div class="mb-3 row">
-        <label for="agencyCode" class="col-sm-3 col-form-label">Mã đại lý</label>
-        <div class="col-sm-9">
-            <select class="form-select" id="agencyCode" name="agencyCode" required style="font-family: 'Roboto Mono', monospace;">
-                <option value="" selected disabled>-- Chọn đại lý --</option>
-                {{#each formattedAgencies}}
-                    <option value="{{value}}">{{{display}}}</option>
-                {{/each}}
-            </select>
+    <!-- Form preview với watermark -->
+    <div class="w-50 p-4 position-relative" id="formPreviewWrapper">
+        <div class="form-preview-watermark">
+            <i class="bi bi-globe"></i>
+            Dealio
         </div>
+        <div id="formPreview" style="position: relative; z-index: 1;"></div>
     </div>
-
-
-    <div class="mb-3 row">
-        <label for="sotien" class="col-sm-3 col-form-label">Số tiền</label>
-        <div class="col-sm-9">
-            <input type="text" class="form-control" id="sotien" name="sotien" placeholder="Nhập số tiền" required>
-        </div>
-    </div>
-
-    <div class="mb-3 row">
-        <label for="ghichu" class="col-sm-3 col-form-label">Ghi chú</label>
-        <div class="col-sm-9">
-            <input type="text" class="form-control" id="ghichu" name="ghichu" value="Phiếu thu tiền đại lý" required>
-        </div>
-    </div>
-
-    <button type="submit"
-        class="btn bg-custom fw-semibold rounded px-4 py-2 text-white"
-        onclick="prepareAndSubmit(event)">
-        <i class="bi bi-receipt me-2"></i> Lập phiếu
-    </button>
-
-
-  </form>
 </div>
 
+
+
+
+
 <script>
+
     function prepareAndSubmit(event) {
         const amountField = document.getElementById('sotien');
-        amountField.value = amountField.value.replace(/[^\d.]/g, ''); 
+        amountField.value = amountField.value.replace(/[^\d.]/g, '');
     }
 
     const successMsg = "{{success_msg}}";
@@ -70,29 +103,62 @@
     console.log("Success Message:", successMsg);
     console.log("Error Message:", errorMsg);
 
-    if(successMsg) {
+    if (successMsg) {
         Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title: 'Thành công!',
-        text: successMsg,
-        timer: 5000,
-        timerProgressBar: true,
-        showConfirmButton: false
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: 'Thành công!',
+            text: successMsg,
+            timer: 5000,
+            timerProgressBar: true,
+            showConfirmButton: false
         });
     }
 
-    if(errorMsg) {
+    if (errorMsg) {
         Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'error',
-        title: 'Thất bại!',
-        text: errorMsg,
-        timer: 5000,
-        timerProgressBar: true,
-        showConfirmButton: false
+            toast: true,
+            position: 'top-end',
+            icon: 'error',
+            title: 'Thất bại!',
+            text: errorMsg,
+            timer: 5000,
+            timerProgressBar: true,
+            showConfirmButton: false
         });
     }
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const formPreview = document.getElementById('formPreview');
+
+        window.updateForm = function () {
+            const maphieu = document.getElementById('maphieu').value || '________';
+            const agencyCode = document.getElementById('agencyCode').value || '_______________';
+            const amount = document.getElementById('sotien').value || '__________________';
+            const note = document.getElementById('ghichu').value || '_________________';
+
+            formPreview.innerHTML = `
+                <div style="border: 2px solid black; padding: 20px; background: white;">
+                    <h3 class="text-center mb-4">PHIẾU THU TIỀN</h3>
+                    <div class="mb-4 text-end fst-italic">Ngày lập phiếu thu tiền: ${new Date().toLocaleDateString('vi-VN')}</div>
+                    <p><strong>Mã phiếu:</strong> ${maphieu}</p>
+                    <p><strong>Mã đại lý:</strong> ${agencyCode}</p>
+                    <p><strong>Số tiền:</strong> ${amount}</p>
+                    <p><strong>Ghi chú:</strong> ${note}</p>
+                    <div class="text-end fst-italic mt-5">Người lập phiếu</div>
+                    <div class="text-end">{{user.fullname}}</div>
+                </div>
+            `;
+        };
+
+        // Gọi khi trang load
+        updateForm();
+
+        // Gán sự kiện cho các input/select
+        document.querySelectorAll('#receipt-form input, #receipt-form select').forEach(el => {
+            el.addEventListener('input', updateForm);
+        });
+    });
 </script>
