@@ -28,14 +28,12 @@ module.exports.registerPost = async (req, res) => {
     const { username, password, confirmPassword, fullname, email } = req.body;
 
     try {
-        // Kiểm tra username đã tồn tại
         const existedUser = await User.findOne({ username: username });
         if (existedUser) {
             req.flash("error", "Username đã tồn tại!");
             return res.redirect('/user/register');
         }
 
-        // Kiểm tra mật khẩu nhập lại
         if (password !== confirmPassword) {
             req.flash("error", "Mật khẩu không khớp!");
             return res.redirect('/user/register');
@@ -58,7 +56,6 @@ module.exports.registerPost = async (req, res) => {
             httpOnly: true,
         });
 
-        // Chuyển sang trang đăng nhập sau khi đăng ký
         req.flash("success", "Đăng ký thành công. Hãy đăng nhập!");
         return res.redirect('/user/login');
     } catch (error) {
@@ -125,7 +122,6 @@ module.exports.home = async(req, res) => {
     });
 };
 
-// controllers/about.controller.js
 module.exports.showAboutPage = (req, res) => {
     res.render('about', {
         layout: 'main',
@@ -148,7 +144,6 @@ module.exports.forgotPasswordPost = async (req, res) => {
     const { email } = req.body;
     try {
         const user = await User.findOne({ email: email });
-        // console.log('email: ', email);
         if (!user) {
             req.flash("error", "Tài khoản không tồn tại!");
             return res.redirect('/user/forgot-password');
@@ -159,7 +154,7 @@ module.exports.forgotPasswordPost = async (req, res) => {
         const objectForgotPassword = {
             email: email,
             OTP: otp,
-            expireAt: Date.now() + 3000000
+            expireAt: Date.now() + 180000
         }
 
         const forgotPassword = new ForgotPassword(objectForgotPassword);
@@ -169,6 +164,7 @@ module.exports.forgotPasswordPost = async (req, res) => {
         const html = `Mã OTP để lấy lại mật khẩu là: <b>${otp}</b>. Thời hạn sử dụng là 3p`;
         await BrevoProvider.sendEmail(email, subject, html);
 
+        req.flash("success", "Mã OTP đã được gửi đến email của bạn. Vui lòng kiểm tra hộp thư đến!");
         res.redirect(`/user/password/otp?email=${email}`);
 
     } catch (error) {
@@ -179,13 +175,48 @@ module.exports.forgotPasswordPost = async (req, res) => {
 
 }
 
+module.exports.resendOtp = async (req, res) => {
+    const { email } = req.query;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            req.flash("error", "Email không hợp lệ!");
+            return res.redirect("/page/forgot-password");
+        }
+
+        const otp = generateRandomNumber.generateRandomNumber(8);
+        const objectForgotPassword = {
+            email,
+            OTP: otp,
+            expireAt: Date.now() + 180000
+        };
+
+        await ForgotPassword.deleteMany({ email });
+        await new ForgotPassword(objectForgotPassword).save();
+
+        const subject = "Mã OTP mới để lấy lại mật khẩu";
+        const html = `Mã OTP mới là: <b>${otp}</b>. Thời hạn sử dụng là 3 phút.`;
+        await BrevoProvider.sendEmail(email, subject, html);
+
+        req.flash("success", "Yêu cầu gửi lại mã OTP thành công! Vui lòng kiểm tra email của bạn.");
+        res.redirect(`/page/password/otp?email=${email}`);
+    } catch (error) {
+        console.error("Lỗi gửi lại OTP:", error);
+        req.flash("error", "Có lỗi xảy ra khi gửi lại OTP.");
+        res.redirect("/page/forgot-password");
+    }
+};
+
+
 module.exports.otpPassword = async (req, res) => {
     const email = req.query.email;
     try {
         res.render('otpPassword', {
             layout: 'main',
             pageTitle: 'Xác minh OTP',
-            email: email
+            email: email,
+            success: req.flash('success')[0],
+            error: req.flash('error')[0]
         });
     } catch (err) {
         console.error('Render lỗi:', err);
@@ -201,13 +232,12 @@ module.exports.otpPasswordPost = async (req, res) => {
         const forgotPassword = await ForgotPassword.findOne({
             email: email,
             OTP: otp,
-            expireAt: { $gt: Date.now() } // Kiểm tra OTP còn hiệu lực
+            expireAt: { $gt: Date.now() }
         }); 
         if (!forgotPassword) {
             req.flash("error", "Mã OTP không hợp lệ hoặc đã hết hạn!");
             return res.redirect(`/user/password/otp?email=${email}`);
         }
-        // Nếu OTP hợp lệ, chuyển hướng đến trang đặt lại mật khẩu
         res.render('resetPassword', {
             layout: 'main',
             pageTitle: 'Đặt lại mật khẩu',
@@ -238,7 +268,6 @@ module.exports.resetPasswordPost = async (req, res) => {
     console.log('password: ', password);
     console.log('confirmPassword: ', confirmPassword);
     try {
-        // Kiểm tra mật khẩu nhập lại
         if (password !== confirmPassword) {
             req.flash("error", "Mật khẩu không khớp!");
             return res.redirect(`/user/password/reset?email=${email}`);
@@ -246,10 +275,8 @@ module.exports.resetPasswordPost = async (req, res) => {
 
         const hashedPassword = await Crypto.hashedPassword(password);
 
-        // Cập nhật mật khẩu cho người dùng
         await User.updateOne({ email: email }, { password: hashedPassword });
 
-        // Xóa OTP đã sử dụng
         await ForgotPassword.deleteOne({ email: email });
 
         req.flash("success", "Đặt lại mật khẩu thành công!");

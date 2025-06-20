@@ -28,6 +28,8 @@ router.get("/password/otp", userController.otpPassword);
 
 router.post("/password/otp", userController.otpPasswordPost);
 
+router.get('/password/resend-otp', userController.resendOtp);
+
 router.get("/password/reset", userController.resetPassword);
 
 router.post("/password/reset", userController.resetPasswordPost);
