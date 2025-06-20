@@ -51,11 +51,6 @@ module.exports.registerPost = async (req, res) => {
 
         await newUser.save();
 
-        res.cookie("tokenUser", newUser.tokenUser, {
-            maxAge: 86400000,
-            httpOnly: true,
-        });
-
         req.flash("success", "Đăng ký thành công. Hãy đăng nhập!");
         return res.redirect('/user/login');
     } catch (error) {
