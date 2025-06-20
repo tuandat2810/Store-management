@@ -55,3 +55,22 @@ module.exports.loginPost =  (req,res, next) => {
     }
     next();
 }
+
+module.exports.update_thong_tin_tai_khoan = (req, res, next) => {
+    const { email, phone } = req.body;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^(0|\+84)(\d{9})$/;
+
+    if (email && !emailRegex.test(email)) {
+        req.flash("error", "Email không hợp lệ!");
+        return res.redirect("/user/info");
+    }
+
+    if (phone && !phoneRegex.test(phone)) {
+        req.flash("error", "Số điện thoại không hợp lệ!");
+        return res.redirect("/user/info");
+    }
+
+    next();
+}
