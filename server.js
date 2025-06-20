@@ -11,6 +11,8 @@ const exphbs = require('express-handlebars');
 const District = require('./models/district.m.js'); // Import model District
 const Agency = require('./models/agency.m.js'); // Import model Agency
 
+// Cấu hình public folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Cấu hình cổng
 const port = process.env.PORT || 3000;
