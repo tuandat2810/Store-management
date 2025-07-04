@@ -60,20 +60,22 @@
 
 </style>
 
-<!-- Trang chủ -->
 <div class="container-fluid px-4 py-4">
-  <!-- 🎉 Banner -->
   <div class="banner">
-    <h2 class="fw-bold mb-2">🎉 Xin chào, Chủ đại lý <span class="text-warning">{{user.fullname}}</span></h2>
-    <p class="mb-1">Bạn đang quản lý: <strong>{{agencyCount}}</strong> đại lý</p>
+    {{#eq user.type "admin"}}
+      <h2 class="fw-bold mb-2">🎉 Xin chào, <span class="text-warning">Admin {{user.fullname}}</span></h2>
+    {{else}}
+      <h2 class="fw-bold mb-2">🎉 Xin chào, Chủ đại lý <span class="text-warning">{{user.fullname}}</span></h2>
+      <p class="mb-1">Bạn đang quản lý: <strong>{{agencyCount}}</strong> đại lý</p>
+    {{/eq}}
   </div>
 
-  <!-- ⚡ Hành động nhanh -->
+
+
 <div class="quick-actions mb-5">
   <h5 class="mb-3 fw-semibold"><i class="bi bi-lightning-fill text-warning me-1"></i> Hành động nhanh</h5>
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
     
-    <!-- Quản lý đại lý -->
     <div class="col">
       <div class="card text-center shadow-sm p-4 h-100">
         <div class="text-primary card-icon"><i class="bi bi-box-seam"></i></div>
@@ -82,7 +84,6 @@
       </div>
     </div>
 
-    <!-- Quản lý phiếu xuất hàng -->
     <div class="col">
       <div class="card text-center shadow-sm p-4 h-100">
         <div class="text-success card-icon"><i class="bi bi-receipt"></i></div>
@@ -91,7 +92,6 @@
       </div>
     </div>
 
-    <!-- Quản lý phiếu thu tiền -->
     <div class="col">
       <div class="card text-center shadow-sm p-4 h-100">
         <div class="text-warning card-icon"><i class="bi bi-people"></i></div>
@@ -100,7 +100,6 @@
       </div>
     </div>
 
-    <!-- Báo cáo doanh thu -->
     <div class="col">
       <div class="card text-center shadow-sm p-4 h-100">
         <div class="text-danger card-icon"><i class="bi bi-graph-up-arrow"></i></div>
@@ -113,7 +112,6 @@
 </div>
 
 
-  <!-- 💬 Gợi ý / Hỗ trợ -->
   <div class="row g-4">
     <div class="col-md-6">
       <div class="card info-card p-4 shadow-sm border-0 h-100">
@@ -140,7 +138,6 @@
   </div>
 </div>
 
-<!-- Toast Thông báo -->
 <script>
   const successMsg = "{{success_msg}}";
   if (successMsg) {
