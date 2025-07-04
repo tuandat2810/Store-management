@@ -2,7 +2,6 @@ module.exports.registerPost = (req, res, next) => {
     const { username, fullname, email, password, confirmPassword } = req.body;
 
     if (!username) {
-        console.log("Nhập username đi !")
         req.flash('error', 'Vui lòng nhập tên tài khoản');
         return res.redirect("back");
     }

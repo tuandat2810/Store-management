@@ -9,6 +9,7 @@ const generateHelper = require("../helpers/generateRandom.js");
 // Cloudinary
 const multer = require('multer');
 const { cloudinary, storage } = require('../utils/cloudinary.js');
+const Agency = require('../models/agency.m.js');
 const upload = multer({ storage });
 
 module.exports.register = async (req, res) => {
@@ -111,9 +112,14 @@ module.exports.logout = async (req, res) => {
 }
 
 module.exports.home = async(req, res) => {
+
+    const user = res.locals.user;
+    const agencyCount = await Agency.countDocuments({ managerUsername: user.fullname });
     res.render('home', {
         layout: 'main',
-        pageTitle: 'Trang chủ'
+        pageTitle: 'Trang chủ',
+        user: res.locals.user,
+        agencyCount: agencyCount
     });
 };
 
@@ -221,8 +227,7 @@ module.exports.otpPassword = async (req, res) => {
 
 module.exports.otpPasswordPost = async (req, res) => {
     const { email, otp } = req.body;
-    console.log('email: ', email);
-    console.log('otp: ', otp);
+
     try {
         const forgotPassword = await ForgotPassword.findOne({
             email: email,
@@ -258,10 +263,7 @@ module.exports.resetPassword = async (req, res) => {
 
 module.exports.resetPasswordPost = async (req, res) => {
     const { email, password, confirmPassword } = req.body;
-    console.log('RESETPOST:')
-    console.log('email: ', email);
-    console.log('password: ', password);
-    console.log('confirmPassword: ', confirmPassword);
+
     try {
         if (password !== confirmPassword) {
             req.flash("error", "Mật khẩu không khớp!");

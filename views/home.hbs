@@ -1,25 +1,154 @@
+<!-- SweetAlert2 & Bootstrap Icons -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
 
-{{!-- <style>
-  body {
-        background-color: #f8f9fa;
-        font-family: 'Arial', sans-serif;
+<!-- Custom Style -->
+<style>
+  .banner {
+    background: linear-gradient(135deg, #4b6cb7, #182848);
+    color: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
-</style> --}}
 
-<div class="container-fluid text-center" id="main-content">
-    <h3 style="margin-top:32px">Đây là trang chủ</h3>    
+  .quick-actions .card {
+    transition: 0.3s ease;
+    cursor: pointer;
+    border-radius: 1rem;
+    border: 1px solid #e0e0e0;
+  }
+
+  .quick-actions .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .info-card {
+    transition: 0.3s;
+    border-radius: 1rem;
+  }
+
+  .info-card:hover {
+    background-color: #f9f9f9;
+  }
+
+  .quick-actions .card {
+    transition: 0.3s ease;
+    cursor: pointer;
+    border-radius: 1rem;
+    border: 1px solid #e0e0e0;
+    background-color: #fff;
+    height: 100%;
+  }
+
+  .quick-actions .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .card-icon {
+    font-size: 2.8rem;
+    margin-bottom: 1rem;
+  }
+
+</style>
+
+<!-- Trang chủ -->
+<div class="container-fluid px-4 py-4">
+  <!-- 🎉 Banner -->
+  <div class="banner">
+    <h2 class="fw-bold mb-2">🎉 Xin chào, Chủ đại lý <span class="text-warning">{{user.fullname}}</span></h2>
+    <p class="mb-1">Bạn đang quản lý: <strong>{{agencyCount}}</strong> đại lý</p>
+  </div>
+
+  <!-- ⚡ Hành động nhanh -->
+<div class="quick-actions mb-5">
+  <h5 class="mb-3 fw-semibold"><i class="bi bi-lightning-fill text-warning me-1"></i> Hành động nhanh</h5>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+    
+    <!-- Quản lý đại lý -->
+    <div class="col">
+      <div class="card text-center shadow-sm p-4 h-100">
+        <div class="text-primary card-icon"><i class="bi bi-box-seam"></i></div>
+        <h6 class="fw-semibold">Quản lý đại lý</h6>
+        <p class="text-muted small">Đăng ký đại lý và xem danh sách các đại lý</p>
+      </div>
+    </div>
+
+    <!-- Quản lý phiếu xuất hàng -->
+    <div class="col">
+      <div class="card text-center shadow-sm p-4 h-100">
+        <div class="text-success card-icon"><i class="bi bi-receipt"></i></div>
+        <h6 class="fw-semibold">Quản lý phiếu xuất hàng</h6>
+        <p class="text-muted small">Lập phiếu xuất hàng và xem trạng thái phiếu xuất</p>
+      </div>
+    </div>
+
+    <!-- Quản lý phiếu thu tiền -->
+    <div class="col">
+      <div class="card text-center shadow-sm p-4 h-100">
+        <div class="text-warning card-icon"><i class="bi bi-people"></i></div>
+        <h6 class="fw-semibold">Quản lý phiếu thu tiền</h6>
+        <p class="text-muted small">Xem phiếu thu tiền của đại lý</p>
+      </div>
+    </div>
+
+    <!-- Báo cáo doanh thu -->
+    <div class="col">
+      <div class="card text-center shadow-sm p-4 h-100">
+        <div class="text-danger card-icon"><i class="bi bi-graph-up-arrow"></i></div>
+        <h6 class="fw-semibold">Báo cáo doanh thu</h6>
+        <p class="text-muted small">Xem báo cáo doanh thu theo từng tháng</p>
+      </div>
+    </div>
+
+  </div>
 </div>
 
+
+  <!-- 💬 Gợi ý / Hỗ trợ -->
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="card info-card p-4 shadow-sm border-0 h-100">
+        <div class="d-flex align-items-start">
+          <i class="bi bi-life-preserver fs-3 text-info me-3"></i>
+          <div>
+            <h6 class="fw-semibold mb-1">❓ Cần hỗ trợ?</h6>
+            <p class="text-muted mb-0">Liên hệ admin để được hỗ trợ nhanh nhất, 24/7.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card info-card p-4 shadow-sm border-0 h-100">
+        <div class="d-flex align-items-start">
+          <i class="bi bi-journal-text fs-3 text-secondary me-3"></i>
+          <div>
+            <h6 class="fw-semibold mb-1">📖 Tài liệu hướng dẫn</h6>
+            <p class="text-muted mb-0">Xem video và tài liệu để sử dụng hệ thống hiệu quả.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Thông báo -->
 <script>
   const successMsg = "{{success_msg}}";
-  console.log("Success Message:", successMsg);
-  if(successMsg) {
+  if (successMsg) {
     Swal.fire({
       toast: true,
       position: 'top-end',
       icon: 'success',
-      text: successMsg,
+      title: successMsg,
       timer: 2000,
       timerProgressBar: true,
       showConfirmButton: false
