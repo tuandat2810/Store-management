@@ -35,29 +35,39 @@ module.exports.manage = async (req, res) => {
 function getPaginationPages(currentPage, totalPages, delta = 1) {
   const pages = [];
 
+  // Tập các trang nên hiển thị
+  const range = [];
+  const left = Math.max(1, currentPage - delta);
+  const right = Math.min(totalPages, currentPage + delta);
+
+  for (let i = left; i <= right; i++) {
+    range.push(i);
+  }
+
   // Luôn hiển thị trang đầu
-  if (1 < currentPage - delta) {
-    pages.push(1);
-    if (currentPage - delta > 2) {
-      pages.push('...');
+  if (range[0] > 2) {
+    pages.push(1, '...');
+  } else {
+    for (let i = 1; i < range[0]; i++) {
+      pages.push(i);
     }
   }
 
-  // Hiển thị các trang xung quanh currentPage
-  for (let i = Math.max(1, currentPage - delta); i <= Math.min(totalPages, currentPage + delta); i++) {
-    pages.push(i);
-  }
+  // Thêm range chính giữa
+  pages.push(...range);
 
   // Luôn hiển thị trang cuối
-  if (totalPages > currentPage + delta) {
-    if (currentPage + delta < totalPages - 1) {
-      pages.push('...');
+  if (range[range.length - 1] < totalPages - 1) {
+    pages.push('...', totalPages);
+  } else {
+    for (let i = range[range.length - 1] + 1; i <= totalPages; i++) {
+      pages.push(i);
     }
-    pages.push(totalPages);
   }
 
   return pages;
 }
+
 
 
 // Load danh sách đại lý
