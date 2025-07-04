@@ -32,15 +32,33 @@ module.exports.manage = async (req, res) => {
   }
 };
 
-function getPaginationPages(currentPage, totalPages, delta = 2) {
+function getPaginationPages(currentPage, totalPages, delta = 1) {
   const pages = [];
-  const start = Math.max(1, currentPage - delta);
-  const end = Math.min(totalPages, currentPage + delta);
-  for (let i = start; i <= end; i++) {
+
+  // Luôn hiển thị trang đầu
+  if (1 < currentPage - delta) {
+    pages.push(1);
+    if (currentPage - delta > 2) {
+      pages.push('...');
+    }
+  }
+
+  // Hiển thị các trang xung quanh currentPage
+  for (let i = Math.max(1, currentPage - delta); i <= Math.min(totalPages, currentPage + delta); i++) {
     pages.push(i);
   }
+
+  // Luôn hiển thị trang cuối
+  if (totalPages > currentPage + delta) {
+    if (currentPage + delta < totalPages - 1) {
+      pages.push('...');
+    }
+    pages.push(totalPages);
+  }
+
   return pages;
 }
+
 
 // Load danh sách đại lý
 module.exports.viewAllAgencies = async (req, res) => {

@@ -101,6 +101,7 @@ module.exports.updateUnit = async (req, res) => {
     try {
         const { value } = req.params;
         const { newValue } = req.body;
+        console.log(value, newValue);
 
         if (!value || !newValue) {
             return res.status(400).json({ message: 'Đơn vị tính không được để trống' });
@@ -109,12 +110,17 @@ module.exports.updateUnit = async (req, res) => {
         if (value === newValue) {
             return res.status(400).json({ message: 'Loại đơn vị tính mới phải khác loại đơn vị tính cũ.' });
         }
+        const checkExistsUnit = await ProductUnit.findOne({ value: newValue });
+        if (checkExistsUnit && checkExistsUnit.value !== value) {
+            return res.status(409).json({ message: 'Loại đơn vị tính mới đã tồn tại. Vui lòng nhập đơn vị khác' });
+        }
 
         const updated = await ProductUnit.findOneAndUpdate(
             { value },
             { value: newValue },
             { new: true }
         );
+
 
         if (!updated) {
             return res.status(404).json({ message: 'Không tìm thấy loại đơn vị tính.' });
