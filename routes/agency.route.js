@@ -6,6 +6,18 @@ const router = express.Router();
 const authMiddleware = require("../middlewares/auth.middleware");
 const agencyController = require('../controllers/agency.controller');
 
+
+router.get('/manage', authMiddleware.requireAuth, agencyController.manage);
+
+router.get('/view', authMiddleware.requireAuth, agencyController.viewAllAgencies);
+
+router.get('/register', authMiddleware.requireAuth, agencyController.registerView);
+router.post('/register', authMiddleware.requireAuth, agencyController.register);
+
+
+
+
+
 router.post('/api/agency/update-status', authMiddleware.requireAuth, agencyController.update_status);
 router.post('/api/district/update-max-agency', authMiddleware.requireAuth, agencyController.update_max_agency);
 

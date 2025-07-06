@@ -41,6 +41,9 @@ module.exports = (app) => {
           month: '2-digit',
           year: 'numeric'
         });
+      },
+      json: function(context) {
+        return JSON.stringify(context);
       }
     }
   }));

@@ -6,7 +6,7 @@
         <h2 class="card-title text-center mb-4">Đăng nhập</h2>
 
         <!-- Login Form -->
-        <form action="/page/login" method="POST">
+        <form action="/user/login" method="POST">
             <div class="mb-3">
                 <label for="username" class="form-label">Tên tài khoản</label>
                 <input type="text" class="form-control {{#if username_error}}is-invalid{{/if}}" id="username" name="username" required>
@@ -30,10 +30,10 @@
 
         <!-- Forgot Password Link -->
         <div class="text-center mt-3">
-            <a href="/page/register" class="text-muted text-decoration-none" style="font-size: 14px;">Bạn chưa có tài khoản? Đăng ký</a>
+            <a href="/user/register" class="text-muted text-decoration-none" style="font-size: 14px;">Bạn chưa có tài khoản? Đăng ký</a>
         </div>
         <div class="text-center mt-3">
-            <a href="/forgot-password" class="text-muted text-decoration-none" style="font-size: 14px;">Quên mật khẩu?</a>
+            <a href="/user/forgot-password" class="text-muted text-decoration-none" style="font-size: 14px;">Quên mật khẩu?</a>
         </div>
     </div>
 </main>
@@ -52,7 +52,7 @@
             });
         });
         const successMsg = "{{success_msg}}";
-        console.log("Success Message:", successMsg);
+
         if(successMsg) {
             Swal.fire({
             toast: true,
@@ -63,6 +63,19 @@
             timer: 2000,
             timerProgressBar: true,
             showConfirmButton: false
+            });
+        }
+        const errorMsg = "{{error_msg}}";
+        if(errorMsg) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'error',
+                title: 'Thất bại!',
+                text: errorMsg,
+                timer: 5000,
+                timerProgressBar: true,
+                showConfirmButton: false
             });
         }
 </script>

@@ -16,8 +16,6 @@ const AgencyTypeSchema = new mongoose.Schema({
         required: true,
         min: 0 
     }
-}, {
-  timestamps: true // Tự động thêm createdAt và updatedAt
 });
 
 
