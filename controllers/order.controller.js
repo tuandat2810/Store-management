@@ -104,7 +104,8 @@ module.exports.createOrder = async (req, res) => {
 
     if (!agency) {
       req.flash("error", "Không tìm thấy đại lý.");
-      return res.redirect('/main/lap_phieu_xuat_hang');
+      console.log('1')
+      return res.redirect('/order/create');
     }
 
     // Lấy maximumDebt từ loại đại lý
@@ -112,15 +113,17 @@ module.exports.createOrder = async (req, res) => {
 
     if (!agencyType) {
       req.flash("error", "Không tìm thấy thông tin loại đại lý.");
-      return res.redirect('/main/lap_phieu_xuat_hang');
+      console.log('2')
+      return res.redirect('/order/create');
     }
 
     const newDebt = agency.debt + totalAmount;
     const maximumDebt = agencyType.maximumDebt;
 
     if (newDebt > maximumDebt) {
-      req.flash("error", `Không thể lập phiếu. Tổng nợ (${newDebt}) vượt mức cho phép (${maximumDebt}).`);
-      return res.redirect('/main/lap_phieu_xuat_hang');
+      req.flash("error", `Không thể lập phiếu. Tổng nợ ${newDebt} vượt mức cho phép ${maximumDebt}.`);
+      console.log('3')
+      return res.redirect('/order/create');
     }
 
     // 6. Tạo một instance mới của Order

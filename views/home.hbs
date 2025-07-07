@@ -63,7 +63,7 @@
 <div class="container-fluid px-4 py-4">
   <div class="banner">
     {{#eq user.type "admin"}}
-      <h2 class="fw-bold mb-2">🎉 Xin chào, <span class="text-warning">Admin {{user.fullname}}</span></h2>
+      <h2 class="fw-bold mb-2">🎉 Xin chào, Admin <span class="text-warning">{{user.fullname}}</span></h2>
     {{else}}
       <h2 class="fw-bold mb-2">🎉 Xin chào, Chủ đại lý <span class="text-warning">{{user.fullname}}</span></h2>
       <p class="mb-1">Bạn đang quản lý: <strong>{{agencyCount}}</strong> đại lý</p>
