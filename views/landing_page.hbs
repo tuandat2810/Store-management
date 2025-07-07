@@ -1,5 +1,5 @@
 <div class="landing-container">
-    <div class="left-content">
+    <div class="left-content" id="leftContent">
         <h1>Chủ Động Quản Lý<br>Hệ Thống Đại Lý<br>Hiệu Quả & Chuyên Nghiệp</h1>
         <p>
             Hệ thống giúp giám sát, phân quyền và tối ưu hóa hoạt động của các đại lý trên toàn quốc.
@@ -8,7 +8,7 @@
         <a href="/user/register" class="btn-register">ĐĂNG KÝ NGAY</a>
     </div>
 
-    <div class="right-image">
+    <div class="right-image" id="rightImage">
         <div class="diagonal-overlay"></div>
         <img src="images/anhvanphong.jpg" alt="Office" />
     </div>
@@ -246,4 +246,39 @@
         color: #555;
         line-height: 1.6;
     }
+    .blurred {
+        filter: blur(2px) brightness(0.7);
+        transition: filter 0.3s;
+    }
+    .focused {
+        filter: none;
+        transition: filter 0.3s;
+    }
+    @keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-80px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(80px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+.left-content {
+    animation: slideInLeft 1s cubic-bezier(.77,0,.18,1) 0.2s both;
+}
+.right-image {
+    animation: slideInRight 1s cubic-bezier(.77,0,.18,1) 0.4s both;
+}
 </style>

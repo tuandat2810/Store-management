@@ -71,7 +71,7 @@
   </div>
 
 
-
+{{#eq user.type "admin"}}
 <div class="quick-actions mb-5">
   <h5 class="mb-3 fw-semibold"><i class="bi bi-lightning-fill text-warning me-1"></i> Hành động nhanh</h5>
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
@@ -80,7 +80,8 @@
       <div class="card text-center shadow-sm p-4 h-100">
         <div class="text-primary card-icon"><i class="bi bi-box-seam"></i></div>
         <h6 class="fw-semibold">Quản lý đại lý</h6>
-        <p class="text-muted small">Đăng ký đại lý và xem danh sách các đại lý</p>
+        <p class="text-muted small">Xem danh sách trạng thái các đại lý</p>
+        <a href="/agency/manage" class="stretched-link"></a>
       </div>
     </div>
 
@@ -88,7 +89,8 @@
       <div class="card text-center shadow-sm p-4 h-100">
         <div class="text-success card-icon"><i class="bi bi-receipt"></i></div>
         <h6 class="fw-semibold">Quản lý phiếu xuất hàng</h6>
-        <p class="text-muted small">Lập phiếu xuất hàng và xem trạng thái phiếu xuất</p>
+        <p class="text-muted small">Xem phiếu xuất hàng của đại lý</p>
+        <a href="/order/view" class="stretched-link"></a>
       </div>
     </div>
 
@@ -97,6 +99,7 @@
         <div class="text-warning card-icon"><i class="bi bi-people"></i></div>
         <h6 class="fw-semibold">Quản lý phiếu thu tiền</h6>
         <p class="text-muted small">Xem phiếu thu tiền của đại lý</p>
+        <a href="/receipt/view" class="stretched-link"></a>
       </div>
     </div>
 
@@ -105,6 +108,50 @@
         <div class="text-danger card-icon"><i class="bi bi-graph-up-arrow"></i></div>
         <h6 class="fw-semibold">Báo cáo doanh thu</h6>
         <p class="text-muted small">Xem báo cáo doanh thu theo từng tháng</p>
+        <a href="/main/report" class="stretched-link"></a>
+      </div>
+    </div>
+
+  </div>
+
+{{else}}
+<div class="quick-actions mb-5">
+  <h5 class="mb-3 fw-semibold"><i class="bi bi-lightning-fill text-warning me-1"></i> Hành động nhanh</h5>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+    
+    <div class="col">
+      <div class="card text-center shadow-sm p-4 h-100">
+        <div class="text-primary card-icon"><i class="bi bi-box-seam"></i></div>
+        <h6 class="fw-semibold">Quản lý đại lý</h6>
+        <p class="text-muted small">Xem danh sách các đại lý</p>
+        <a href="/agency/view" class="stretched-link"></a>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card text-center shadow-sm p-4 h-100">
+        <div class="text-success card-icon"><i class="bi bi-receipt"></i></div>
+        <h6 class="fw-semibold">Quản lý phiếu xuất hàng</h6>
+        <p class="text-muted small">Lập phiếu xuất hàng</p>
+        <a href="/order/create" class="stretched-link"></a>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card text-center shadow-sm p-4 h-100">
+        <div class="text-warning card-icon"><i class="bi bi-people"></i></div>
+        <h6 class="fw-semibold">Quản lý phiếu thu tiền</h6>
+        <p class="text-muted small">Lập phiếu thu tiền</p>
+        <a href="/receipt/create" class="stretched-link"></a>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card text-center shadow-sm p-4 h-100">
+        <div class="text-danger card-icon"><i class="bi bi-graph-up-arrow"></i></div>
+        <h6 class="fw-semibold">Báo cáo doanh thu</h6>
+        <p class="text-muted small">Xem báo cáo doanh thu theo từng tháng</p>
+        <a href="/main/report" class="stretched-link"></a>
       </div>
     </div>
 
@@ -137,7 +184,7 @@
     </div>
   </div>
 </div>
-
+{{/eq}}
 <script>
   const successMsg = "{{success_msg}}";
   if (successMsg) {
