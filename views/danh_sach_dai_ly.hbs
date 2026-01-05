@@ -74,12 +74,13 @@
         <tr>
           <th scope="col" class="text-center" style="width: 5%;">#</th>
           <th scope="col" class="text-center" style="width: 16%;">Tên đại lý</th>
-          <th scope="col" class="text-center" style="width: 15%;">Người quản lý</th>
+          <th scope="col" class="text-center" style="width: 15%;">Người QL</th>
           <th scope="col" class="text-center" style="width: 6%;">Loại</th>
           <th scope="col" class="text-center" style="width: 7%;">Quận</th>
           <th scope="col" class="text-center" style="width: 30%;">Địa chỉ</th>
           <th scope="col" class="text-center" style="width: 8%;">Tiền nợ</th>
           <th scope="col" class="text-center" style="width: 11%;">Ngày duyệt</th>
+          <th scope="col" class="text-center" style="width: 7%;">Liên hệ</th>
           <th scope="col" class="text-center" style="width: 12%;">Trạng thái</th>
         </tr>
       </thead>
@@ -97,6 +98,10 @@
             {{#eq status "Đã duyệt"}}
             {{formatDate2 acceptedDate}}
             {{/eq}}
+          </td>
+          <td>
+            <span class="text-decoration-none">{{ email }}</span>
+            <span class="text-decoration-none">SĐT: {{ phone }}</span>
           </td>
           <td class="text-center">
             {{#eq status "Đã duyệt"}}

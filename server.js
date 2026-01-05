@@ -46,32 +46,18 @@ app.use((req, res, next) => {
     next();
 });
 
-// Route chính
+// 
+// Landing_page
 app.get('/', async (req, res) => {
-    try {
-        const agencies = await Agency.find({status:"Đã duyệt"},'district');
-        const districtIdsWithAgencies = [...new Set(agencies.map(a => a.district))];
-        const districts = await District.find({ id: { $in: districtIdsWithAgencies } });
-        const totalDistricts = districts.length;
-        const totalAgencies = agencies.length;
-
-        res.render('landing_page', {
-            districts,
-            totalDistricts,
-            totalAgencies
-        });
-
-    } catch (err) {
-        console.error('Lỗi khi lấy quận có đại lý:', err);
-        res.status(500).send('Lỗi server');
-    }
+    res.render('landing_page');
 });
+
+
 app.use(infoUser)
 // Sử dụng router người dùng
 app.use('/user', require('./routes/user.route.js'));
 // Sử dụng router chính của Người dùng
 app.use('/main', require('./routes/main.route.js'));
-
 
 app.use('/agency', require('./routes/agency.route.js'));
 app.use('/policy', require('./routes/policy.route.js'));
